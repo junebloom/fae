@@ -1,0 +1,20 @@
+{
+  "name": "fae",
+  "version": "1.0.0",
+  "description": "A small es6 game-engine built on PixiJS. Fae is event-driven, and features a simple ecs design!",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --host 0.0.0.0",
+    "build": "webpack"
+  },
+  "author": "Sam Woodruff",
+  "devDependencies": {
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
+  },
+  "dependencies": {
+    "pixi-sound": "^1.1.1",
+    "pixi.js": "^4.3.4",
+    "sat": "^0.6.0"
+  }
+}
