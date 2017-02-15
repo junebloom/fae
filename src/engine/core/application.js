@@ -2,6 +2,7 @@ import Entity from "./entity";
 import Component from "./component";
 import System from "./system";
 import Scene from "./scene";
+import Vector from "../vector";
 
 import * as components from "../components";
 import * as systems from "../systems";
@@ -30,6 +31,12 @@ export default class Application extends PIXI.Application {
             alpha: true
         });
 
+        // Set up debug graphics overlay
+        this.stage.graph = this.stage.addChild(new PIXI.Graphics());
+        this.bind("update", () => {
+            this.stage.graph.clear();
+        });
+
         // Load default components and systems
         for (const component in components) {
             this.c(component, components[component]);
@@ -38,6 +45,33 @@ export default class Application extends PIXI.Application {
         for (const system in systems) {
             this.s(systems[system]);
         }
+
+        // Set up input
+        const interaction = this.renderer.plugins.interaction;
+        const stage = this.stage;
+        this.stage.interactive = true;
+
+        this.input = {
+            pointerDown: false,
+            get pointerPos() {
+                return new Vector(
+                    interaction.pointer.global.x / stage.scale.x,
+                    interaction.pointer.global.y / stage.scale.y
+                );
+            }
+        };
+
+        this.stage.on("pointerdown", () => {
+            this.input.pointerDown = true;
+        });
+
+        this.stage.on("pointerup", () => {
+            this.input.pointerDown = false;
+        });
+
+        this.view.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
 
         // Start firing update events
         this.ticker.add(() => {
