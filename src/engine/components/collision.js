@@ -1,30 +1,21 @@
-import SAT from "sat";
+import Vector from "../vector";
 
 export const collision = {
     w: 0,
     h: 0,
-    r: 0,
+    r: null,
+    drawCollider: false,
 
-    get collider() {
-        const pos = new SAT.Vector(this.x, this.y);
-        let c;
-        if (this.w > 0 && this.h > 0) {
-            pos.y -= this.h;
-            c = new SAT.Box(pos, this.w, this.h).toPolygon();
-        } else if (this.r > 0) {
-            c = new SAT.Circle(pos, this.r);
-        } else {
-            c = pos;
-        }
-        c.type = c.constructor.name;
-        return c;
-    },
+    get left() {    return this.x - this.w * this.cAnchor.x; },
+    get right() {   return this.left + this.w; },
+    get top() {     return this.y - this.h * this.cAnchor.y; },
+    get bottom() {  return this.top + this.h; },
 
     attach() {
-
+        this.cAnchor = new Vector();
     },
 
     remove() {
-
+        delete this.cAnchor;
     }
 };
