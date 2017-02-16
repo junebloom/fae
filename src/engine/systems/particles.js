@@ -17,9 +17,10 @@ export const particles = {
                     const particle = new Particle(this.app, e.emitOptions);
 
                     // TODO: Find a way to this to constructor
+                    const globalPos = e.toGlobal(this.app.stage.position);
                     particle.position.set(
-                        e.x + (((Math.random() - 0.5) * e.emitOptions.area) || 0),
-                        e.y + (((Math.random() - 0.5) * e.emitOptions.area) || 0)
+                        globalPos.x / this.app.stage.scale.x + (((Math.random() - 0.5) * e.emitOptions.area) || 0),
+                        globalPos.y / this.app.stage.scale.y + (((Math.random() - 0.5) * e.emitOptions.area) || 0)
                     );
                 }
             }
@@ -50,6 +51,7 @@ class Particle extends PIXI.Sprite {
         // Set starting properties
         this.scale.set(options.scale || 1);
         this.rotation = options.rotation || 0;
+        this.alpha = options.alpha || 1;
         this.velocity = options.velocity ? options.velocity.copy() : new Vector();
 
         // Calculate randomness for starting properties
@@ -57,6 +59,8 @@ class Particle extends PIXI.Sprite {
             this.scale.set(this.scale + ((Math.random() - 0.5) * options.scaleRandom));
         if (options.rotationRandom)
             this.rotation += (Math.random() - 0.5) * options.rotationRandom;
+        if (options.alphaRandom)
+            this.alpha += (Math.random() - 0.5) * options.alphaRandom;
         if (options.velocityRandom)
             this.velocity.add(new Vector(
                 (Math.random() - 0.5) * options.velocityRandom.x,
@@ -66,16 +70,20 @@ class Particle extends PIXI.Sprite {
         // Set ending properties
         this.endScale = options.endScale || this.scale.x;
         this.endRotation = options.endRotation || this.rotation;
+        this.endAlpha = options.endAlpha || this.alpha;
 
         // Calculate randomness for ending properties
         if (options.endScaleRandom)
             this.endScale += (Math.random() - 0.5) * options.endScaleRandom;
         if (options.endRotationRandom)
             this.endRotation += (Math.random() - 0.5) * options.endRotationRandom;
+        if (options.endAlphaRandom)
+            this.endAlpha += (Math.random() - 0.5) * options.endAlphaRandom;
 
         // Set/calculate property deltas
-        this.scaleDelta = options.scaleDelta || (this.endScale - this.scale.x) / this.lifetime * app.ticker.elapsedMS;
-        this.rotationDelta = options.rotationDelta || (this.endRotation - this.rotation) / this.lifetime * app.ticker.elapsedMS;
+        this.scaleDelta = options.scaleDelta || (this.endScale - this.scale.x) / this.lifetime * (1000/60);
+        this.rotationDelta = options.rotationDelta || (this.endRotation - this.rotation) / this.lifetime * (1000/60);
+        this.alphaDelta = options.alphaDelta || (this.endAlpha - this.alpha) / this.lifetime * (1000/60);
     }
 
     process(dt) {
@@ -84,6 +92,8 @@ class Particle extends PIXI.Sprite {
         this.scale.y += this.scaleDelta * dt;
 
         this.rotation += this.rotationDelta * dt;
+
+        this.alpha += this.alphaDelta * dt;
 
         this.position.x += this.velocity.x * dt;
         this.position.y += this.velocity.y * dt;
