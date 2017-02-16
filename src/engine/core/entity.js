@@ -34,7 +34,7 @@ export default class Entity extends PIXI.Container {
     destroy(options) {
         this.app.entities.splice(this.index, 1);
         for (let i = this.index; i < this.app.entities.length; i++) {
-            this.app.entities[i]._index -= 1;
+            this.app.entities[i].index -= 1;
         }
 
         super.destroy(options);
@@ -42,6 +42,10 @@ export default class Entity extends PIXI.Container {
         this.fire("destroyed");
 
         // TODO: fire global entityDestroyed event
+    }
+
+    queueDestroy() {
+        this.app.destroyQueue.push(this);
     }
 
     // Return a particular entity

@@ -22,6 +22,8 @@ export default class Application extends PIXI.Application {
         this.systems = [];
         this.scenes = {};
 
+        this.destroyQueue = [];
+
         this.stage.particles = this.stage.addChild(new PIXI.particles.ParticleContainer());
         this.stage.particles.blendMode = PIXI.BLEND_MODES.ADD;
         this.stage.particles.setProperties({
@@ -75,6 +77,11 @@ export default class Application extends PIXI.Application {
 
         // Start firing update events
         this.ticker.add(() => {
+            for (let i = 0; i < this.destroyQueue.length; i++) {
+                this.destroyQueue[i].destroy();
+            }
+            this.destroyQueue = [];
+
             this.fire("update", this.ticker.deltaTime);
 
             for (const system of this.systems) {
