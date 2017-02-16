@@ -21,6 +21,7 @@ export const collision = {
 
             for (let j = 0; j < entities.length; j++) {
                 if (i == j) continue;
+                if (e.sleeping) continue;
 
                 const other = entities[j];
 

@@ -4,6 +4,7 @@ export const collision = {
     w: 0,
     h: 0,
     r: null,
+    sleeping: false,
     drawCollider: false,
 
     get left() {    return this.x - this.w * this.cAnchor.x; },
