@@ -25,6 +25,7 @@ export default class Entity extends PIXI.Container {
 
         if (entity.parent) entity.parent.addChild(this);
 
+        this.alive = true;
         this.fire("ready");
 
         // TODO: fire global entityCreated event
@@ -45,7 +46,10 @@ export default class Entity extends PIXI.Container {
     }
 
     queueDestroy() {
-        this.app.destroyQueue.push(this);
+        if (this.alive) {
+            this.app.destroyQueue.push(this);
+            this.alive = false;
+        }
     }
 
     // Return a particular entity
