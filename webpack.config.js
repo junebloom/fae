@@ -1,6 +1,6 @@
 module.exports = {
     devtool: "source-map",
-    entry: "./src/game.js",
+    entry: "./src/index.js",
     output: {
         filename: "index.js"
     }
