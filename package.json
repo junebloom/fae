@@ -8,6 +8,8 @@
     "build": "webpack"
   },
   "author": "Sam Woodruff",
+  "license": "MIT",
+  "repository": "sambrosia/fae",
   "devDependencies": {
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
