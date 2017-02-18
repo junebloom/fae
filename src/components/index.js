@@ -6,3 +6,5 @@ export { sprite } from "./sprite";
 export { animatedsprite } from "./animatedsprite";
 
 export { emitter } from "./emitter";
+
+export { timeout } from "./timeout";
