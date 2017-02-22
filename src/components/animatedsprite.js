@@ -1,7 +1,6 @@
 export const animatedsprite = {
     attach() {
-        // TODO: placeholder sprite?
-        this.as = new AnimatedSprite([this.app.resources.mage.array[0]]);
+        this.as = new AnimatedSprite([PIXI.Texture.EMPTY]);
         this.addChild(this.as);
     },
 
