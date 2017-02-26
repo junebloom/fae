@@ -1,3 +1,5 @@
+import * as PIXI from "pixi.js";
+
 import Entity from "./entity";
 import Component from "./component";
 import System from "./system";
@@ -24,14 +26,14 @@ export default class Application extends PIXI.Application {
 
         this.destroyQueue = [];
 
-        this.stage.particles = this.stage.addChild(new PIXI.particles.ParticleContainer());
-        this.stage.particles.blendMode = PIXI.BLEND_MODES.ADD;
-        this.stage.particles.setProperties({
-            scale: true,
-            position: true,
-            rotation: true,
-            alpha: true
-        });
+        this.stage.particles = this.stage.addChild(new PIXI.Container());
+        // this.stage.particles.blendMode = PIXI.BLEND_MODES.ADD;
+        // this.stage.particles.setProperties({
+        //     scale: true,
+        //     position: true,
+        //     rotation: true,
+        //     alpha: true
+        // });
 
         // Set up debug graphics overlay
         this.stage.graph = this.stage.addChild(new PIXI.Graphics());

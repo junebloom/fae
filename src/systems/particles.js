@@ -9,7 +9,7 @@ export const particles = {
     update(dt) {
         for (const e of this.entities) {
             if (e.emitting) {
-                e.emitTimer -= this.app.ticker.elapsedMS;
+                e.emitTimer -= this.app.ticker.deltaTime / 60 * 1000;
 
                 if (e.emitTimer <= 0) {
                     e.emitTimer = e.emitOptions.period || 50;
@@ -32,18 +32,14 @@ export const particles = {
     }
 };
 
-const defaultTexture = new PIXI.Graphics()
-.beginFill(0xff4411)
-.drawRect(0,0,1,1)
-.endFill()
-.generateCanvasTexture(PIXI.SCALE_MODES.LINEAR);
-
 class Particle extends PIXI.Sprite {
     constructor(app, options) {
-        super(options.texture || defaultTexture);
+        super(options.texture || PIXI.Texture.EMPTY);
         app.stage.particles.addChild(this);
         this.app = app;
         this.anchor.set(0.5);
+
+        this.blendMode = PIXI.BLEND_MODES.ADD;
 
         this.lifetime = options.lifetime || 300;
         this.life = this.lifetime;
@@ -56,7 +52,7 @@ class Particle extends PIXI.Sprite {
 
         // Calculate randomness for starting properties
         if (options.scaleRandom)
-            this.scale.set(this.scale + ((Math.random() - 0.5) * options.scaleRandom));
+            this.scale.set(this.scale.x + ((Math.random() - 0.5) * options.scaleRandom));
         if (options.rotationRandom)
             this.rotation += (Math.random() - 0.5) * options.rotationRandom;
         if (options.alphaRandom)
@@ -98,7 +94,7 @@ class Particle extends PIXI.Sprite {
         this.position.x += this.velocity.x * dt;
         this.position.y += this.velocity.y * dt;
 
-        this.life -= this.app.ticker.elapsedMS;
+        this.life -= this.app.ticker.deltaTime / 60 * 1000;
 
         if (this.life <= 0 || this.scale.x <= 0 || this.alpha <= 0) {
             this.destroy();
