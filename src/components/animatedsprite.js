@@ -6,6 +6,7 @@ export const animatedsprite = {
 
     remove() {
         this.removeChild(this.as);
+        this.as.stop();
         this.as.destroy();
         delete this.as;
     }
@@ -17,25 +18,70 @@ class AnimatedSprite extends PIXI.extras.AnimatedSprite {
 
         this.animations = {};
         this.currentAnimation = null;
+
+        this.animationQueue = [];
     }
 
     addAnimation(name, animation) {
         this.animations[name] = animation;
     }
 
-    playAnimation(name) {
+    loopAnimation(name) {
         if (this.currentAnimation == name) return;
         this.currentAnimation = name;
 
+        // TODO: replace 60 w/ app.ticker.FPS
+        this.animationSpeed = this.animations[name].speed / 60;
+
         this.onFrameChange = function() {
-            // TODO: replace 60 w/ app.ticker.FPS
-            this.animationSpeed = this.animations[name].speed / 60;
+            if (this.currentFrame > this.animations[name].end ||
+                this.currentFrame < this.animations[name].start
+            ) {
+                this.gotoAndPlay(this.animations[name].start);
+            }
+        };
+
+        this.texture = this.textures[this.animations[name].start];
+        this.gotoAndPlay(this.animations[name].start);
+    }
+
+    // TODO: burn this all to the ground
+    playAnimation(name) {
+        this.currentAnimation = name;
+
+        // TODO: replace 60 w/ app.ticker.FPS
+        this.animationSpeed = this.animations[name].speed / 60;
+
+        this.onFrameChange = function() {
+            if (this.animations[name].events) {
+                for (const frame in this.animations[name].events) {
+                    if (this.currentFrame == frame) {
+                        this.parent.fire(this.animations[name].events[frame]);
+                    }
+                }
+            }
 
             if (this.currentFrame > this.animations[name].end ||
                 this.currentFrame < this.animations[name].start
-            ) { this.gotoAndPlay(this.animations[name].start); }
+            ) {
+                const nextAnimation = this.animationQueue.pop();
+                if (nextAnimation) {
+                    if (nextAnimation.loop) {
+                        this.loopAnimation(nextAnimation.name);
+                    } else {
+                        this.playAnimation(nextAnimation.name);
+                    }
+                } else {
+                    this.gotoAndStop(this.animations[name].end);
+                }
+            }
         };
 
-        this.play();
+        this.texture = this.textures[this.animations[name].start];
+        this.gotoAndPlay(this.animations[name].start);
+    }
+
+    queueAnimation(name, loop) {
+        this.animationQueue.push({ name: name, loop: loop });
     }
 }
