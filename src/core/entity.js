@@ -32,7 +32,7 @@ export default class Entity extends PIXI.Container {
     }
 
     // Free internal references
-    destroy(options) {
+    destroy(options = { children: true }) {
         this.fire("destroy");
 
         this.app.entities.splice(this.index, 1);
