@@ -9,7 +9,7 @@ export const particles = {
     update(dt) {
         for (const e of this.entities) {
             if (e.emitting) {
-                e.emitTimer -= this.app.ticker.deltaTime / 60 * 1000;
+                e.emitTimer -= dt / 60 * 1000;
 
                 if (e.emitTimer <= 0) {
                     e.emitTimer = e.emitOptions.period || 50;
@@ -94,7 +94,7 @@ class Particle extends PIXI.Sprite {
         this.position.x += this.velocity.x * dt;
         this.position.y += this.velocity.y * dt;
 
-        this.life -= this.app.ticker.deltaTime / 60 * 1000;
+        this.life -= dt / 60 * 1000;
 
         if (this.life <= 0 || this.scale.x <= 0 || this.alpha <= 0) {
             this.destroy();
