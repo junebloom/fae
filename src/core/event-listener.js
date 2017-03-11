@@ -1,3 +1,5 @@
+// TODO: Get rid of this and use EventEmitter3 as PIXI already does
+
 export default function mixinEventListener(object) {
     object.callbacks = {};
 

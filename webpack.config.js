@@ -5,5 +5,8 @@ module.exports = {
         filename: "index.js",
         library: "fae",
         libraryTarget: "umd"
+    },
+    node: {
+        fs: "empty"
     }
 };

@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import sound from "pixi-sound";
 
 import Entity from "./entity";
 import Component from "./component";

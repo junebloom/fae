@@ -23,6 +23,7 @@ export default class Component {
 
         this.attach.call(entity);
 
+        // TODO: Edge support - Replace getOwnPropertyDescriptors with custom getOwnPropertyDescriptor loop?
         Object.defineProperties(entity, Object.getOwnPropertyDescriptors(this.members));
     }
 
