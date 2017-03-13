@@ -31,18 +31,11 @@ export default class Application extends PIXI.Application {
         });
 
         this.event.on("update", (dt) => {
-            for (const entity of this.destroyQueue) {
-                entity.destroy();
-                this.destroyQueue.delete(entity);
-            }
+            for (const entity of this.destroyQueue) entity.destroy();
+            this.destroyQueue.clear();
 
-            for (const system of this.systems) {
-                system.emit("update", dt);
-            }
-
-            for (const entity of this.groups.all) {
-                entity.emit("update", dt);
-            }
+            for (const system of this.systems)      system.emit("update", dt);
+            for (const entity of this.groups.all)   entity.emit("update", dt);
         });
     }
 
