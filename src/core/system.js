@@ -1,31 +1,24 @@
-import mixinEventListener from "./event-listener";
+import EventEmitter from "eventemitter3";
 
-export default class System {
+export default class System extends EventEmitter {
     constructor(app, system) {
-        mixinEventListener(this);
+        super();
 
         this.app = app;
         app.systems.push(this);
 
-        this.require = system.require;
+        for (const key in system) {
+            switch (key) {
+                case "group":
+                    // TODO: use subset of entities from array of groups as entities for the system
+                    this.entities = app.groups[system[key]];
+                    break;
 
-        for (const event in system) {
-            if (event == "require") continue;
-            this.bind(event, system[event]);
+                default:
+                    this.on(key, system[key], this);
+            }
         }
 
-        this.fire("ready");
-    }
-
-    // TODO: Optimize this?
-    // Maybe set when entities are added or removed from the app,
-    // instead of being a getter
-    get entities() {
-        return this.app.entities.filter((entity) => {
-            for (const componentName of this.require) {
-                if (entity.has(componentName)) return true;
-            }
-            return false;
-        });
+        this.emit("ready");
     }
 }
