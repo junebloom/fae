@@ -1,14 +1,14 @@
 export const animatedsprite = {
     attach() {
-        this.as = new AnimatedSprite([PIXI.Texture.EMPTY]);
-        this.addChild(this.as);
+        this.sprite = new AnimatedSprite([PIXI.Texture.EMPTY]);
+        this.addChild(this.sprite);
     },
 
-    remove() {
-        this.removeChild(this.as);
-        this.as.stop();
-        this.as.destroy();
-        delete this.as;
+    detach() {
+        this.removeChild(this.sprite);
+        this.sprite.stop();
+        this.sprite.destroy();
+        delete this.sprite;
     }
 };
 

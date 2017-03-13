@@ -1,10 +1,11 @@
 import Vector from "../vector";
 
-// TODO: object pool for particles
-// TODO: access emitter velocity from particle constructor
-
 export const particles = {
-    require: ["emitter"],
+    group: "emitter",
+
+    ready() {
+        this.app.stage.particles = this.app.stage.addChild(new PIXI.Container());
+    },
 
     update(dt) {
         for (const e of this.entities) {
@@ -16,7 +17,7 @@ export const particles = {
 
                     const particle = new Particle(this.app, e.emitOptions);
 
-                    // TODO: Find a way to this to constructor
+                    // TODO: Move this to particle constructor
                     const globalPos = e.toGlobal(this.app.stage.position);
                     particle.position.set(
                         globalPos.x / this.app.stage.scale.x + (((Math.random() - 0.5) * e.emitOptions.area) || 0),

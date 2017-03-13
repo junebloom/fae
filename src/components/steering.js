@@ -1,20 +1,20 @@
 import Vector from "../vector";
 
 export const steering = {
-    require: ["motion"],
-
-    moveSpeed: 5,
-    turnSpeed: 1,
-
-    steer: true,
-    chaseVec: null,
-    avoidVecs: [],
-
     attach() {
+        this.avoidVecs = [];
         this.desiredVelocity = new Vector();
     },
 
-    remove() {
+    detach() {
+        delete this.avoidVecs;
         delete this.desiredVelocity;
+    },
+
+    properties: {
+        steer: true,
+        moveSpeed: 5,
+        turnSpeed: 1,
+        chaseVec: null
     }
 };

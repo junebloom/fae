@@ -1,53 +1,46 @@
 export const collision = {
-    require: ["collision"],
+    group: "collision",
 
     update() {
-        // Check e against every other collidable entity
-        const entities = this.entities;
-        for (let i = 0; i < entities.length; i++) {
-            const e = entities[i];
+        for (const e of this.entities) e.checked.length = 0;
 
-            // Draw debug rects
-            if (e.drawCollider) {
-                this.app.stage.graph
-                .lineStyle(0.25, 0xff0000)
-                .beginFill(0xff0000, 0.1);
+        for (const e of this.entities) {
+            for (const groupName of e.collisionGroups) {
+                for (const other of this.app.groups[groupName]) {
+                    if (e == other ||
+                        !e.awake ||
+                        !other.awake ||
+                        e.checked.includes(other) ||
+                        other.checked.includes(e)
+                    ) continue;
 
-                if (e.r) this.app.stage.graph.drawCircle(e.x, e.y, e.r);
-                else this.app.stage.graph.drawRect(e.left, e.top, e.w, e.h);
+                    let hit;
 
-                this.app.stage.graph.endFill();
-            }
+                    // both aabb
+                    if (!e.r && !other.r) {
+                        hit = testAABB(e, other);
+                    }
 
-            for (let j = 0; j < entities.length; j++) {
-                if (i == j) continue;
+                    // circle and aabb
+                    else if (e.r && !other.r) {
+                        hit = testCircleAABB(e, other);
+                    }
 
-                const other = entities[j];
-                if (e.sleeping || other.sleeping) continue;
+                    // aabb and circle
+                    else if (!e.r && other.r) {
+                        hit = testCircleAABB(other, e);
+                    }
 
-                let hit;
+                    // both circle
+                    else if (e.r && other.r) {
+                        hit = testCircle(e, other);
+                    }
 
-                // if both aabb (no radius)
-                if (!e.r && !other.r) {
-                    hit = testAABB(e, other);
+                    if (hit) e.fire("collided", other);
+
+                    e.checked.push(other);
+                    other.checked.push(e);
                 }
-
-                // circle and aabb
-                else if (e.r && !other.r) {
-                    hit = testCircleAABB(e, other);
-                }
-
-                // aabb and circle
-                else if (!e.r && other.r) {
-                    hit = testCircleAABB(other, e);
-                }
-
-                // both circle
-                else if (e.r && other.r) {
-                    hit = testCircle(e, other);
-                }
-
-                if (hit) e.fire("collided", other);
             }
         }
     }
@@ -58,9 +51,7 @@ function testAABB(a, b) {
         a.right > b.left &&
         a.top < b.bottom &&
         a.bottom > b.top
-    ) {
-        return true;
-    }
+    ) return true;
 
     return false;
 }

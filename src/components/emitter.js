@@ -1,12 +1,14 @@
 export const emitter = {
-    emitting: true,
-    emitTimer: 0,
-
     attach() {
         this.emitOptions = {};
     },
 
-    remove() {
+    detach() {
         delete this.emitOptions;
+    },
+
+    properties: {
+        emitting: true,
+        emitTimer: 0
     }
 };
