@@ -4,6 +4,7 @@ import EventEmitter from "eventemitter3";
 
 import Entity from "./entity";
 import System from "./system";
+import InputManager from "./input";
 
 import * as components from "../components";
 import * as systems from "../systems";
@@ -11,8 +12,10 @@ import * as systems from "../systems";
 export default class Application extends PIXI.Application {
     constructor(width, height, options, noWebGL) {
         super(width, height, options, noWebGL);
+        this.view.setAttribute("tabindex", -1);
 
         this.event = new EventEmitter();
+        this.input = new InputManager(this);
         this.loader = new PIXI.loaders.Loader();
         this.resources = this.loader.resources;
 
