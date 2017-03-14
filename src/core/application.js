@@ -27,15 +27,19 @@ export default class Application extends PIXI.Application {
         for (const s in systems)    this.s(systems[s]);
 
         this.ticker.add(() => {
+            this.event.emit("preupdate", this.ticker.deltaTime);
             this.event.emit("update", this.ticker.deltaTime);
+            this.event.emit("postupdate", this.ticker.deltaTime);
         });
 
         this.event.on("update", (dt) => {
-            for (const entity of this.destroyQueue) entity.destroy();
-            this.destroyQueue.clear();
-
             for (const system of this.systems)      system.emit("update", dt);
             for (const entity of this.groups.all)   entity.emit("update", dt);
+        });
+
+        this.event.on("postupdate", (dt) => {
+            for (const entity of this.destroyQueue) entity.destroy();
+            this.destroyQueue.clear();
         });
     }
 
