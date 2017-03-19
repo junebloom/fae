@@ -36,7 +36,7 @@ export const collision = {
                         hit = testCircle(e, other);
                     }
 
-                    if (hit) e.fire("collided", other);
+                    if (hit) e.emit("collided", other);
 
                     e.checked.push(other);
                     other.checked.push(e);
