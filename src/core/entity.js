@@ -80,7 +80,7 @@ export default class Entity extends PIXI.Container {
         const entity = this;
         function updateTimer(dt) {
             if (timer <= 0) {
-                if (typeof(callback) == "function") callback.apply(entity, args);
+                if (typeof callback == "function") callback.apply(entity, args);
                 else entity.emit(callback, ...args);
 
                 entity.removeListener("update", updateTimer);
