@@ -96,7 +96,7 @@ export default class Entity extends PIXI.Container {
         if (options && options.children === undefined) options.children = true;
         this.emit("destroy");
 
-        for (const groupName in this.groups) {
+        for (const groupName of this.groups) {
             this.app.groups[groupName].delete(this);
         }
 
