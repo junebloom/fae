@@ -2,16 +2,20 @@ export const collision = {
     group: "collision",
 
     update() {
-        for (const e of this.entities) e.checked.length = 0;
+        for (const e of this.entities) e.checked = [];
 
         for (const e of this.entities) {
+            if (!e.awake || this.app.destroyQueue.has(e)) continue;
+
             for (const groupName of e.collisionGroups) {
+                if (!this.app.groups[groupName]) continue;
+
                 for (const other of this.app.groups[groupName]) {
                     if (e == other ||
-                        !e.awake ||
-                        !other.awake ||
+                        !other.awake || // implicitly checks that other has collision component
                         e.checked.includes(other) ||
-                        other.checked.includes(e)
+                        other.checked.includes(e) ||
+                        this.app.destroyQueue.has(other)
                     ) continue;
 
                     let hit;
