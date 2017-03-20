@@ -56,7 +56,7 @@ class AnimatedSprite extends PIXI.extras.AnimatedSprite {
             if (this.animations[name].events) {
                 for (const frame in this.animations[name].events) {
                     if (this.currentFrame == frame) {
-                        this.parent.fire(this.animations[name].events[frame]);
+                        this.parent.emit(this.animations[name].events[frame]);
                     }
                 }
             }
