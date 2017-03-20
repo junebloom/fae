@@ -39,6 +39,8 @@ export default class Entity extends PIXI.Container {
     attach(...componentNames) {
         for (const componentName of componentNames) {
             const component = this.app.components[componentName];
+            if (!component) throw new Error(componentName + " is not a component");
+            
             if (component.properties) {
                 Object.defineProperties(this, Object.getOwnPropertyDescriptors(component.properties));
             }
