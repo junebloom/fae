@@ -31,6 +31,7 @@ export default class Entity extends PIXI.Container {
         }
 
         this.emit("ready");
+        this.app.event.emit("entitycreated", this);
     }
 
     get position() { return new Vector(super.position); }
@@ -40,7 +41,7 @@ export default class Entity extends PIXI.Container {
         for (const componentName of componentNames) {
             const component = this.app.components[componentName];
             if (!component) throw new Error(componentName + " is not a component");
-            
+
             if (component.properties) {
                 Object.defineProperties(this, Object.getOwnPropertyDescriptors(component.properties));
             }
@@ -94,7 +95,7 @@ export default class Entity extends PIXI.Container {
         this.on("update", updateTimer);
     }
 
-    destroy(options) {
+    destroy(options = { children: true }) {
         if (options && options.children === undefined) options.children = true;
         this.emit("destroy");
 
@@ -103,6 +104,8 @@ export default class Entity extends PIXI.Container {
         }
 
         super.destroy(options);
+
+        this.app.event.emit("entitydestroyed", this);
     }
 
     queueDestroy() {
