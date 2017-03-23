@@ -65,9 +65,12 @@ export default class Application extends PIXI.Application {
                     if (!entity.persistent) entity.queueDestroy();
                 }
                 // TODO: Also destroy any display objects in stage?
-                this.scenes.current = this.scenes[name];
-                this.scenes[name].enter();
-                this.event.emit("scenechanged", name);
+
+                this.event.once("postupdate", () => {
+                    this.scenes.current = this.scenes[name];
+                    this.scenes[name].enter();
+                    this.event.emit("scenechanged", name);
+                });
             };
 
             this.exitingScene = true;
