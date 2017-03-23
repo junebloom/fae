@@ -1,22 +1,27 @@
 import Vector from "../vector";
 
 export const collision = {
-    w: 0,
-    h: 0,
-    r: null,
-    sleeping: false,
-    drawCollider: false,
-
-    get left() {    return this.x - this.w * this.cAnchor.x; },
-    get right() {   return this.left + this.w; },
-    get top() {     return this.y - this.h * this.cAnchor.y; },
-    get bottom() {  return this.top + this.h; },
-
     attach() {
-        this.cAnchor = new Vector();
+        this.collisionAnchor = new Vector();
+        this.collisionGroups = new Set();
+        this.checked = [];
     },
 
-    remove() {
-        delete this.cAnchor;
+    detach() {
+        delete this.collisionAnchor;
+        delete this.collisionGroups;
+        delete this.checked;
+    },
+
+    properties: {
+        w: 0,
+        h: 0,
+        r: null,
+        awake: true,        
+
+        get left()   { return this.x - this.w * this.collisionAnchor.x; },
+        get right()  { return this.left + this.w; },
+        get top()    { return this.y - this.h * this.collisionAnchor.y; },
+        get bottom() { return this.top + this.h; }
     }
 };

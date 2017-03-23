@@ -1,11 +1,10 @@
 export const sprite = {
     attach() {
-        // TODO: placeholder sprite?
         this.sprite = new PIXI.Sprite(PIXI.Texture.EMPTY);
         this.addChild(this.sprite);
     },
 
-    remove() {
+    detach() {
         this.removeChild(this.sprite);
         this.sprite.destroy();
         delete this.sprite;

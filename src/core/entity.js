@@ -1,93 +1,126 @@
 import Vector from "../vector";
-import mixinEventListener from "./event-listener";
-
-let entityUID = 0;
 
 export default class Entity extends PIXI.Container {
     constructor(app, entity) {
         super();
-        mixinEventListener(this);
 
         this.app = app;
-        this.index = app.entities.push(this) - 1;
-        this.id = entityUID;
-        entityUID++;
+        this.persistent = false;
+        this.components = new Set();
+        this.groups = new Set();
 
-        this.components = entity.components;
-        for (const componentName of entity.components) {
-            this.attach(componentName);
+        this.group("all");
+
+        for (const key in entity) {
+            switch (key) {
+                case "components":
+                    this.attach(...entity[key]);
+                    break;
+
+                case "groups":
+                    this.group(...entity[key]);
+                    break;
+
+                case "parent":
+                    entity[key].addChild(this);
+                    break;
+
+                default:
+                    this.on(key, entity[key]);
+            }
         }
 
-        for (const event in entity) {
-            if (event == "components" || event == "parent") continue;
-            this.bind(event, entity[event]);
-        }
-
-        if (entity.parent) entity.parent.addChild(this);
-
-        this.alive = true;
-        this.fire("ready");
-
-        // TODO: fire global entityCreated event
+        this.emit("ready");
+        this.app.event.emit("entitycreated", this);
     }
 
-    // Free internal references
-    destroy(options = { children: true }) {
-        this.fire("destroy");
+    get position() { return new Vector(super.position); }
+    set position(v) { super.position.set(v.x, v.y); }
 
-        this.app.entities.splice(this.index, 1);
-        for (let i = this.index; i < this.app.entities.length; i++) {
-            this.app.entities[i].index -= 1;
+    attach(...componentNames) {
+        for (const componentName of componentNames) {
+            const component = this.app.components[componentName];
+            if (!component) throw new Error(componentName + " is not a component");
+
+            if (component.properties) {
+                Object.defineProperties(this, Object.getOwnPropertyDescriptors(component.properties));
+            }
+            if (component.attach) component.attach.call(this);
+
+            this.components.add(componentName);
+            this.group(componentName);
+        }
+    }
+
+    detach(...componentNames) {
+        for (const componentName of componentNames) {
+            // TODO: actually remove component properties
+
+            this.components.delete(componentName);
+            this.ungroup(componentName);
+        }
+    }
+
+    group(...groupNames) {
+        for (const groupName of groupNames) {
+            if (!this.app.groups[groupName]) this.app.groups[groupName] = new Set();
+            this.app.groups[groupName].add(this);
+            this.groups.add(groupName);
+        }
+    }
+
+    ungroup(...groupNames) {
+        for (const groupName of groupNames) {
+            if (groupName == "all") throw new Error("You can't remove an entity from the 'all' group");
+            this.app.groups[groupName].delete(this);
+            this.groups.delete(groupName);
+        }
+    }
+
+    timeout(time, callback, ...args) {
+        let timer = time;
+
+        const entity = this;
+        function updateTimer(dt) {
+            if (timer <= 0) {
+                if (typeof callback == "function") callback.apply(entity, args);
+                else entity.emit(callback, ...args);
+
+                entity.removeListener("update", updateTimer);
+            }
+
+            timer -= dt / 60 * 1000;
+        }
+
+        this.on("update", updateTimer);
+    }
+
+    destroy(options = { children: true }) {
+        if (options && options.children === undefined) options.children = true;
+        this.emit("destroy");
+
+        for (const groupName of this.groups) {
+            this.app.groups[groupName].delete(this);
         }
 
         super.destroy(options);
 
-        // TODO: fire global entityDestroyed event
+        this.app.event.emit("entitydestroyed", this);
     }
 
     queueDestroy() {
-        if (this.alive) {
-            this.app.destroyQueue.push(this);
-            this.alive = false;
-        }
+        this.app.destroyQueue.add(this);
     }
 
-    // Return a particular entity
-    static get(id) {
-        for (const entity of this.app.entities) {
-            if (entity.id === id) return entity;
-        }
+    on(eventName, callback, thisArg = this) {
+        return super.on(eventName, callback, thisArg);
     }
 
-    // Vector position
-    get position() { return new Vector(super.position); }
-    set position(v) { super.position.set(v.x, v.y); }
-
-    // Components
-    attach(componentName) {
-        const component = this.app.components[componentName];
-        if (!component) throw new Error("'" + componentName + "' is not a valid component name");
-
-        component.attachTo(this);
-
-        this.components[componentName] = true;
-
-        this.fire("attachedComponent", componentName);
+    once(eventName, callback, thisArg = this) {
+        return super.once(eventName, callback, thisArg);
     }
 
-    remove(componentName) {
-        const component = this.app.components[componentName];
-        if (!component) throw new Error("'" + componentName + "' is not a valid component name");
-
-        component.removeFrom(this);
-
-        this.components[componentName] = undefined;
-
-        this.fire("removedComponent", { name: componentName });
-    }
-
-    has(componentName) {
-        if (this.components[componentName]) return true;
-        return false;
+    removeListener(eventName, callback, thisArg = this) {
+        return super.removeListener(eventName, callback, thisArg);
     }
 }

@@ -1,118 +1,80 @@
 import * as PIXI from "pixi.js";
 import sound from "pixi-sound";
+import EventEmitter from "eventemitter3";
 
 import Entity from "./entity";
-import Component from "./component";
 import System from "./system";
-import Scene from "./scene";
-import Vector from "../vector";
+import InputManager from "./input";
 
 import * as components from "../components";
 import * as systems from "../systems";
 
-import mixinEventListener from "./event-listener";
-
 export default class Application extends PIXI.Application {
     constructor(width, height, options, noWebGL) {
         super(width, height, options, noWebGL);
-        mixinEventListener(this);
+        this.view.setAttribute("tabindex", -1);
 
+        this.event = new EventEmitter();
+        this.input = new InputManager(this);
         this.loader = new PIXI.loaders.Loader();
         this.resources = this.loader.resources;
 
-        this.entities = [];
-        this.components = {};
         this.systems = [];
-        this.scenes = {};
+        this.components = {};
+        this.scenes = { current: null };
+        this.groups = { all: new Set() };
 
-        this.destroyQueue = [];
+        this.exitingScene = false;
+        this.destroyQueue = new Set();
 
-        this.stage.particles = this.stage.addChild(new PIXI.Container());
-        // this.stage.particles.blendMode = PIXI.BLEND_MODES.ADD;
-        // this.stage.particles.setProperties({
-        //     scale: true,
-        //     position: true,
-        //     rotation: true,
-        //     alpha: true
-        // });
+        for (const c in components) this.c(c, components[c]);
+        for (const s in systems)    this.s(systems[s]);
 
-        // Set up debug graphics overlay
-        this.stage.graph = this.stage.addChild(new PIXI.Graphics());
-        this.bind("update", () => {
-            this.stage.graph.clear();
-        });
-
-        // Load default components and systems
-        for (const component in components) {
-            this.c(component, components[component]);
-        }
-
-        for (const system in systems) {
-            this.s(systems[system]);
-        }
-
-        // Set up input
-        const interaction = this.renderer.plugins.interaction;
-        const stage = this.stage;
-        this.stage.interactive = true;
-
-        this.input = {
-            pointerDown: false,
-            get pointerPos() {
-                return new Vector(
-                    interaction.pointer.global.x / stage.scale.x,
-                    interaction.pointer.global.y / stage.scale.y
-                );
-            }
-        };
-
-        this.stage.on("pointerdown", () => {
-            this.input.pointerDown = true;
-        });
-
-        this.stage.on("pointerup", () => {
-            this.input.pointerDown = false;
-        });
-
-        this.view.addEventListener("contextmenu", (event) => {
-            event.preventDefault();
-        });
-
-        // Start firing update events
         this.ticker.add(() => {
-            for (let i = 0; i < this.destroyQueue.length; i++) {
-                this.destroyQueue[i].destroy();
-            }
-            this.destroyQueue = [];
+            this.event.emit("preupdate", this.ticker.deltaTime);
+            this.event.emit("update", this.ticker.deltaTime);
+            this.event.emit("postupdate", this.ticker.deltaTime);
+        });
 
-            this.fire("update", this.ticker.deltaTime);
+        this.event.on("update", (dt) => {
+            for (const system of this.systems)      system.emit("update", dt);
+            for (const entity of this.groups.all)   entity.emit("update", dt);
+        });
 
-            for (const system of this.systems) {
-                system.fire("update", this.ticker.deltaTime);
-            }
-
-            for (const entity of this.entities) {
-                entity.fire("update", this.ticker.deltaTime);
-            }
+        this.event.on("postupdate", (dt) => {
+            for (const entity of this.destroyQueue) entity.destroy();
+            this.destroyQueue.clear();
         });
     }
 
-    // ECS wrappers
-    e(options) {
-        return new Entity(this, options);
+    e(entity) { return new Entity(this, entity); }
+
+    c(name, component) {
+        this.components[name] = component;
+        this.groups[name] = new Set();
     }
 
-    c(name, options) {
-        new Component(this, name, options);
-    }
+    s(system) { return new System(this, system); }
 
-    s(options) {
-        new System(this, options);
-    }
+    scene(name, scene) {
+        if (scene) this.scenes[name] = scene;
+        else {
+            const next = () => {
+                this.exitingScene = false;
+                for (const entity of this.groups.all) {
+                    if (!entity.persistent) entity.queueDestroy();
+                }
+                // TODO: Also destroy any display objects in stage?
+                this.scenes.current = this.scenes[name];
+                this.scenes[name].enter();
+                this.event.emit("scenechanged", name);
+            };
 
-    // Scene wrapper
-    scene(name, options) {
-        if (options) new Scene(this, name, options);
-        else Scene.set(this, name);
+            this.exitingScene = true;
+
+            const curScene = this.scenes.current;
+            if (curScene && curScene.exit) curScene.exit(next);
+            else next();
+        }
     }
 }

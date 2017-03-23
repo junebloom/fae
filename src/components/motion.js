@@ -5,7 +5,7 @@ export const motion = {
         this.velocity = new Vector();
     },
 
-    remove() {
+    detach() {
         delete this.velocity;
     }
 };
