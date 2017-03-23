@@ -1,12 +1,12 @@
 # fae
-Fae is a small 2d game-engine designed to be fast and easy to work with. It uses PixiJS for maximum rendering performance and flexibility.
+Fae is a small 2d game-engine designed to be fast and easy to work with. It is built on PixiJS.
 
 The main features of fae are:
 
-- Straightforward and powerful ECS implementation
+- Straightforward ECS implementation
 - Communication via events
 - Basic scenes
-- Flexible InputManager
+- Input manager
 - Vectors
 - Plus everything Pixi has! (resource loader, glsl shaders, etc.)
 
@@ -18,7 +18,7 @@ Feel free to offer any suggestions or contributions, if you're interested.
 Get fae using `npm install -S fae`. Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in all browsers.
 
 ## Usage
-There is currently no real documentation (sorry), but the core is pretty small and easy to understand so you should be able to figure out the API by reading the source.
+There is currently no proper documentation (sorry), but the core is pretty small and easy to understand so you should be able to figure out the API by reading the source.
 
 Some of the default components/systems (specifically particles, steering, animatedsprite) are pretty hacky, as I needed something that worked (sorry again). I'll remove/rewrite them later.
 
