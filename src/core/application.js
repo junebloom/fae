@@ -24,6 +24,7 @@ export default class Application extends PIXI.Application {
         this.scenes = { current: null };
         this.groups = { all: new Set() };
 
+        this.exitingScene = false;
         this.destroyQueue = new Set();
 
         for (const c in components) this.c(c, components[c]);
@@ -59,13 +60,17 @@ export default class Application extends PIXI.Application {
         if (scene) this.scenes[name] = scene;
         else {
             const next = () => {
+                this.exitingScene = false;
                 for (const entity of this.groups.all) {
                     if (!entity.persistent) entity.queueDestroy();
                 }
                 // TODO: Also destroy any display objects in stage?
                 this.scenes.current = this.scenes[name];
                 this.scenes[name].enter();
+                this.event.emit("scenechanged", name);
             };
+
+            this.exitingScene = true;
 
             const curScene = this.scenes.current;
             if (curScene && curScene.exit) curScene.exit(next);

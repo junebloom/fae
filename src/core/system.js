@@ -1,5 +1,7 @@
 import EventEmitter from "eventemitter3";
 
+// TODO: Make systems destroyable
+
 export default class System extends EventEmitter {
     constructor(app, system) {
         super();
@@ -9,8 +11,8 @@ export default class System extends EventEmitter {
 
         for (const key in system) {
             switch (key) {
+                // TODO: use subset of entities from array of groups as entities for the system
                 case "group":
-                    // TODO: use subset of entities from array of groups as entities for the system
                     this.entities = app.groups[system[key]];
                     break;
 
