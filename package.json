@@ -10,7 +10,9 @@
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0",
     "build": "webpack --progress --colors",
-    "build:watch": "webpack --progress --colors --watch"
+    "build:watch": "webpack --progress --colors --watch",
+    "version": "npm run build && git add dist",
+    "postversion": "git push && git push --tags"
   },
   "author": "Sam Woodruff",
   "license": "MIT",
