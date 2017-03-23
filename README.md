@@ -1,36 +1,88 @@
 # fae
-There are *a lot* of things missing or hastily written with no documentation, no tests, etc., so I can't recommend actually using it in this state, but I won't stop you ;)
+Fae is a small 2d game-engine designed to be fast and easy to work with. It uses PixiJS for maximum rendering performance and flexibility.
+
+The main features of fae are:
+
+- Straightforward and powerful ECS implementation
+- Communication via events
+- Basic scenes
+- Flexible InputManager
+- Vectors
+- Plus everything Pixi has! (resource loader, glsl shaders, etc.)
+
+Fae is in its early stages, so some things are still a bit rough around the edges. Core parts of the engine may be scrapped and rewritten as I decide on the best way to do things.
 
 Feel free to offer any suggestions or contributions, if you're interested.
 
-## Overview
-Many of the barebones core features are working, but the API isn't perfect yet. I'm working on making it awesome!
+## Installation
+Get fae using `npm install -S fae`. Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in all browsers.
 
-The event system I wrote is redundant and probably worse than the node-style implementation Pixi uses, so I'll replace it with EventEmitter3 (same as Pixi).
+## Usage
+There is currently no real documentation (sorry), but the core is pretty small and easy to understand so you should be able to figure out the API by reading the source.
 
-The ECS implementation needs some love as well. I have plans in mind to improve it a good deal.
+Some of the default components/systems (specifically particles, steering, animatedsprite) are pretty hacky, as I needed something that worked (sorry again). I'll remove/rewrite them later.
 
-Some systems still need to be written, like input handling.
+### Application
+The `fae.Application` class is where most of the action is. It extends `PIXI.Application` and provides access to fae's various features. Create an instance of it to get a basic game running.
 
-### Events
-Fae has a simple event system for communication among Entities, Systems, and the application.
 ```javascript
-// Bind an event to the player entity. The passed callback will be called when the event is triggered.
-// (Note that "this" inside of event handlers refers to the entity the event is bound to.)
-player.bind("hitbyarrow", (data) => {
+import * as fae from "fae";
 
-  if (data.shooter.friendly) return;
-  
-  this.hp -= data.arrow.damage - this.armor;
-  
-  // Trigger an event to be handled on the arrow entity, and pass some data along with it.
-  data.arrow.fire("landedhit", { character: this });
-});
+const app = new fae.Application();
+document.body.appendChild(app.view);
 ```
-In the example above, we don't directly destroy the arrow because it could be enchanted with piercing, or anything else that might alter its behavior, and that's none of the player entity's business.
-
-### ECS
-...
 
 ### Scenes
+Games in fae are built primarily from scenes with entities in them.
+
+A scene looks like this:
+```javascript
+app.scene("myScene", {
+  enter() {
+    // Set up the scene
+  },
+  
+  exit(next) {
+    // Do some stuff, then call next() to enter the next scene
+  },
+});
+```
+
+To enter the scene you can call `app.scene("myScene");`. This will call the current scene's `exit()` method, and enter `"myScene"` once that exit method calls `next()`.
+
+It is set up this way to allow a smooth transition between scenes. You can start an exit animation in `exit()`, and call `next()` when it is finished.
+
+All non-persistent entities will be destroyed when `next()` is called.
+
+### Entities
+An entity is basically a fancified PIXI.Container. You can attach components to it to add behaviors.
+
+```javascript
+const myEntity = app.e({
+  components: ["someComponent", "anotherOne"], // Names of components to attach to this entity
+  groups: ["myGroup"], // Names of groups to add this entity to
+  parent: myParentContainer // Can be a PIXI.Container (or subclass thereof, including other entities)
+  
+  ready() {
+    // Set initial values
+  },
+  
+  someEvent() {
+    // Do stuff when this entity recieves 'someEvent'
+  }
+});
+```
+
+#### Groups
+Groups are how you work with sets of entities (in fact they are currently implemented using Set objects).
+
+...
+
+### Components
+...
+
+### Systems
+...
+
+### Input
 ...
