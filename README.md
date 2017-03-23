@@ -10,12 +10,14 @@ The main features of fae are:
 - Vectors
 - Plus everything Pixi has! (resource loader, glsl shaders, etc.)
 
-Fae is in its early stages, so some things are still a bit rough around the edges. Core parts of the engine may be scrapped and rewritten as I decide on the best way to do things.
+Fae is in its early stages, so some things are still a bit rough around the edges. Major parts of the engine may be scrapped and rewritten as I decide on the best way to do things.
 
 Feel free to offer any suggestions or contributions, if you're interested.
 
 ## Installation
-Get fae using `npm install -S fae`. Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in all browsers.
+Get fae using `npm install -S fae`
+
+Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in all browsers.
 
 ## Usage
 There is currently no proper documentation (sorry), but the core is pretty small and easy to understand so you should be able to figure out the API by reading the source.
@@ -43,7 +45,10 @@ app.scene("myScene", {
   },
   
   exit(next) {
-    // Do some stuff, then call next() to enter the next scene
+    // Do some stuff
+    // ...
+    // Enter the next scene (normally after some delay or animation)
+    next();
   },
 });
 ```
