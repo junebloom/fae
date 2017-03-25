@@ -80,4 +80,22 @@ export default class Application extends PIXI.Application {
             else next();
         }
     }
+
+    timeout(time, callback, ...args) {
+        let timer = time;
+
+        const ee = this.event;
+        function updateTimer(dt) {
+            if (timer <= 0) {
+                if (typeof callback == "function") callback(...args);
+                else ee.emit(callback, ...args);
+
+                ee.removeListener("update", updateTimer);
+            }
+
+            timer -= dt / 60 * 1000;
+        }
+
+        ee.on("update", updateTimer);
+    }
 }
