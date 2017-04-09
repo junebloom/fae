@@ -12,7 +12,7 @@ The main features of fae are:
 
 Fae is in its early stages, so some things are still a bit rough around the edges. Major parts of the engine may be scrapped and rewritten as I decide on the best way to do things.
 
-Feel free to offer any suggestions or contributions, if you're interested.
+I encourage you to offer any suggestions (or contributions) for improvements, and of course I would love to see anything you make!
 
 ## Installation
 Get fae using `npm install -S fae`
