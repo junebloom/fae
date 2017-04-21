@@ -38,6 +38,13 @@ export default class Entity {
     }
   }
 
+  hasGroups (...groups) {
+    for (const group of groups) {
+      if (!this.groups.has(group)) return false
+    }
+    return true
+  }
+
   destroy () {
     this.destroyed = true
     for (const group of this.groups) {
