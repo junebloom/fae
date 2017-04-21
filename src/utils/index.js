@@ -1,1 +1,1 @@
-export { default as Vector } from './Vector'
+export { default as Vec2 } from './Vec2'
