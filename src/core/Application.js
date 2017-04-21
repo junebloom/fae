@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
-import InputManager from './input'
+import InputManager from './InputManager'
 
 export default class Application extends PIXI.Application {
   constructor (width, height, options, noWebGL) {

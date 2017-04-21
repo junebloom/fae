@@ -113,4 +113,4 @@ function parseBindingString (string) {
   }
 }
 
-function clamp (num, min, max) { return Math.min(Math.max(min, num), max) }
+function clamp (n, min, max) { return Math.min(Math.max(min, n), max) }
