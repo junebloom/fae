@@ -7,8 +7,8 @@ export default class Application extends PIXI.Application {
     super(width, height, options, noWebGL)
     this.view.setAttribute('tabindex', -1)
 
-    this.input = new InputManager(this)
     this.event = new EventEmitter()
+    this.input = new InputManager(this)
     this.groups = { all: new Set() }
 
     this.ticker.add(() => {

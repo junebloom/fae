@@ -8,6 +8,7 @@ export default class Entity {
     app.event.emit('entityCreated', this)
   }
 
+  // TODO: Multiple instances of same component
   attach (...components) {
     for (const component of components) {
       this[pascalToCamel(component.name)] = new component()
@@ -24,6 +25,7 @@ export default class Entity {
 
   group (...groups) {
     for (const group of groups) {
+      if (!this.app.groups[group]) this.app.groups[group] = new Set()
       this.app.groups[group].add(this)
       this.groups.add(group)
     }
@@ -45,7 +47,7 @@ export default class Entity {
   }
 }
 
-// TODO: Account for unicode (WTF) identifiers
+// Does not account for unicode (WTF) identifiers
 const re = /^[A-Z](?:[A-Z](?![a-z]))*/
 function pascalToCamel (string) {
   return string.replace(re, match => match.toLowerCase())
