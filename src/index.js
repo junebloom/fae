@@ -1,5 +1,4 @@
-import * as PIXI from "pixi.js";
+import * as utils from './utils'
 
-export * from "./core";
-
-export { default as Vector } from "./vector";
+export * from './core'
+export { utils }
