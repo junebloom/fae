@@ -1,0 +1,52 @@
+export default class Entity {
+  constructor (app, ...components) {
+    this.app = app
+    this.groups = new Set()
+
+    this.attach(...components)
+    this.group('all')
+    app.event.emit('entityCreated', this)
+  }
+
+  attach (...components) {
+    for (const component of components) {
+      this[pascalToCamel(component.name)] = new component()
+      this.group(component.name)
+    }
+  }
+
+  detach (...components) {
+    for (const component of components) {
+      this[pascalToCamel(component.name)] = null
+      this.ungroup(component.name)
+    }
+  }
+
+  group (...groups) {
+    for (const group of groups) {
+      this.app.groups[group].add(this)
+      this.groups.add(group)
+    }
+  }
+
+  ungroup (...groups) {
+    for (const group of groups) {
+      this.app.groups[group].delete(this)
+      this.groups.delete(group)
+    }
+  }
+
+  destroy () {
+    this.destroyed = true
+    for (const group of this.groups) {
+      this.ungroup(group)
+    }
+    this.app.event.emit('entityDestroyed', this)
+  }
+}
+
+// TODO: Account for unicode (WTF) identifiers
+const re = /^[A-Z](?:[A-Z](?![a-z]))*/
+function pascalToCamel (string) {
+  return string.replace(re, match => match.toLowerCase())
+}
