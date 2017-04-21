@@ -13,21 +13,30 @@ export default class Application extends PIXI.Application {
     this.systems = new Set()
     this.groups = { all: new Set() }
 
-    this.entities = {
-      with (...groups) {
-        groups.sort((a, b) => this.groups[a].size - this.groups[b].size)
-        const entities = []
-        for (const e of this.groups[groups[0]]) {
-          if (e.hasGroups(groups)) entities.push(e)
-        }
-        return entities
-      }
-    }
-
     this.ticker.add(() => {
       this.event.emit('preupdate', this.ticker.deltaTime)
       this.event.emit('update', this.ticker.deltaTime)
       this.event.emit('postupdate', this.ticker.deltaTime)
     })
+  }
+
+  entitiesWith (...groups) {
+    groups.sort((a, b) => this.groups[a].size - this.groups[b].size)
+    const entities = []
+    for (const entity of this.groups[groups[0]]) {
+      if (entity.hasGroups(...groups)) entities.push(entity)
+    }
+    return entities
+  }
+
+  enter (scene) {
+    this.event.emit('exitScene')
+    for (const system of this.systems) {
+      if (!system.persistent) system.stop(this)
+    }
+    for (const entity of this.groups.all) {
+      if (!entity.persistent) entity.destroy()
+    }
+    scene(this)
   }
 }

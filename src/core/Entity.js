@@ -5,11 +5,11 @@ export default class Entity {
 
     this.attach(...components)
     this.group('all')
-    app.event.emit('entityCreated', this)
   }
 
-  // TODO: Multiple instances of same component
   attach (...components) {
+    // TODO: Multiple instances of same component
+    /* eslint new-cap: 'off' */
     for (const component of components) {
       this[pascalToCamel(component.name)] = new component()
       this.group(component.name)
@@ -50,11 +50,10 @@ export default class Entity {
     for (const group of this.groups) {
       this.ungroup(group)
     }
-    this.app.event.emit('entityDestroyed', this)
   }
 }
 
-// Does not account for unicode (WTF) identifiers
+// Does not account for unicode identifiers, but what monster uses those?
 const re = /^[A-Z](?:[A-Z](?![a-z]))*/
 function pascalToCamel (string) {
   return string.replace(re, match => match.toLowerCase())
