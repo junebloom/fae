@@ -11,7 +11,7 @@ export default class Entity {
     // TODO: Multiple instances of same component
     /* eslint new-cap: 'off' */
     for (const component of components) {
-      this[pascalToCamel(component.name)] = new component()
+      this[pascalToCamel(component.name)] = new component(this)
       this.group(component.name)
     }
   }
