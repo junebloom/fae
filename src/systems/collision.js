@@ -14,15 +14,15 @@ export const collision = {
             e === other ||
             !other.collider ||
             other.collider.sleeping ||
-            e.checked.includes(other) ||
-            other.checked.includes(e)
+            e.collider.checked.includes(other) ||
+            other.collider.checked.includes(e)
           ) continue
 
           let hit = testAABB(e.collider, other.collider)
           if (hit) this.app.event.emit('collision', e, other)
 
-          e.checked.push(other)
-          other.checked.push(e)
+          e.collider.checked.push(other)
+          other.collider.checked.push(e)
         }
       }
     }
