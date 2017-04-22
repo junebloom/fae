@@ -1,3 +1,5 @@
+import { pascalToCamel } from '../utils'
+
 export default class Entity {
   constructor (app, ...components) {
     this.app = app
@@ -51,10 +53,4 @@ export default class Entity {
       this.ungroup(group)
     }
   }
-}
-
-// Does not account for unicode identifiers, but what monster uses those?
-const re = /^[A-Z](?:[A-Z](?![a-z]))*/
-function pascalToCamel (string) {
-  return string.replace(re, match => match.toLowerCase())
 }
