@@ -1,5 +1,6 @@
 export const collision = {
   update () {
+    if (!this.app.groups.Collider) return
     for (const e of this.app.groups.Collider) e.collider.checked = []
 
     for (const e of this.app.groups.Collider) {
