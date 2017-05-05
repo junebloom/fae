@@ -29,14 +29,31 @@ export default class Application extends PIXI.Application {
     return entities
   }
 
+  startSystem (system) {
+    this.systems.add(system)
+    for (const listener in system) {
+      this.event.on(listener, system[listener])
+    }
+  }
+
+  stopSystem (system) {
+    this.systems.delete(system)
+    for (const listener in system) {
+      this.event.removeListener(listener, system[listener])
+    }
+  }
+
   enter (scene) {
     this.event.emit('exitScene')
     for (const system of this.systems) {
-      if (!system.persistent) system.stop(this)
+      if (!system.persistent) this.stopSystem(system)
     }
     for (const entity of this.groups.all) {
       if (!entity.persistent) entity.destroy()
     }
+    // TODO: Only destroy non-persistent children of stage?
+    this.stage.destroy()
+    this.stage = new PIXI.Container()
     scene(this)
   }
 }
