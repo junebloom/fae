@@ -1,28 +1,29 @@
 import { pascalToCamel } from '../utils'
 
 export default class Entity {
-  constructor (app, ...components) {
+  constructor (app) {
     this.app = app
     this.groups = new Set()
-
-    this.attach(...components)
     this.group('all')
   }
 
   attach (...components) {
-    // TODO: Multiple instances of same component
-    /* eslint new-cap: 'off' */
     for (const component of components) {
-      this[pascalToCamel(component.name)] = new component(this)
-      this.group(component.name)
+      const name = Object.getPrototypeOf(component).constructor.name
+      this[pascalToCamel(name)] = component
+      this.group(name)
+      component.entity = this
     }
+    return this
   }
 
   detach (...components) {
     for (const component of components) {
-      this[pascalToCamel(component.name)] = null
-      this.ungroup(component.name)
+      const name = Object.getPrototypeOf(component).constructor.name
+      this[pascalToCamel(name)] = null
+      this.ungroup(name)
     }
+    return this
   }
 
   group (...groups) {
@@ -31,6 +32,7 @@ export default class Entity {
       this.app.groups[group].add(this)
       this.groups.add(group)
     }
+    return this
   }
 
   ungroup (...groups) {
@@ -38,6 +40,7 @@ export default class Entity {
       this.app.groups[group].delete(this)
       this.groups.delete(group)
     }
+    return this
   }
 
   hasGroups (...groups) {
