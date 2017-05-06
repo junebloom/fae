@@ -1,17 +1,16 @@
 export const collision = {
   update () {
-    if (!this.app.groups.Collider) return
-    for (const e of this.app.groups.Collider) e.collider.checked = []
+    if (!this.groups.Collider) return
+    for (const e of this.groups.Collider) e.collider.checked = []
 
-    for (const e of this.app.groups.Collider) {
+    for (const e of this.groups.Collider) {
       if (e.destroyed || e.collider.sleeping) continue
 
       for (const groupName of e.collider.groups) {
-        if (!this.app.groups[groupName]) continue
+        if (!this.groups[groupName]) continue
 
-        for (const other of this.app.groups[groupName]) {
-          if (
-            e === other ||
+        for (const other of this.groups[groupName]) {
+          if (e === other ||
             !other.collider ||
             other.collider.sleeping ||
             e.collider.checked.includes(other) ||
@@ -19,7 +18,7 @@ export const collision = {
           ) continue
 
           let hit = testAABB(e.collider, other.collider)
-          if (hit) this.app.event.emit('collision', e, other)
+          if (hit) this.event.emit('collision', e, other)
 
           e.collider.checked.push(other)
           other.collider.checked.push(e)
@@ -31,10 +30,10 @@ export const collision = {
 
 function testAABB (a, b) {
   if (a.left < b.right &&
-        a.right > b.left &&
-        a.top < b.bottom &&
-        a.bottom > b.top
-    ) return true
+    a.right > b.left &&
+    a.top < b.bottom &&
+    a.bottom > b.top
+  ) return true
 
   return false
 }

@@ -1,11 +1,9 @@
-import { Component } from '../core'
 import { Vec2 } from '../utils'
 
-export default class Transform extends Component {
-  constructor (entity) {
-    super(entity)
-    this.position = new Vec2()
-    this.rotation = 0
+export default class Transform {
+  constructor (x = 0, y = 0, r = 0) {
+    this.position = new Vec2(x, y)
+    this.rotation = r
   }
 
   get x () { return this.position.x }
