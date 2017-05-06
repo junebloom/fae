@@ -32,14 +32,14 @@ export default class Application extends PIXI.Application {
   startSystem (system) {
     this.systems.add(system)
     for (const listener in system) {
-      this.event.on(listener, system[listener])
+      this.event.on(listener, system[listener], this)
     }
   }
 
   stopSystem (system) {
     this.systems.delete(system)
     for (const listener in system) {
-      this.event.removeListener(listener, system[listener])
+      this.event.removeListener(listener, system[listener], this)
     }
   }
 
