@@ -55,7 +55,7 @@ export default class Application {
     }
   }
 
-  enter (scene) {
+  enterScene (scene) {
     this.event.emit('exitScene')
     for (const system of this.systems) this.stopSystem(system)
     for (const entity of this.groups.all) {
