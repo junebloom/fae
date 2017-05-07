@@ -1,4 +1,4 @@
-import { Vec2 } from '../utils'
+import { Vec2 } from '../core'
 
 export default class Transform {
   constructor (x = 0, y = 0, r = 0) {

@@ -1,4 +1,4 @@
-import { Vec2 } from '../utils'
+import { Vec2 } from '../core'
 
 export default class Collider {
   constructor (w = 100, h = 100, ax = 0, ay = ax) {
