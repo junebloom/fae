@@ -44,9 +44,7 @@ export default class Application extends PIXI.Application {
 
   enter (scene) {
     this.event.emit('exitScene')
-    for (const system of this.systems) {
-      if (!system.persistent) this.stopSystem(system)
-    }
+    for (const system of this.systems) this.stopSystem(system)
     for (const entity of this.groups.all) {
       if (!entity.persistent) entity.destroy()
     }
