@@ -1,14 +1,13 @@
 import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
-import InputManager from './InputManager'
+import Input from './Input'
 
 export default class Application extends PIXI.Application {
   constructor (width, height, options, noWebGL) {
     super(width, height, options, noWebGL)
-    this.view.setAttribute('tabindex', -1)
 
     this.event = new EventEmitter()
-    this.input = new InputManager(this)
+    this.input = new Input(this)
 
     this.systems = new Set()
     this.groups = { all: new Set() }
