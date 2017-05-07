@@ -1,22 +1,35 @@
-import * as PIXI from 'pixi.js'
 import EventEmitter from 'eventemitter3'
 import Input from './Input'
 
-export default class Application extends PIXI.Application {
-  constructor (width, height, options, noWebGL) {
-    super(width, height, options, noWebGL)
+function main (app) {
+  let dt = 0
+  let lastTime = window.performance.now()
 
+  function loop () {
+    app.event.emit('preupdate')
+
+    const curTime = window.performance.now()
+    dt = curTime - lastTime
+    lastTime = curTime
+
+    app.event.emit('update', dt)
+    app.event.emit('draw')
+
+    window.requestAnimationFrame(loop)
+  }
+  loop()
+}
+
+export default class Application {
+  constructor (customMain) {
     this.event = new EventEmitter()
     this.input = new Input(this)
 
     this.systems = new Set()
     this.groups = { all: new Set() }
 
-    this.ticker.add(() => {
-      this.event.emit('preupdate', this.ticker.deltaTime)
-      this.event.emit('update', this.ticker.deltaTime)
-      this.event.emit('postupdate', this.ticker.deltaTime)
-    })
+    if (customMain) customMain(this)
+    else main(this)
   }
 
   entitiesWith (...groups) {
@@ -48,9 +61,6 @@ export default class Application extends PIXI.Application {
     for (const entity of this.groups.all) {
       if (!entity.persistent) entity.destroy()
     }
-    // TODO: Only destroy non-persistent children of stage?
-    this.stage.destroy()
-    this.stage = new PIXI.Container()
     scene(this)
   }
 }

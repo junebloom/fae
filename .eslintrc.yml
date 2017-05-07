@@ -1,8 +1,6 @@
 extends:
   - eslint:recommended
   - standard
-globals:
-  PIXI: true
 rules:
   no-trailing-spaces: off
   spaced-comment:

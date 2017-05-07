@@ -1,9 +1,6 @@
-import Vec2 from './Vec2'
-
 // TODO: Better key names (no 'a' vs 'A', or ' ' instead of 'space', etc.)
 export default class Input {
   constructor (app) {
-    this.pixi = app.renderer.plugins.interaction
     this.keyRepeat = false
     this.keys = {}
     this.codes = {}
@@ -33,6 +30,4 @@ export default class Input {
 
   keyPressed (key) { return this.keys[key] || false }
   codePressed (code) { return this.codes[code] || false }
-
-  get mouseVec () { return new Vec2(this.pixi.mouse) }
 }
