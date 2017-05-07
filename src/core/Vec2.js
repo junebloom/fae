@@ -1,6 +1,6 @@
 export default class Vec2 {
   constructor (x = 0, y = 0) {
-    if (typeof x === 'object') {
+    if (x.x) {
       this.x = x.x
       this.y = x.y
     } else {
