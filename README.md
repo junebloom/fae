@@ -24,6 +24,15 @@ The documentation is still in progress (sorry). The core is quite small and easy
 
 The heart of Fae is the ECS implementation. I worked hard to pack as much goodness into as few lines as possible. The result is a powerful, easy to use framework for making games.
 
+1. [Application](#application)
+2. [Entities](#entities)
+    - [Groups](#groups)
+    - [Components](#components)
+3. [Systems](#systems)
+4. [Scenes](#scenes)
+5. [Input](#input)
+6. [Pixi Integration](#pixi-integration)
+
 ## Application
 The `fae.Application` class is used to handle the game's state and loop. Create an instance of it to get an empty game running.
 
@@ -59,7 +68,7 @@ const bullet = new fae.Entity(app).attach(
   new fae.components.Collider(8, 8, 0.5)
 )
 ```
-*(`attach()` returns the entity object so that it may be chained with the constructor)*
+`attach()` returns the entity object so that it may be chained with the constructor.
 
 ### Groups
 Groups are JS Set objects. They can be accessed by name via the `app.groups` object.
