@@ -45,8 +45,11 @@ const app = new fae.Application()
 The `app.event` object is an `EventEmitter` that emits game loop events and input events as well as arbitrary user events.
 
 You can utilise the game loop by adding listeners to the following events:
+
 `'preupdate'`
+
 `'update'` (delta time is passed with this event)
+
 `'draw'`
 
 ```javascript
