@@ -5,7 +5,7 @@ function main (app) {
   let dt = 0
   let lastTime = window.performance.now()
 
-  function loop () {
+  function gameLoop () {
     app.event.emit('preupdate')
 
     const curTime = window.performance.now()
@@ -15,9 +15,9 @@ function main (app) {
     app.event.emit('update', dt)
     app.event.emit('draw')
 
-    window.requestAnimationFrame(loop)
+    window.requestAnimationFrame(gameLoop)
   }
-  loop()
+  gameLoop()
 }
 
 export default class Application {
