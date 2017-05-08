@@ -14,17 +14,17 @@ The engine is still in its fairly early stages, so some things are still a bit r
 
 I encourage you to offer any suggestions (or contributions) for improvements, and of course I would love to see anything you make!
 
-## Installation
+# Installation
 Get fae using `npm install -S fae`
 
 Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in all browsers.
 
-## Usage
+# Usage
 The documentation is still in progress (sorry). The core is quite small and easy to understand, so you could learn all by reading the source if you are so inclined.
 
 The heart of Fae is the ECS implementation. I worked hard to pack as much goodness into as few lines as possible. The result is a powerful, easy to use framework for making games.
 
-### Application
+## Application
 The `fae.Application` class is used to handle the game's state and loop. Create an instance of it to get an empty game running.
 
 ```javascript
@@ -48,7 +48,7 @@ app.event.on('draw', () => {
 
 Adding these listeners can be done manually, as above, but it is typically done using systems (the 'S' in ECS).
 
-### Entities
+## Entities
 An entity is a container for holding components. Entities can belong to groups, which can be iterated over by systems to perform game logic.
 
 You can create entities and attach components like so:
@@ -61,7 +61,7 @@ const bullet = new fae.Entity(app).attach(
 ```
 *(`attach()` returns the entity object so that it may be chained with the constructor)*
 
-#### Groups
+### Groups
 Groups are JS Set objects. They can be accessed by name via the `app.groups` object.
 
 Every entity is automatically added to the `'all'` group, as well as to a group for each of their components. They can also be added to arbitrary groups:
@@ -71,7 +71,7 @@ bullet.group('bullet')
 
 `bullet` now belongs to the following groups: `'all'`, `'Transform'`, `'Body'`, `'Collider'`, and `'bullet'`.
 
-#### Components
+### Components
 A component is a class that can be instanced and attached to an entity. Components should hold data and utility methods relevant to one piece of behavior, but no game logic.
 
 They are simply classes:
@@ -96,10 +96,10 @@ A lowercase-beginning version of the class name is used as the property name. I 
 `MyComponent` becomes `myComponent`
 `AIController` becomes `aiController`*
 
-### Systems
+## Systems
 ...
 
-### Scenes
+## Scenes
 Scenes are simply functions that can be called by Fae to set a scene's initial state.
 
 A scene might look like this:
@@ -117,8 +117,8 @@ app.enterScene(tavern)
 
 Entering a scene will emit the `'exitScene'` event, stop all systems, and destroy all non-persistent entities before finally calling the scene function. (`tavern()` in this case)
 
-### Input
+## Input
 ...
 
-### Pixi Integration
+## Pixi Integration
 ...
