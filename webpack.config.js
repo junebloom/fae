@@ -13,20 +13,8 @@ module.exports = {
     'eventemitter3': {
       commonjs: 'eventemitter3',
       commonjs2: 'eventemitter3',
-      amd: 'eventemitter3'
-    },
-    'pixi-sound': {
-      commonjs: 'pixi-sound',
-      commonjs2: 'pixi-sound',
-      amd: 'pixi-sound'
-    },
-    'pixi.js': {
-      commonjs: 'pixi.js',
-      commonjs2: 'pixi.js',
-      amd: 'pixi.js'
+      amd: 'eventemitter3',
+      root: 'EventEmitter3'
     }
-  },
-  node: {
-    fs: 'empty'
   }
 }
