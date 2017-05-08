@@ -22,7 +22,7 @@ Keep in mind that fae is written using the latest JS standards. You may need to 
 # Usage
 The documentation is still in progress (sorry). The core is quite small and easy to understand, so you could learn all by reading the source if you are so inclined.
 
-The heart of Fae is the ECS implementation. I worked hard to pack as much goodness into as few lines as possible. The result is a powerful, easy to use framework for making games.
+The heart of fae is the ECS implementation. I worked hard to pack as much goodness into as few lines as possible. The result is a powerful, easy to use framework for making games.
 
 1. [Application](#application)
 2. [Entities](#entities)
@@ -114,7 +114,7 @@ A lowercase-beginning version of the class name is used as the property name. I 
 ...
 
 ## Scenes
-Scenes are simply functions that can be called by Fae to set a scene's initial state.
+Scenes are simply functions that can be called by fae to set a scene's initial state.
 
 A scene might look like this:
 ```javascript
