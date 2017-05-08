@@ -61,6 +61,6 @@ export default class Application {
     for (const entity of this.groups.all) {
       if (!entity.persistent) entity.destroy()
     }
-    scene(this)
+    scene()
   }
 }
