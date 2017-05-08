@@ -1,16 +1,16 @@
 # fae
-Fae is a small 2d game-engine designed to be fast and easy to work with. It is built on PixiJS.
+Fae is a small 2d game-engine designed to be flexible and easy to work with.
 
 The main features of fae are:
 
-- Straightforward ECS implementation
-- Communication via events
-- Basic scenes
+- Renderer-agnostic, easily integrate with PixiJS or any other
+- Lightweight core (a few hundred lines!)
+- Powerful ECS implementation
+- Event-driven
 - Input manager
-- Vectors
-- Plus everything Pixi has! (resource loader, glsl shaders, etc.)
+- Scenes
 
-Fae is in its early stages, so some things are still a bit rough around the edges. Major parts of the engine may be scrapped and rewritten as I decide on the best way to do things.
+The engine is still in its fairly early stages, so some things are still a bit rough around the edges.
 
 I encourage you to offer any suggestions (or contributions) for improvements, and of course I would love to see anything you make!
 
@@ -20,74 +20,105 @@ Get fae using `npm install -S fae`
 Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in all browsers.
 
 ## Usage
-There is currently no proper documentation (sorry), but the core is pretty small and easy to understand so you should be able to figure out the API by reading the source.
+The documentation is still in progress (sorry). The core is quite small and easy to understand, so you could learn all by reading the source if you are so inclined.
 
-Some of the default components/systems (specifically particles, steering, animatedsprite) are pretty hacky, as I needed something that worked (sorry again). I'll remove/rewrite them later.
+The heart of Fae is the ECS implementation. I worked hard to pack as much goodness into as few lines as possible. The result is a powerful, easy to use framework for making games.
 
 ### Application
-The `fae.Application` class is where most of the action is. It extends `PIXI.Application` and provides access to fae's various features. Create an instance of it to get a basic game running.
+The `fae.Application` class is used to handle the game's state and loop. Create an instance of it to get an empty game running.
 
 ```javascript
-import * as fae from "fae";
+import * as fae from 'fae'
 
-const app = new fae.Application();
-document.body.appendChild(app.view);
+const app = new fae.Application()
 ```
 
-### Scenes
-Games in fae are built primarily from scenes with entities in them.
+The `app.event` object is an `EventEmitter` that emits game loop events and input events as well as arbitrary user events.
 
-A scene looks like this:
+You can utilise the game loop by adding listeners to the following events:
+`'preupdate'`
+`'update'` (delta time is passed with this event)
+`'draw'`
+
 ```javascript
-app.scene("myScene", {
-  enter() {
-    // Set up the scene
-  },
-  
-  exit(next) {
-    // Do some stuff
-    // ...
-    // Enter the next scene (normally after some delay or animation)
-    next();
-  },
-});
+app.event.on('draw', () => {
+  // Your rendering code here
+})
 ```
 
-To enter the scene you can call `app.scene("myScene");`. This will call the current scene's `exit()` method, and enter `"myScene"` once that exit method calls `next()`.
-
-It is set up this way to allow a smooth transition between scenes. You can start an exit animation in `exit()`, and call `next()` when it is finished.
-
-All non-persistent entities will be destroyed when `next()` is called.
+Adding these listeners can be done manually, as above, but it is typically done using systems (the 'S' in ECS).
 
 ### Entities
-An entity is basically a fancified PIXI.Container. You can attach components to it to add behaviors.
+An entity is a container for holding components. Entities can belong to groups, which can be iterated over by systems to perform game logic.
 
+You can create entities and attach components like so:
 ```javascript
-const myEntity = app.e({
-  components: ["someComponent", "anotherOne"], // Names of components to attach to this entity
-  groups: ["myGroup"], // Names of groups to add this entity to
-  parent: myParentContainer // Can be a PIXI.Container (or subclass thereof, including other entities)
-  
-  ready() {
-    // Set initial values
-  },
-  
-  someEvent() {
-    // Do stuff when this entity recieves 'someEvent'
-  }
-});
+const bullet = new fae.Entity(app).attach(
+  new fae.components.Transform(),
+  new fae.components.Body(1),
+  new fae.components.Collider(8, 8, 0.5)
+)
 ```
+*(`attach()` returns the entity object so that it may be chained with the constructor)*
 
 #### Groups
-Groups are how you work with sets of entities (in fact they are currently implemented using Set objects).
+Groups are JS Set objects. They can be accessed by name via the `app.groups` object.
 
-...
+Every entity is automatically added to the `'all'` group, as well as to a group for each of their components. They can also be added to arbitrary groups:
+```javascript
+bullet.group('bullet')
+```
 
-### Components
-...
+`bullet` now belongs to the following groups: `'all'`, `'Transform'`, `'Body'`, `'Collider'`, and `'bullet'`.
+
+#### Components
+A component is a class that can be instanced and attached to an entity. Components should hold data and utility methods relevant to one piece of behavior, but no game logic.
+
+They are simply classes:
+```javascript
+class Body {
+  constructor (mass = 1) {
+    this.mass = mass
+    this.force = new Vec2()
+    this.velocity = new Vec2()
+    this.acceleration = new Vec2()
+  }
+}
+```
+
+An entity's component instances can be accessed like so:
+```javascript
+bullet.body.mass = 10
+```
+A lowercase-beginning version of the class name is used as the property name. I may change that if I can find a better way to handle it.
+
+*`Body` becomes `body`
+`MyComponent` becomes `myComponent`
+`AIController` becomes `aiController`*
 
 ### Systems
 ...
 
+### Scenes
+Scenes are simply functions that can be called by Fae to set a scene's initial state.
+
+A scene might look like this:
+```javascript
+function tavern () {
+  // Start some systems
+  // ...
+
+  // Create some entities
+  // ...
+}
+
+app.enterScene(tavern)
+```
+
+Entering a scene will emit the `'exitScene'` event, stop all systems, and destroy all non-persistent entities before finally calling the scene function. (`tavern()` in this case)
+
 ### Input
+...
+
+### Pixi Integration
 ...
