@@ -1,7 +1,7 @@
 export const debug = {
   drawDebug () {
-    if (!this.groups.Graphics) return
-    for (const e of this.groups.Graphics) {
+    if (!this.groups.graphics) return
+    for (const e of this.groups.graphics) {
       if (e.collider) {
         e.graphics.cacheAsBitmap = true
         e.graphics.clear()

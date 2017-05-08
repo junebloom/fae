@@ -66,14 +66,20 @@ const bullet = new fae.Entity(app).attach(
 `attach()` returns the entity object so that it may be chained with the constructor.
 
 ### Groups
-Groups are JS Set objects. They can be accessed by name via the `app.groups` object.
-
-Every entity is automatically added to the `'all'` group, as well as to a group for each of their components. They can also be added to arbitrary groups:
+Groups are JS Set objects. Every entity is automatically added to the `'all'` group, as well as to a group for each of their components. They can also be added to arbitrary groups.
 ```javascript
+// Add the bullet entity to a group called 'bullet', creating the group if necessary
 bullet.group('bullet')
+
+// Groups are accessible via the app.groups object
+for (const e of app.groups.bullet) {
+  // Do something with each entity in the group
+}
 ```
 
-`bullet` now belongs to the following groups: `'all'`, `'Transform'`, `'Body'`, `'Collider'`, and `'bullet'`.
+`bullet` now belongs to the following groups: `'all'`, `'transform'`, `'body'`, `'collider'`, and `'bullet'`.
+
+A lowercase-beginning version of the class name is used as the group name. *`Body` becomes `body`*. *`MyComponent` becomes `myComponent`*. *`AIController` becomes `aiController`*.
 
 ### Components
 A component is a class that can be instanced and attached to an entity. Components should hold data and utility methods relevant to one piece of behavior, but no game logic.
@@ -90,17 +96,11 @@ class Body {
 }
 ```
 
-An entity's component instances can be accessed like so:
+Component instances are added to the entity object with the property name transformed in the same way as group names.
 ```javascript
+const col = bullet.collider
 bullet.body.mass = 10
 ```
-A lowercase-beginning version of the class name is used as the property name. I may change that if I can find a better way to handle it.
-
-*`Body` becomes `body`*
-
-*`MyComponent` becomes `myComponent`*
-
-*`AIController` becomes `aiController`*
 
 ## Systems
 ...

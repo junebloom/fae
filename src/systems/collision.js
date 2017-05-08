@@ -1,9 +1,9 @@
 export const collision = {
   update () {
-    if (!this.groups.Collider) return
-    for (const e of this.groups.Collider) e.collider.checked = []
+    if (!this.groups.collider) return
+    for (const e of this.groups.collider) e.collider.checked = []
 
-    for (const e of this.groups.Collider) {
+    for (const e of this.groups.collider) {
       if (e.destroyed || e.collider.sleeping) continue
 
       for (const groupName of e.collider.groups) {

@@ -9,8 +9,8 @@ export default class Entity {
 
   attach (...components) {
     for (const component of components) {
-      const name = Object.getPrototypeOf(component).constructor.name
-      this[pascalToCamel(name)] = component
+      const name = pascalToCamel(Object.getPrototypeOf(component).constructor.name)
+      this[name] = component
       this.group(name)
       component.entity = this
     }
@@ -19,8 +19,8 @@ export default class Entity {
 
   detach (...components) {
     for (const component of components) {
-      const name = Object.getPrototypeOf(component).constructor.name
-      this[pascalToCamel(name)] = null
+      const name = pascalToCamel(Object.getPrototypeOf(component).constructor.name)
+      this[name] = null
       this.ungroup(name)
     }
     return this
