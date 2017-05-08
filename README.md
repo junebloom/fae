@@ -42,7 +42,7 @@ import * as fae from 'fae'
 const app = new fae.Application()
 ```
 
-The `app.event` object is an `EventEmitter` that emits game loop events and input events as well as arbitrary user events. You can utilise the game loop by adding listeners to the following events: `'preupdate'`, `'update'`, and `'draw'`
+The `app.event` object is an [EventEmitter](https://github.com/primus/eventemitter3) that emits game loop events and input events as well as arbitrary user events. You can utilise the game loop by adding listeners to the following events: `'preupdate'`, `'update'`, and `'draw'`
 
 ```javascript
 app.event.on('draw', () => {
