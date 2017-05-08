@@ -92,9 +92,11 @@ bullet.body.mass = 10
 ```
 A lowercase-beginning version of the class name is used as the property name. I may change that if I can find a better way to handle it.
 
-*`Body` becomes `body`
-`MyComponent` becomes `myComponent`
-`AIController` becomes `aiController`*
+*`Body` becomes `body`*
+
+*`MyComponent` becomes `myComponent`*
+
+*`AIController` becomes `aiController`*
 
 ## Systems
 ...
