@@ -1,4 +1,7 @@
 // TODO: Better key names (no 'a' vs 'A', or ' ' instead of 'space', etc.)
+// TODO: Mouse/touch
+// TODO: Gamepad support
+// TODO: Bndable 'buttons' and 'axes'
 export default class Input {
   constructor (app) {
     this.keyRepeat = false
