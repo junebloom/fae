@@ -1,14 +1,13 @@
 # fae
-Main features are:
+A small JS game framework with a clean, simple API. Fae's features are:
 
-- Powerful Entity-Component-System implementation
-- Event-driven
+- Flexible entity-component-system design
+- Event-driven game loop
 - Simple scene switching
+- Can run in the browser or in Node (for multiplayer game servers)
 - Renderer-agnostic, easily integrate with canvas, [pixi](https://github.com/pixijs/pixi.js/), or anything else
-- Tiny (fewer than 150 lines!)
+- Tiny (fewer than 150 lines!) (2.3kb gzipped)
 - Written in ES6
-
-The framework is fairly young, so some things are still a bit rough around the edges.
 
 I encourage you to offer any suggestions (or contributions) for improvements, and of course I would love to see anything that you make!
 
@@ -18,7 +17,7 @@ Get fae using `npm install -S fae`
 Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in older browsers.
 
 # Usage
-I will assume you are at least a little bit familiar with the [ECS](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system) pattern. If something doesn't make sense, please put in an issue and I will clarify it!
+I will assume you are at least a little bit familiar with the [ECS](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system) pattern. If something doesn't make sense, please put in an issue and I will clarify it! Taking a look at the source might be enough to figure it out in the meantime.
 
 1. [Application](#application)
 2. [Entities](#entities)
