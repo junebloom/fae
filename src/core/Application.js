@@ -7,9 +7,9 @@ function main (app) {
   function gameLoop () {
     app.event.emit('preupdate')
 
-    const curTime = window.performance.now()
-    dt = curTime - lastTime
-    lastTime = curTime
+    const currentTime = window.performance.now()
+    dt = currentTime - lastTime
+    lastTime = currentTime
 
     app.event.emit('update', dt)
     app.event.emit('draw')
