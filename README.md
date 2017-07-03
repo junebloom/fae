@@ -49,7 +49,7 @@ app.event.on('draw', () => {
 
 #### Application instance methods:
 
-`entitiesWith (...groups : String)`: Returns an array containing all entities that belong to every group specified. Uses [rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) syntax.
+`entitiesWith (...groups : String)`: Returns an array containing only the entities that belong to every group specified. Uses [rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) syntax.
 
 `startSystem (system : Object)`: Registers the [`system`](#systems)'s event listeners.
 
@@ -76,7 +76,7 @@ const entity = new fae.Entity(app)
 
 #### Entity instance methods:
 
-`attach (...components : Object)`: Takes one or more [component](#components) instances, attaches them to the entity, and adds the entity to the groups for those components. Returns the entity instance.
+`attach (...components : Object)`: Takes one or more [component](#components) instances, attaches them to the entity, and adds the entity to the [groups](#groups) for those components. Returns the entity instance.
 
 `detach (...componentNames : String)`: Takes one or more component names, detaches them from the entity, and removes the entity from those component groups. Returns the entity instance.
 
