@@ -34,7 +34,7 @@ import * as fae from 'fae'
 const app = new fae.Application()
 ```
 
-An Application instance has the following properties:
+#### Application instance properties:
 
 `app.event`: An [EventEmitter](https://github.com/primus/eventemitter3) that emits game loop events as well as custom user events. You can utilise the default game loop by listening to the following events: `'preupdate'`, `'update'`, and `'draw'`.
 ```javascript
@@ -47,12 +47,9 @@ app.event.on('draw', () => {
 
 `app.groups`: An object whose keys are [group](#groups) names and whose values are Sets containing the [Entities](#entities) in those groups.
 
-An Application instance has the following methods:
+#### Application instance methods:
 
 `entitiesWith (...groups : String)`: Returns an array containing all entities that belong to every group specified. Uses [rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) syntax.
-```javascript
-const enemyHumans = app.entitiesWith('enemy', 'human')
-```
 
 `startSystem (system : Object)`: Registers the [`system`](#systems)'s event listeners.
 
@@ -71,13 +68,13 @@ The `Entity` constructor takes an `Application` instance as its only argument.
 const entity = new fae.Entity(app)
 ```
 
-An Entity instance has the following properties:
+#### Entity instance properties:
 
 `entity.app`: A reference to the Application instance passed in to the constructor. Mostly for internal use.
 
 `entity.groups`: A Set of group names that this entity belongs to. Like `entity.app`, primarily for internal use.
 
-An Entity instance has the following methods:
+#### Entity instance methods:
 
 `attach (...components : Object)`: Takes one or more [component](#components) instances, attaches them to the entity, and adds the entity to the groups for those components. Returns the entity instance.
 
@@ -106,15 +103,9 @@ class Body {
 }
 ```
 
-Components can be attached to entities by passing a component instance to the entity's `attach()` method:
-```javascript
-entity.attach(new Body(10))
-```
+Components can be attached to entities by passing a component instance to the entity's `attach()` method: `entity.attach(new Body(10))`
 
-Once attached, the component instance can be referenced as a property on the entity:
-```javascript
-entity.body.mass = 100
-```
+Once attached, the component instance can be referenced as a property on the entity: `entity.body.mass = 100`
 
 The name of the property is a camelCase transformed version of the class name. `Body` becomes `body`, `MyComponent` becomes `myComponent`, `AIController` becomes `aiController`.
 
