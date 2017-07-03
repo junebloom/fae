@@ -1,5 +1,4 @@
 import EventEmitter from 'eventemitter3'
-import Input from './Input'
 
 function main (app) {
   let dt = 0
@@ -23,7 +22,6 @@ function main (app) {
 export default class Application {
   constructor (customMain) {
     this.event = new EventEmitter()
-    this.input = new Input(this)
 
     this.systems = new Set()
     this.groups = { all: new Set() }
@@ -43,15 +41,15 @@ export default class Application {
 
   startSystem (system) {
     this.systems.add(system)
-    for (const listener in system) {
-      this.event.on(listener, system[listener], this)
+    for (const listener in system.listeners) {
+      this.event.on(listener, system.listeners[listener])
     }
   }
 
   stopSystem (system) {
     this.systems.delete(system)
-    for (const listener in system) {
-      this.event.removeListener(listener, system[listener], this)
+    for (const listener in system.listeners) {
+      this.event.removeListener(listener, system.listeners[listener])
     }
   }
 
