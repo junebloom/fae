@@ -35,6 +35,7 @@ const app = new fae.Application()
 ```
 
 An Application instance has the following properties:
+
 `app.event`: An [EventEmitter](https://github.com/primus/eventemitter3) that emits game loop events as well as custom user events. You can utilise the default game loop by listening to the following events: `'preupdate'`, `'update'`, and `'draw'`.
 ```javascript
 app.event.on('draw', () => {
@@ -43,16 +44,20 @@ app.event.on('draw', () => {
 ```
 
 `app.systems`: A [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) of active systems for internal use.
+
 `app.groups`: An object whose keys are [group](#groups) names and whose values are Sets containing the [Entities](#entities) in those groups.
 
 An Application instance has the following methods:
+
 `entitiesWith (...groups : String)`: Returns an array containing all entities that belong to every group specified. Uses [rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) syntax.
 ```javascript
 const enemyHumans = app.entitiesWith('enemy', 'human')
 ```
 
 `startSystem (system : Object)`: Registers the [`system`](#systems)'s event listeners.
+
 `stopSystem (system : Object)`: Unregisters the [`system`](#systems)'s event listeners.
+
 `enterScene (scene : Function)`: Emits the `'exitScene'` event, stops all running systems, destroys all non-persistent entities, and then calls `scene()`. See [scenes](#scenes).
 
 #### Custom game loop
@@ -67,15 +72,23 @@ const entity = new fae.Entity(app)
 ```
 
 An Entity instance has the following properties:
+
 `entity.app`: A reference to the Application instance passed in to the constructor. Mostly for internal use.
+
 `entity.groups`: A Set of group names that this entity belongs to. Like `entity.app`, primarily for internal use.
 
 An Entity instance has the following methods:
+
 `attach (...components : Object)`: Takes one or more [component](#components) instances, attaches them to the entity, and adds the entity to the groups for those components. Returns the entity instance.
+
 `detach (...componentNames : String)`: Takes one or more component names, detaches them from the entity, and removes the entity from those component groups. Returns the entity instance.
+
 `group (...groups : String)`: Takes one or more [group](#groups) names, and adds the entity instance to those groups, creating any that don't already exist. Returns the entity instance.
+
 `ungroup (...groups : String)`: Takes one or more group names, and removes the entity instance from those groups. Returns the entity instance.
+
 `hasGroups (...groups : String)`: Takes one or more group names, and returns `true` if the entity instance belongs to every group provided. Returns `false` otherwise.
+
 `destroy ()`: Sets the entity instance's `destroyed` property to `true`, and removes the instance from all groups, freeing all internal references that fae has to it. The entity instance will be garbage collected as long as your code doesn't hold any reference to it.
 
 ### Components
