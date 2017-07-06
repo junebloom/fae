@@ -1,12 +1,23 @@
 import { pascalToCamel } from '../utils'
 
+// Composes one logical 'object' in the game using components
 export default class Entity {
   constructor (app) {
+    // ## Properties
+    // *(read-only)*
+
+    // A reference to an `Application` instance
     this.app = app
+
+    // The Set of group names that this entity is a member of
     this.groups = new Set()
+
     this.group('all')
   }
 
+  // ## Methods
+
+  // Attach the provided component instances to the entity
   attach (...components) {
     for (const component of components) {
       const rawName = Object.getPrototypeOf(component).constructor.name
@@ -14,6 +25,7 @@ export default class Entity {
 
       this[name] = component
       this.group(name)
+
       component.entity = this
     }
     return this
@@ -27,6 +39,8 @@ export default class Entity {
     return this
   }
 
+  // Add this entity to the provided groups,
+  // creating any that don't already exist
   group (...groups) {
     for (const group of groups) {
       if (!this.app.groups[group]) this.app.groups[group] = new Set()
@@ -51,6 +65,8 @@ export default class Entity {
     return true
   }
 
+  // Free all of fae's internal references to the entity,
+  // allowing it to be garbage collected
   destroy () {
     this.destroyed = true
     for (const group of this.groups) {
