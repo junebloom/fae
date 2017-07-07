@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3'
+import { logBanner } from '../utils'
 
 // Provides events and manages systems, scenes, and entity groups
 export default class Application {
@@ -17,6 +18,7 @@ export default class Application {
     this.groups = { all: new Set() }
 
     start(this)
+    logBanner()
   }
 
   // ## Methods
