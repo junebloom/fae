@@ -182,3 +182,7 @@ function tavern () {
 
 app.enterScene(tavern)
 ```
+
+---
+
+[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
