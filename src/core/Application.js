@@ -33,12 +33,13 @@ export default class Application {
     return entities
   }
 
-  // Register `system`'s event listeners
+  // Register `system`'s event listeners and return 'system'
   startSystem (system) {
     this.systems.add(system)
     for (const listener in system.listeners) {
       this.event.on(listener, system.listeners[listener], system)
     }
+    return system
   }
 
   // Unregister `system`'s event listeners
