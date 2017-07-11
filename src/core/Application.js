@@ -72,7 +72,7 @@ function main (app) {
     app.event.emit('preupdate')
 
     const currentTime = window.performance.now()
-    dt = currentTime - lastTime
+    dt = (currentTime - lastTime) / 1000
     lastTime = currentTime
 
     app.event.emit('update', dt)
