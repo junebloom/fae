@@ -14,6 +14,7 @@
   "scripts": {
     "build": "rollup --config",
     "build:watch": "rollup --config --watch",
+    "docs": "docco src/*.js src/**/*.js",
     "version": "npm run build",
     "postversion": "git push && git push --tags"
   },
@@ -21,6 +22,7 @@
     "eventemitter3": "^2.0.3"
   },
   "devDependencies": {
+    "docco": "^0.7.0",
     "rollup": "^0.45.2",
     "rollup-plugin-buble": "^0.15.0",
     "rollup-plugin-commonjs": "^8.1.0",

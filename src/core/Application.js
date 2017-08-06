@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3'
-import { logBanner } from '../utils'
+import logBanner from '../utils/logBanner'
 
 // Provides events and manages systems, scenes, and entity groups
 export default class Application {
