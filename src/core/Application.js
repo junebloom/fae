@@ -33,7 +33,7 @@ export default class Application {
     return entities
   }
 
-  // Register `system`'s event listeners and return 'system'
+  // Register `system`'s event listeners and return `system`
   startSystem (system) {
     this.systems.add(system)
     for (const listener in system.listeners) {
