@@ -1,4 +1,4 @@
-/* eslint no-console: "off" */
+/* eslint no-console: off */
 import { version } from '../../package.json'
 
 // Display a nice banner in the browser console
