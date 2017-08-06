@@ -6,7 +6,7 @@
   "author": "Sam Woodruff",
   "license": "MIT",
   "main": "dist/fae.js",
-  "module": "src/index.js",
+  "module": "src/fae.js",
   "files": [
     "dist",
     "src"

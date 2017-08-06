@@ -7,7 +7,7 @@ import uglify from 'rollup-plugin-uglify'
 import license from 'rollup-plugin-license'
 
 export default {
-  entry: 'src/index.js',
+  entry: 'src/fae.js',
   dest: 'dist/fae.js',
   sourceMap: true,
 
