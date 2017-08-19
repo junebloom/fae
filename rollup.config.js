@@ -14,11 +14,6 @@ export default {
   format: 'umd',
   moduleName: 'fae',
 
-  external: [ 'eventemitter3' ],
-  globals: {
-    eventemitter3: 'EventEmitter3'
-  },
-
   plugins: [
     filesize(),
     resolve(),
