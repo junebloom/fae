@@ -31,6 +31,15 @@ export default class Entity {
     return this
   }
 
+  attachProperties (components) {
+    for (const name in components) {
+      this[name] = components[name]
+      this.group(name)
+      if (typeof components[name] === 'object') components[name].entity = this
+    }
+    return this
+  }
+
   detach (...componentNames) {
     for (const name of componentNames) {
       this[name] = null
