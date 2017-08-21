@@ -31,6 +31,9 @@ export default class Entity {
     return this
   }
 
+  // Attach the properties of the `components` object,
+  // where the keys are the component names
+  // and the values are the component instances
   attachProperties (components) {
     for (const name in components) {
       this[name] = components[name]
