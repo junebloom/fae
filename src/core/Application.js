@@ -64,6 +64,7 @@ export default class Application {
 
 // Used if you do not provide a custom `start` function to the
 // `Application` constructor
+// *Note that this function will not work in Node due to use of `window`*
 function main (app) {
   let dt = 0
   let lastTime = window.performance.now()
