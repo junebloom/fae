@@ -15,8 +15,7 @@
     "build": "rollup --config",
     "build:watch": "rollup --config --watch",
     "docs": "docco src/*.js src/**/*.js",
-    "version": "npm run build",
-    "postversion": "git push && git push --tags"
+    "prepublish": "git push && git push --tags"
   },
   "dependencies": {
     "eventemitter3": "^2.0.3"
