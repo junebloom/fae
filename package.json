@@ -1,6 +1,6 @@
 {
   "name": "fae",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A tiny magical game framework written in ES6",
   "repository": "sambrosia/fae",
   "author": "Sam Woodruff",
