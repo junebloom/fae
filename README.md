@@ -1,188 +1,132 @@
 # fae
-A small JS game framework with a clean, simple API. Fae's features are:
+A small JS game framework with a clean, simple API.
 
 - Flexible entity-component-system design
 - Event-driven game loop
-- Simple scene switching
-- Can run in the browser or in Node (for multiplayer game servers)
-- Renderer-agnostic, easily integrate with canvas, [pixi](https://github.com/pixijs/pixi.js/), or anything else
-- Tiny (fewer than 150 lines!) (2.3kb gzipped)
-- Written in ES6
-
-I encourage you to offer any suggestions (or contributions) for improvements, and of course I would love to see anything that you make!
+- Renderer-agnostic; easily integrate with canvas, [pixi](https://github.com/pixijs/pixi.js/), or anything else
+- Can run in the browser or in Node
+- Written in modern JS
+- Tiny
 
 # Installation
-Get fae using `npm install -S fae`
+`npm i -S fae`
 
-Keep in mind that fae is written using the latest JS standards. You may need to use a transpiler like Babel for your game to be supported in older browsers.
-
-# Usage
-I will assume you are at least a little bit familiar with the [ECS](https://en.wikipedia.org/wiki/Entity%E2%80%93component%E2%80%93system) pattern. If something doesn't make sense, please put in an issue and I will clarify it! Taking a look at the source might be enough to figure it out in the meantime.
-
-1. [Application](#application)
-2. [Entities](#entities)
-    - [Components](#components)
-    - [Groups](#groups)
-3. [Systems](#systems)
-4. [Scenes](#scenes)
-
-## Application
-The `Application` class is used to handle the game's state and loop. Create an instance of it to get an empty game running.
+# Getting Started
 ```javascript
-import * as fae from 'fae'
+import fae from 'fae'
 
 const app = new fae.Application()
 ```
 
-#### Application instance properties:
+# Concepts
+This is a minimal guide. Check out the annotated source for more API details (it's short and sweet!).
 
-`app.event`: An [EventEmitter](https://github.com/primus/eventemitter3) that emits game loop events as well as custom user events. You can utilise the default game loop by listening to the following events: `'preupdate'`, `'update'`, and `'draw'`.
+## The loop
+`app.event` is an [EventEmitter3](https://github.com/primus/EventEmitter3) (follows the Node API).
+Each frame it emits these events:
+
+`preupdate`, `update`, and `draw`
+
+Arbitrary events can be emitted as well:
+
 ```javascript
-app.event.on('draw', () => {
-  // Your rendering code here
-})
+app.event.emit('entityWasHit', myEntity, 2)
 ```
 
-`app.systems`: A [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set) of active systems for internal use.
+You can manually listen for events with `app.event.on()`, but in practice you rarely need to do so because fae's systems allows you to manage listeners in a smarter way.
 
-`app.groups`: An object whose keys are [group](#groups) names and whose values are Sets containing the [Entities](#entities) in those groups.
+## Components
+A component is an ES6 class for holding state and utility methods. Component instances can be attached to entities to compose their functionality.
 
-#### Application instance methods:
-
-`entitiesWith (...groups : String)`: Returns an array containing only the entities that belong to every group specified. Uses [rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) syntax.
-
-`startSystem (system : Object)`: Registers the [`system`](#systems)'s event listeners.
-
-`stopSystem (system : Object)`: Unregisters the [`system`](#systems)'s event listeners.
-
-`enterScene (scene : Function)`: Emits the `'exitScene'` event, stops all running systems, destroys all non-persistent entities, and then calls `scene()`. See [scenes](#scenes).
-
-#### Custom game loop
-You can optionally pass a function as the only argument to the `Application` constructor, and it will be used to start the game instead of the default `main` function. Check out the source to see exactly how that works.
-
-## Entities
-An entity is a container for holding components. Entities belong to groups, which can be iterated over by systems to perform game logic.
-
-The `Entity` constructor takes an `Application` instance as its only argument.
 ```javascript
-const entity = new fae.Entity(app)
-```
-
-#### Entity instance properties:
-
-`entity.app`: A reference to the Application instance passed in to the constructor. Mostly for internal use.
-
-`entity.groups`: A Set of group names that this entity belongs to. Like `entity.app`, primarily for internal use.
-
-#### Entity instance methods:
-
-`attach (...components : Object)`: Takes one or more [component](#components) instances, attaches them to the entity, and adds the entity to the [groups](#groups) for those components. Returns the entity instance.
-
-`detach (...componentNames : String)`: Takes one or more component names, detaches them from the entity, and removes the entity from those component groups. Returns the entity instance.
-
-`group (...groups : String)`: Takes one or more [group](#groups) names, and adds the entity instance to those groups, creating any that don't already exist. Returns the entity instance.
-
-`ungroup (...groups : String)`: Takes one or more group names, and removes the entity instance from those groups. Returns the entity instance.
-
-`hasGroups (...groups : String)`: Takes one or more group names, and returns `true` if the entity instance belongs to every group provided. Returns `false` otherwise.
-
-`destroy ()`: Sets the entity instance's `destroyed` property to `true`, and removes the instance from all groups, freeing all internal references that fae has to it. The entity instance will be garbage collected as long as your code doesn't hold any reference to it.
-
-### Components
-A component is a class that can be instanced and attached to an entity. Components should hold data and utility methods relevant to one piece of behavior, but no game logic.
-
-They are defined using ES6 classes:
-```javascript
-class Body {
-  constructor (mass = 1) {
-    this.mass = mass
-    this.force = new Vec2()
-    this.velocity = new Vec2()
-    this.acceleration = new Vec2()
+// A component that holds health-related state
+class HP {
+  constructor (max) {
+    this.max = max
+    this.current = max
   }
 }
 ```
 
-Components can be attached to entities by passing a component instance to the entity's `attach()` method: `entity.attach(new Body(10))`
+## Entities
+Entities are the objects in your game. They are empty containers that you can group together and attach components to.
 
-Once attached, the component instance can be referenced as a property on the entity: `entity.body.mass = 100`
-
-The name of the property is a camelCase transformed version of the class name. `Body` becomes `body`, `MyComponent` becomes `myComponent`, `AIController` becomes `aiController`.
-
-The entity is also added to a group with the same camelCase-ified name for every component that is attached to it.
-
-### Groups
-Groups are JS Set objects that hold related entities. Every entity is automatically added to the `'all'` group, as well as to a group for each of their components. They can also be added to arbitrary groups.
-
-Groups are the main way of getting entities for processing.
 ```javascript
-// Add the entity to a group called 'bullet', creating the group if necessary
-entity.group('bullet')
-
-// Groups are accessible via the app.groups object
-for (const e of app.groups.bullet) {
-  // Do something with each entity in the group
-  // ...
-}
+const player = new fae.Entity(app).attach(
+  new HP(10),
+  new Position(0, 0),
+  new Collider(12, 18),
+  new KeyboardMovement(),
+  new Sprite('sprites/player.png'),
+  // etc...
+)
 ```
 
 ## Systems
-A system is where the game logic lives. A system is any object with a `listeners` property, which in turn is an object whose keys are event names and whose values are funtions to handle those events:
+Systems tie things together by providing the actual game logic. A system is an object with a `listeners` property. `listeners` is itself an object whose keys are event names, and whose values are functions to handle those events.
+
 ```javascript
-const system = {
+// A system for healing/dealing damage
+const health = {
   listeners: {
-    update(dt) {
-      // Do something every frame (usually involving processing some entities)
-      // ...
+    update (dt) {
+      // Do something every frame
+      // like iterate over entities with the HP component and slowly heal them:
+      for (const e of app.groups.hp) {
+        if (e.hp.current < e.hp.max) {
+          e.hp.current = Math.min(e.hp.current + 0.1 * dt, e.hp.max)
+        }
+      }
+    },
+    entityWasHit (entity, damage) {
+      // handle 'entityWasHit' event
     }
   }
 }
 
-app.startSystem(system)
+app.startSystem(health)
 ```
 
-Those listeners will be called when `app.event` emits the relevant event. Fae doesn't care about anything except the `listeners` property, so you are free to structure the rest of the system object in any way you desire.
+Fae doesn't care how you structure the rest of the system. You can even write a class for each system to enable easy reuse across projects.
 
-If you want your systems to be easily reusable, you can write a class that creates an instance of the system. You won't have to `import` your `Application` instance into your system definition files.
 ```javascript
-class CollisionSystem {
+class Health {
   constructor (app) {
     this.app = app
     this.listeners = {
-      update: this.update
+      update: this.update,
+      entityWasHit: this.entityWasHit
     }
   }
-
-  update (dt) {
-    for (const entity of this.app.groups.collider) {
-      // Do something for every entity with the 'collider' component.
-      // ...
-    }
-  }
+  update (dt) {}
+  entityWasHit (entity, damage) {}
 }
 
-// ...
-// Somewhere in another file (probably in a scene function)
-const collision = new CollisionSystem(app)
-app.startSystem(collision)
+// startSystem() returns the system object that you pass to it
+// (the Health instance in this case)
+const health = app.startSystem(new Health(app))
+
+// The system can later be passed to stopSystem()
+app.stopSystem(health)
 ```
 
 ## Scenes
-Scenes are simply functions that can be called by fae to set a scene's initial state.
+You can split your game into scenes (loading, main menu, cave, etc.) by wrapping the code for each scene in a function.
 
-A scene might look like this:
 ```javascript
-function tavern () {
-  // Start some systems
+function cave () {
+  // Start all of the necessary systems for the cave area
+  app.startSystem(new Health(app))
+  app.startSystem(new Physics(app))
   // ...
 
-  // Create some entities
+  // Initialize the entities (player, enemies, terrain, treasure)
+  const player = new fae.Entity(/* ... */)
   // ...
 }
 
-app.enterScene(tavern)
+// Somewhere else in your code (maybe in response to the player clicking 'play')
+app.enterScene(cave)
 ```
 
----
-
-[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+`enterScene()` will stop all systems, destroy all non-persistent entities, and then call the passed function.
