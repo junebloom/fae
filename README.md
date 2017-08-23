@@ -62,6 +62,8 @@ const player = new fae.Entity(app).attach(
 )
 ```
 
+Entities are automatically added to a group with the component's class name when a component is attached. (So the player above is in the groups 'HP', 'Position', etc.)
+
 ## Systems
 Systems tie things together by providing the actual game logic. A system is an object with a `listeners` property. `listeners` is itself an object whose keys are event names, and whose values are functions to handle those events.
 
@@ -72,9 +74,9 @@ const health = {
     update (dt) {
       // Do something every frame
       // like iterate over entities with the HP component and slowly heal them:
-      for (const e of app.groups.hp) {
-        if (e.hp.current < e.hp.max) {
-          e.hp.current = Math.min(e.hp.current + 0.1 * dt, e.hp.max)
+      for (const e of app.groups.HP) {
+        if (e.HP.current < e.HP.max) {
+          e.HP.current = Math.min(e.HP.current + 0.1 * dt, e.HP.max)
         }
       }
     },

@@ -1,5 +1,3 @@
-import pascalToCamel from '../utils/pascalToCamel'
-
 // Composes one logical 'object' in the game using components
 export default class Entity {
   constructor (app) {
@@ -20,8 +18,7 @@ export default class Entity {
   // Attach the provided component instances to the entity
   attach (...components) {
     for (const component of components) {
-      const rawName = Object.getPrototypeOf(component).constructor.name
-      const name = pascalToCamel(rawName)
+      const name = Object.getPrototypeOf(component).constructor.name
 
       this[name] = component
       this.group(name)
