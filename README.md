@@ -65,7 +65,7 @@ const player = new fae.Entity(app).attach(
 Entities are automatically added to a group with the component's class name when a component is attached. (So the player above is in the groups 'HP', 'Position', etc.)
 
 ## Systems
-Systems tie things together by providing the actual game logic. A system is an object with a `listeners` property. `listeners` is itself an object whose keys are event names, and whose values are functions to handle those events.
+Systems tie things together by providing the actual game logic. A system is an object with a `listeners` property. `listeners` is itself an object whose keys are event names, and whose values are functions to handle those events. `this` inside of system listeners refers to the system object.
 
 ```javascript
 // A system for healing/dealing damage
@@ -89,7 +89,7 @@ const health = {
 app.startSystem(health)
 ```
 
-Fae doesn't care how you structure the rest of the system. You can even write a class for each system to enable easy reuse across projects.
+Fae doesn't care how you structure the rest of the system. You can even write a class to ease reuse across projects.
 
 ```javascript
 class Health {
