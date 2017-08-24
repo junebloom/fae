@@ -50,13 +50,15 @@ export default class Application {
     }
   }
 
-  enterScene (scene) {
-    this.event.emit('exitScene')
-    for (const system of this.systems) this.stopSystem(system)
-    for (const entity of this.groups.all) {
-      if (!entity.persistent) entity.destroy()
+  // Stop/destroy all non-persistent systems and entities
+  // Includes persistent entities if `clearAll` is `true`
+  clear (clearAll = false) {
+    for (const system of this.systems) {
+      if (!system.persistent || clearAll) this.stopSystem(system)
     }
-    scene()
+    for (const entity of this.groups.all) {
+      if (!entity.persistent || clearAll) entity.destroy()
+    }
   }
 }
 

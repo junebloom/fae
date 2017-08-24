@@ -128,7 +128,8 @@ function cave () {
 }
 
 // Somewhere else in your code (maybe in response to the player clicking 'play')
-app.enterScene(cave)
+app.clear()
+cave()
 ```
 
-`enterScene()` will stop all systems, destroy all non-persistent entities, and then call the passed function.
+`app.clear()` will stop all non-persistent systems and destroy all non-persistent entities, leaving you with a blank slate to call your scene function.
