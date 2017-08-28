@@ -1,9 +1,10 @@
 import EventEmitter from 'eventemitter3'
 import logBanner from '../utils/logBanner'
+import defaultLoop from './defaultLoop'
 
 // Provides events and manages systems, scenes, and entity groups
 export default class Application {
-  constructor (start = main) {
+  constructor (startGame = defaultLoop) {
     // ## Properties
     // *(read-only)*
 
@@ -17,7 +18,9 @@ export default class Application {
     // containing groups of related entities
     this.groups = { all: new Set() }
 
-    start(this)
+    // Call the `startGame` function, which should initiate the game loop
+    // It takes the app instance as its only argument
+    startGame(this)
     logBanner()
   }
 
@@ -60,28 +63,4 @@ export default class Application {
       if (!entity.persistent || clearAll) entity.destroy()
     }
   }
-}
-
-// #### Default game loop
-
-// Used if you do not provide a custom `start` function to the
-// `Application` constructor
-// *Note that this function will not work in Node due to use of `window`*
-function main (app) {
-  let dt = 0
-  let lastTime = window.performance.now()
-
-  function gameLoop () {
-    app.event.emit('preupdate')
-
-    const currentTime = window.performance.now()
-    dt = (currentTime - lastTime) / 1000
-    lastTime = currentTime
-
-    app.event.emit('update', dt)
-    app.event.emit('draw')
-
-    window.requestAnimationFrame(gameLoop)
-  }
-  gameLoop()
 }
