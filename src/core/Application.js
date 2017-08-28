@@ -21,7 +21,10 @@ export default class Application {
     // Call the `startGame` function, which should initiate the game loop
     // It takes the app instance as its only argument
     startGame(this)
-    logBanner()
+
+    this.event.once('preupdate', () => {
+      if (!this.hideBanner) logBanner()
+    })
   }
 
   // ## Methods

@@ -6,6 +6,7 @@ const promiseTimeout = util.promisify(setTimeout)
 
 test('emit proper events every frame', async t => {
   const app = new Application()
+  app.hideBanner = true
 
   let expected = 0
   let i = 0

@@ -19,6 +19,6 @@ export default function defaultLoop (app) {
     if (global.window) window.requestAnimationFrame(gameLoop)
   }
 
-  if (global.window) gameLoop()
+  if (global.window) window.requestAnimationFrame(gameLoop)
   else setInterval(gameLoop, 1000 / 60)
 }
