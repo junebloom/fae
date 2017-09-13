@@ -22,3 +22,11 @@ test('starts and stops systems properly', t => {
 
   app.event.emit('goodDay')
 })
+
+test('creates and holds reference to entity groups', t => {
+  const app = new Application()
+
+  app.createGroup('powerpuff')
+
+  t.truthy(app.groups.powerpuff, 'The powerpuff group should exist')
+})
