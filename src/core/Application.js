@@ -23,6 +23,8 @@ export default class Application {
     // It takes the app instance as its only argument
     startGame(this)
 
+    // Print the fae banner to the console upon the first frame of the gameloop
+    // being processed, unless `this.hideBanner` is truthy
     this.event.once('preupdate', () => {
       if (!this.hideBanner) logBanner()
     })
@@ -64,7 +66,7 @@ export default class Application {
   }
 
   // Stop/destroy all non-persistent systems and entities
-  // Includes persistent entities if `clearAll` is `true`
+  // Includes persistent entities if `clearAll` is truthy
   clear (clearAll = false) {
     for (const system of this.systems) {
       if (!system.persistent || clearAll) this.stopSystem(system)
