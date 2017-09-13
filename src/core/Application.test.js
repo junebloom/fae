@@ -5,21 +5,20 @@ const Application = esm(module)('./Application').default
 test('starts and stops systems properly', t => {
   const app = new Application()
   app.hideBanner = true
+  let running
 
-  const system = app.startSystem({
-    listeners: {
-      goodDay () {
-        t.true(running, 'This should not be called if the system is stopped')
-      }
+  const listeners = {
+    goodDay () {
+      t.true(running, 'This should not be called if the system is stopped')
     }
-  })
-  let running = true // system should be running
+  }
 
+  const system = app.startSystem({ listeners })
+  running = true // system should be running
   app.event.emit('goodDay')
 
   app.stopSystem(system)
   running = false // system should be stopped
-
   app.event.emit('goodDay')
 })
 
