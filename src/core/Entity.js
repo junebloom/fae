@@ -50,19 +50,18 @@ export default class Entity {
 
   // Add this entity to the provided groups,
   // creating any that don't already exist
-  group (...groups) {
-    for (const group of groups) {
-      if (!this.app.groups[group]) this.app.groups[group] = new Set()
-      this.app.groups[group].add(this)
-      this.groups.add(group)
+  group (...groupNames) {
+    for (const name of groupNames) {
+      (this.app.groups[name] || this.app.createGroup(name)).add(this)
+      this.groups.add(name)
     }
     return this
   }
 
-  ungroup (...groups) {
-    for (const group of groups) {
-      this.app.groups[group].delete(this)
-      this.groups.delete(group)
+  ungroup (...groupNames) {
+    for (const name of groupNames) {
+      this.app.groups[name].delete(this)
+      this.groups.delete(name)
     }
     return this
   }

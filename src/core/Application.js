@@ -16,7 +16,8 @@ export default class Application {
 
     // An object whose keys are group names and whose values are Sets
     // containing groups of related entities
-    this.groups = { all: new Set() }
+    this.groups = {}
+    this.createGroup('all')
 
     // Call the `startGame` function, which should initiate the game loop
     // It takes the app instance as its only argument
@@ -29,7 +30,13 @@ export default class Application {
 
   // ## Methods
 
-  // Return an array of entities that belong to all of the provided groups
+  // Create an empty group with the given name and return it
+  createGroup (name) {
+    this.groups[name] = new Set()
+    return this.groups[name]
+  }
+
+  // Return an array of entities that belong to *all* of the provided groups
   entitiesWith (...groups) {
     groups.sort((a, b) => this.groups[a].size - this.groups[b].size)
     const entities = []
