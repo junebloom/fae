@@ -18,24 +18,13 @@ export default class Entity {
   // Attach the provided component instances to the entity
   attach (...components) {
     for (const component of components) {
-      const name = Object.getPrototypeOf(component).constructor.name
+      const getPrototypeOf = Object.getPrototypeOf
+      const name = component.name || getPrototypeOf(component).constructor.name
 
       this[name] = component
       this.group(name)
 
       component.entity = this
-    }
-    return this
-  }
-
-  // Attach the properties of the `components` object,
-  // where the keys are the component names
-  // and the values are the component instances
-  attachProperties (components) {
-    for (const name in components) {
-      this[name] = components[name]
-      this.group(name)
-      if (typeof components[name] === 'object') components[name].entity = this
     }
     return this
   }
