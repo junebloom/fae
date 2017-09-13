@@ -12,7 +12,8 @@
     "src"
   ],
   "@std/esm": {
-    "esm": "js"
+    "esm": "js",
+    "cjs": true
   },
   "scripts": {
     "test": "ava --watch",
