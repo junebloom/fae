@@ -11,18 +11,20 @@
     "dist",
     "src"
   ],
+  "@std/esm": {
+    "esm": "js"
+  },
   "scripts": {
+    "test": "ava --watch",
     "build": "rollup --config",
-    "build:watch": "rollup --config --watch",
     "docs": "docco src/*.js src/**/*.js",
-    "prepublishOnly": "git push && git push --tags",
-    "pretest": "npm run build",
-    "test": "ava test"
+    "prepublishOnly": "git push && git push --tags"
   },
   "dependencies": {
     "eventemitter3": "^2.0.3"
   },
   "devDependencies": {
+    "@std/esm": "^0.9.2",
     "ava": "^0.22.0",
     "docco": "^0.7.0",
     "rollup": "^0.45.2",
