@@ -4,21 +4,27 @@ import getTime from '../utils/getTime'
 // the `Application` constructor
 export default function defaultLoop (app) {
   let lastTime = getTime()
-  let dt = 0
+  let currentTime, dt
 
   function gameLoop () {
-    app.event.emit('preupdate')
-
-    const currentTime = getTime()
+    // Calculate frame delta time in seconds
+    currentTime = getTime()
     dt = currentTime - lastTime
     lastTime = currentTime
 
+    app.event.emit('preupdate')
     app.event.emit('update', dt)
     app.event.emit('draw')
-
-    if (global.window) window.requestAnimationFrame(gameLoop)
   }
 
-  if (global.window) window.requestAnimationFrame(gameLoop)
+  // Function to start looping using requestAnimationFrame
+  function rafLoop () {
+    gameLoop()
+    window.requestAnimationFrame(rafLoop)
+  }
+
+  // Use requestAnimationFrame in browsers and setInterval in Node
+  // In either case, wait a frame before beginning
+  if (global.window) window.requestAnimationFrame(rafLoop)
   else setInterval(gameLoop, 1000 / 60)
 }
