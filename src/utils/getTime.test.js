@@ -1,6 +1,7 @@
+import esm from '@std/esm'
 import test from 'ava'
 import util from 'util'
-import getTime from './getTime'
+const getTime = esm(module)('./getTime').default
 
 const promiseTimeout = util.promisify(setTimeout)
 
