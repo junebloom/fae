@@ -53,11 +53,11 @@ Entities are the objects in your game. They are empty containers that you can gr
 
 ```javascript
 const player = new fae.Entity(app).attach(
-  new HP(10),
-  new Position(0, 0),
-  new Collider(12, 18),
-  new KeyboardMovement(),
   new Sprite('sprites/player.png'),
+  new KeyboardMovement(),
+  new Collider(12, 18),
+  new Position(0, 0),
+  new HP(10),
   // etc...
 )
 ```
@@ -103,12 +103,13 @@ class Health {
   update (dt) {}
   entityWasHit (entity, damage) {}
 }
-
-// startSystem() returns the system object that you pass to it
-// (the Health instance in this case)
+```
+`startSystem()` returns the system object that you pass to it. The `Health` instance in this case.
+```javascript
 const health = app.startSystem(new Health(app))
-
-// The system can later be passed to stopSystem()
+```
+The system object can later be passed to `stopSystem()`.
+```javascript
 app.stopSystem(health)
 ```
 
@@ -126,7 +127,8 @@ function cave () {
   const player = new fae.Entity(/* ... */)
   // ...
 }
-
+```
+```javascript
 // Somewhere else in your code (maybe in response to the player clicking 'play')
 app.clear()
 cave()
