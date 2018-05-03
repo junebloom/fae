@@ -6,17 +6,16 @@ import buble from 'rollup-plugin-buble'
 import uglify from 'rollup-plugin-uglify'
 import { version } from './package.json'
 
-const preamble =
-`// fae v${version} | MIT License | Copyright (c) 2017 Sam Woodruff`
+const preamble = `// fae v${version} | MIT License | Copyright (c) 2017 Sam Woodruff`
 
 export default {
-  entry: 'src/fae.js',
-  dest: 'dist/fae.js',
-  sourceMap: true,
-
-  format: 'umd',
-  moduleName: 'fae',
-
+  input: 'src/fae.js',
+  output: {
+    file: 'dist/fae.js',
+    sourceMap: true,
+    format: 'umd',
+    name: 'fae'
+  },
   plugins: [
     filesize(),
     resolve(),
