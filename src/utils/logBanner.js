@@ -2,7 +2,7 @@
 import { version, repository } from '../../package.json'
 
 // Display a nice banner in the console
-export default function logBanner () {
+export default function logBanner() {
   const message = `%cfae ♥ ${version}%c https://github.com/${repository} `
 
   if (global.window) {
@@ -12,7 +12,6 @@ export default function logBanner () {
       `
         background: #aaf;
         color: white;
-        line-height: 39px;
         padding: 4px 10px;
         border-radius: 30px;
       `,
@@ -21,9 +20,7 @@ export default function logBanner () {
   } else {
     // Color with ANSI escape sequences in node
     console.log(
-      message
-        .replace(/%c/, '\x1B[35m\x1b[1m')
-        .replace(/%c/, '\x1b[0m\x1b[35m')
+      message.replace(/%c/, '\x1B[35m\x1b[1m').replace(/%c/, '\x1b[0m\x1b[35m')
     )
   }
 }

@@ -1,13 +1,11 @@
-import esm from '@std/esm'
 import test from 'ava'
-const loader = esm(module)
-const Application = loader('./Application').default
-const Entity = loader('./Entity').default
+import Application from './Application'
+import Entity from './Entity'
 
-test('is in \'all\' group', t => {
+test("is in 'all' group", t => {
   const app = new Application()
   const entity = new Entity(app)
-  t.true(entity.groups.has('all'), 'Every entity should be in \'all\'')
+  t.true(entity.groups.has('all'), "Every entity should be in 'all'")
 })
 
 test('can be added to and removed from groups', t => {
