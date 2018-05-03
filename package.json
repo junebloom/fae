@@ -1,13 +1,16 @@
 {
   "name": "fae",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A tiny magical game framework written in ES6",
   "repository": "sambrosia/fae",
   "author": "Sam Woodruff",
   "license": "MIT",
   "main": "dist/fae.js",
   "module": "src/fae.js",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "esm": {
     "mode": "auto",
     "cjs": true
@@ -15,7 +18,9 @@
   "ava": {
     "files": "**/*.test.js",
     "source": "src/**",
-    "require": ["esm"]
+    "require": [
+      "esm"
+    ]
   },
   "scripts": {
     "test": "ava --watch",
