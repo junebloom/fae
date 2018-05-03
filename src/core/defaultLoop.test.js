@@ -1,9 +1,8 @@
-import esm from '@std/esm'
 import test from 'ava'
 import util from 'util'
 import EventEmitter from 'eventemitter3'
+import defaultLoop from './defaultLoop'
 
-const defaultLoop = esm(module)('./defaultLoop').default
 const promiseTimeout = util.promisify(setTimeout)
 
 test('emits proper events in node', async t => {

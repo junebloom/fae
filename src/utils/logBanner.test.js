@@ -1,6 +1,5 @@
-import esm from '@std/esm'
 import test from 'ava'
-const logBanner = esm(module)('./logBanner').default
+import logBanner from './logBanner'
 
 test('executes without erroring', t => {
   t.notThrows(logBanner)

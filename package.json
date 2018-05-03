@@ -7,13 +7,15 @@
   "license": "MIT",
   "main": "dist/fae.js",
   "module": "src/fae.js",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "@std/esm": {
-    "esm": "js",
+  "files": ["dist", "src"],
+  "esm": {
+    "mode": "auto",
     "cjs": true
+  },
+  "ava": {
+    "files": "**/*.test.js",
+    "source": "src/**",
+    "require": ["esm"]
   },
   "scripts": {
     "test": "ava --watch",
@@ -25,7 +27,7 @@
     "eventemitter3": "^3.1.0"
   },
   "devDependencies": {
-    "@std/esm": "^0.26.0",
+    "esm": "^3.0.28",
     "ava": "^0.25.0",
     "docco": "^0.8.0",
     "rollup": "^0.58.2",

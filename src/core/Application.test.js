@@ -1,6 +1,5 @@
-import esm from '@std/esm'
 import test from 'ava'
-const Application = esm(module)('./Application').default
+import Application from './Application'
 
 test('starts and stops systems properly', t => {
   const app = new Application()
@@ -8,7 +7,7 @@ test('starts and stops systems properly', t => {
   let running
 
   const listeners = {
-    goodDay () {
+    goodDay() {
       t.true(running, 'This should not be called if the system is stopped')
     }
   }
