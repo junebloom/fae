@@ -53,6 +53,7 @@ export default class Entity {
   // Remove this entity from the provided groups
   ungroup (...groupNames) {
     for (const name of groupNames) {
+      if (!this.app.groups[name]) continue
       this.app.groups[name].delete(this)
       this.groups.delete(name)
     }
