@@ -24,8 +24,7 @@ export default class Entity {
 
       this[name] = component
       this.group(name)
-
-      component.entity = this
+      if (component.componentWasAttached) component.componentWasAttached(this)
     }
     return this
   }
@@ -33,8 +32,10 @@ export default class Entity {
   // Remove the components with the given names from this entity
   detach (...componentNames) {
     for (const name of componentNames) {
-      this[name] = null
+      if (component.componentWillBeDetached)
+        component.componentWillBeDetached(this)
       this.ungroup(name)
+      this[name] = null
     }
     return this
   }
