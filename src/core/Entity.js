@@ -29,13 +29,15 @@ export default class Entity {
     return this
   }
 
-  // Remove the components with the given names from this entity
-  detach (...componentNames) {
-    for (const name of componentNames) {
+  // Remove the given components names from this entity
+  detach (...components) {
+    for (const component of components) {
+      if (this[component.name] !== component)
+        throw new Error('component is not attached to this entity')
       if (component.componentWillBeDetached)
         component.componentWillBeDetached(this)
-      this.ungroup(name)
-      this[name] = null
+      this.ungroup(component.name)
+      this[component.name] = null
     }
     return this
   }
