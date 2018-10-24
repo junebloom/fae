@@ -40,6 +40,7 @@ export default class Application {
 
   // Return an array of entities that belong to *all* of the provided groups
   entitiesWith (...groups) {
+    for (const group of groups) if (!this.groups[group]) return []
     groups.sort((a, b) => this.groups[a].size - this.groups[b].size)
     const entities = []
     for (const entity of this.groups[groups[0]]) {
