@@ -20,7 +20,9 @@ export default function logBanner() {
   } else {
     // Color with ANSI escape sequences in node
     console.log(
-      message.replace(/%c/, '\x1B[35m\x1b[1m').replace(/%c/, '\x1b[0m\x1b[35m')
+      message
+        .replace(/%c/, '\x1B[35m\x1b[1m')
+        .replace(/%c/, '\x1b[0m\x1b[35m') + '\x1b[0m'
     )
   }
 }
