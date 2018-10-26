@@ -25,6 +25,7 @@
   "scripts": {
     "test": "ava --watch",
     "build": "rollup --config",
+    "build:watch": "rollup --config --watch",
     "docs": "docco src/*.js src/**/*.js",
     "prepublishOnly": "git push && git push --tags"
   },
