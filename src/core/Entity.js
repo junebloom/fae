@@ -26,7 +26,7 @@ export default class Entity {
     return this
   }
 
-  // Remove the given components names from this entity
+  // Remove the given components from this entity
   detach (...components) {
     for (const component of components) {
       if (this[component.key] !== component)
