@@ -19,11 +19,8 @@ export default class Entity {
   // Attach the provided component instances to this entity
   attach (...components) {
     for (const component of components) {
-      const getPrototypeOf = Object.getPrototypeOf
-      const name = component.name || getPrototypeOf(component).constructor.name
-
-      this[name] = component
-      this.group(name)
+      this[component.name] = component
+      this.group(component.name)
       if (component.componentWasAttached) component.componentWasAttached(this)
     }
     return this
