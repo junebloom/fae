@@ -19,8 +19,8 @@ export default class Entity {
   // Attach the provided component instances to this entity
   attach (...components) {
     for (const component of components) {
-      this[component.name] = component
-      this.group(component.name)
+      this[component.key] = component
+      this.group(component.key)
       if (component.componentWasAttached) component.componentWasAttached(this)
     }
     return this
@@ -29,12 +29,12 @@ export default class Entity {
   // Remove the given components names from this entity
   detach (...components) {
     for (const component of components) {
-      if (this[component.name] !== component)
+      if (this[component.key] !== component)
         throw new Error('component is not attached to this entity')
       if (component.componentWillBeDetached)
         component.componentWillBeDetached(this)
-      this.ungroup(component.name)
-      this[component.name] = null
+      this.ungroup(component.key)
+      this[component.key] = null
     }
     return this
   }
