@@ -67,6 +67,17 @@ export default class Entity {
     return true
   }
 
+  // Return an array of all components attached to this entity
+  getComponents() {
+    const components = []
+    for (const [key, value] of Object.entries(this)) {
+      if (value && value.key && value.key === key && this.groups.has(key)) {
+        components.push(value)
+      }
+    }
+    return components
+  }
+
   // Free all of fae's internal references to the entity,
   // allowing it to be garbage collected
   destroy () {
