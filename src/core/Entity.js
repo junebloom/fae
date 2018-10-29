@@ -81,9 +81,8 @@ export default class Entity {
   // Free all of fae's internal references to the entity,
   // allowing it to be garbage collected
   destroy () {
+    this.detach(...this.getComponents())
+    this.ungroup(...this.groups)
     this.destroyed = true
-    for (const group of this.groups) {
-      this.ungroup(group)
-    }
   }
 }
