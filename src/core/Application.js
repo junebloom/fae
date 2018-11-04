@@ -25,9 +25,9 @@ export default class Application {
 
     // Print the fae banner to the console upon the first frame of the gameloop
     // being processed, unless `this.hideBanner` is truthy
-    this.event.once('preupdate', () => {
+    setTimeout(() => {
       if (!this.hideBanner) logBanner()
-    })
+    }, 0)
   }
 
   // ## Methods
