@@ -15,16 +15,12 @@
   "scripts": {
     "test": "ava",
     "build": "rollup --config",
-    "docs": "docco src/*.js src/**/*.js",
     "prepublishOnly": "git push && git push --tags"
   },
   "browserslist": [
     "defaults",
     "node 12"
   ],
-  "dependencies": {
-    "eventemitter3": "^4.0.7"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",

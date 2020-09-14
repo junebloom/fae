@@ -7,7 +7,7 @@ A small game framework with a clean, simple API.
 - Renderer-agnostic; easily integrate with canvas, [pixi](https://github.com/pixijs/pixi.js/), [three.js](https://github.com/mrdoob/three.js/), or anything else
 - Can run in the browser or in Node
 - Written in modern JS
-- Tiny
+- Tiny, with zero dependencies
 
 # Installation
 

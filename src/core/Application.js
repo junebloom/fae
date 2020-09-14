@@ -1,5 +1,5 @@
-import EventEmitter from "eventemitter3";
 import logBanner from "../utils/logBanner.js";
+import EventEmitter from "./EventEmitter.js";
 import defaultLoop from "./defaultLoop.js";
 
 // Provides events and manages systems, scenes, and entity groups
