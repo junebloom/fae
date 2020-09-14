@@ -62,7 +62,7 @@ export default class Application {
   stopSystem(system) {
     this.systems.delete(system);
     for (const listener in system.listeners) {
-      this.event.removeListener(listener, system.listeners[listener], system);
+      this.event.removeListener(listener, system.listeners[listener]);
     }
   }
 
