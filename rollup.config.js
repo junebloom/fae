@@ -1,29 +1,17 @@
-import filesize from "rollup-plugin-filesize";
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import json from "rollup-plugin-json";
-import babel from "rollup-plugin-babel";
-import { uglify } from "rollup-plugin-uglify";
-import { version, author } from "./package.json";
-
-const preamble = `// fae v${version} | MIT License | Copyright (c) 2020 ${author}`;
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import { terser } from "rollup-plugin-terser";
+import pkg from "./package.json";
 
 export default {
   input: "src/fae.js",
   output: {
     file: "dist/fae.js",
-    sourceMap: true,
-    format: "umd",
+    sourcemap: true,
+    format: "es",
     name: "fae",
+    banner: `// fae v${pkg.version} | MIT License | Copyright (c) 2020 ${pkg.author}`,
   },
-  plugins: [
-    filesize(),
-    resolve(),
-    commonjs(),
-    json(),
-    babel(),
-    uglify({
-      output: { preamble },
-    }),
-  ],
+  plugins: [resolve(), commonjs(), json(), terser()],
 };
