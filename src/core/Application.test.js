@@ -23,6 +23,7 @@ test("starts and stops systems properly", (t) => {
 
 test("creates and holds reference to entity groups", (t) => {
   const app = new Application();
+  app.hideBanner = true;
 
   app.createGroup("powerpuff");
 
