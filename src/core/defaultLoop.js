@@ -12,7 +12,6 @@ export default function defaultLoop(app) {
     dt = currentTime - lastTime;
     lastTime = currentTime;
 
-    app.event.emit("preupdate");
     app.event.emit("update", dt);
     app.event.emit("draw");
   }
