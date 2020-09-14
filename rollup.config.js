@@ -1,20 +1,20 @@
-import filesize from 'rollup-plugin-filesize'
-import resolve from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
-import babel from 'rollup-plugin-babel'
-import { uglify } from 'rollup-plugin-uglify'
-import { version } from './package.json'
+import filesize from "rollup-plugin-filesize";
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import json from "rollup-plugin-json";
+import babel from "rollup-plugin-babel";
+import { uglify } from "rollup-plugin-uglify";
+import { version, author } from "./package.json";
 
-const preamble = `// fae v${version} | MIT License | Copyright (c) 2017 Sam Woodruff`
+const preamble = `// fae v${version} | MIT License | Copyright (c) 2020 ${author}`;
 
 export default {
-  input: 'src/fae.js',
+  input: "src/fae.js",
   output: {
-    file: 'dist/fae.js',
+    file: "dist/fae.js",
     sourceMap: true,
-    format: 'umd',
-    name: 'fae'
+    format: "umd",
+    name: "fae",
   },
   plugins: [
     filesize(),
@@ -23,7 +23,7 @@ export default {
     json(),
     babel(),
     uglify({
-      output: { preamble }
-    })
-  ]
-}
+      output: { preamble },
+    }),
+  ],
+};
