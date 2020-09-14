@@ -1,21 +1,17 @@
 # fae
 
-A small game framework with a clean, simple API.
+A small game framework with a simple, joyful API.
 
-- Flexible entity-component-system design
-- Event-driven game loop
-- Renderer-agnostic; easily integrate with canvas, [pixi](https://github.com/pixijs/pixi.js/), [three.js](https://github.com/mrdoob/three.js/), or anything else
-- Can run in the browser or in Node
-- Written in modern JS
-- Tiny, with zero dependencies
+- Flexible, decoupled entity-component-system approach
+- Agnostic; pairs with anything you prefer for rendering, physics, etc.
+- Focused; only does what it's good at
+- Runs in browsers and Node
+- Zero dependencies
+- ~1.2 kb gzipped
 
 # Installation
 
-`npm i -S fae`
-
-or
-
-`yarn add fae`
+`yarn add fae` or `npm i -S fae`
 
 # Getting Started
 
@@ -31,9 +27,9 @@ This is a minimal guide. Check out the annotated source for more API details (it
 
 ## The loop
 
-`app.event` is an [EventEmitter3](https://github.com/primus/EventEmitter3) (follows the Node API). By default, it emits these events every frame:
+`app.event` is an EventEmitter (a subset of the Node API). By default, it emits two events every frame:
 
-`preupdate`, `update`, and `draw`
+`update` and `draw`.
 
 Arbitrary events can be emitted as well:
 
@@ -111,8 +107,12 @@ class Health {
       entityWasHit: this.entityWasHit,
     };
   }
-  update(dt) {}
-  entityWasHit(entity, damage) {}
+  update(dt) {
+    // ...
+  }
+  entityWasHit(entity, damage) {
+    // ...
+  }
 }
 ```
 
