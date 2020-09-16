@@ -17,10 +17,6 @@
     "build": "rollup --config",
     "prepublishOnly": "git push && git push --tags"
   },
-  "browserslist": [
-    "defaults",
-    "node 12"
-  ],
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
