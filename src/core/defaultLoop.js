@@ -19,11 +19,11 @@ export default function defaultLoop(app) {
   // Function to start looping using requestAnimationFrame
   function rafLoop() {
     gameLoop();
-    window.requestAnimationFrame(rafLoop);
+    requestAnimationFrame(rafLoop);
   }
 
-  // Use requestAnimationFrame in browsers and setInterval in Node
+  // Use requestAnimationFrame if available, otherwise use setInterval
   // In either case, wait a frame before beginning
-  if (global.window) window.requestAnimationFrame(rafLoop);
+  if (globalThis.requestAnimationFrame) requestAnimationFrame(rafLoop);
   else setInterval(gameLoop, 1000 / 60);
 }

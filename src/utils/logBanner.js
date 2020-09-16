@@ -4,7 +4,7 @@ import pkg from "../../package.json";
 export default function logBanner() {
   const message = `%cfae ♥ ${pkg.version}%c https://github.com/${pkg.repository} `;
 
-  if (global.window) {
+  if (globalThis.document) {
     // Style with CSS in browsers
     console.log(
       message,

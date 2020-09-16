@@ -5,7 +5,7 @@ A small game framework with a simple, joyful API.
 - Flexible, decoupled entity-component-system approach
 - Agnostic; pairs with anything you prefer for rendering, physics, etc.
 - Focused; only does what it's good at
-- Runs in browsers and Node
+- Runs in browsers, Node, and Deno
 - Zero dependencies
 - ~1.2 kb gzipped
 
