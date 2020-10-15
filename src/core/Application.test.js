@@ -36,9 +36,9 @@ test("system state", (t) => {
 
   const system = {
     event: "add",
-    init: (app) => outerState, // Returns initial state.
+    init: () => outerState, // Returns initial state.
+    // `state` is only passed if init returns a value.
     action(app, state, amount) {
-      // `state` is only passed if init returns a value.
       t.is(
         state,
         outerState,
@@ -50,20 +50,33 @@ test("system state", (t) => {
 
   app.startSystem(system);
   app.event.emit("add", 1);
-  t.is(outerState.count, 1, "Count should equal one.");
+  t.is(outerState.count, 1, "Count should be 1.");
 });
 
-test.skip("new api, system lifecycle", (t) => {
-  const app = new Application({ hideBanner: true });
+test("system lifecycle", (t) => {
+  const application = new Application({ hideBanner: true });
+  let running = null;
 
   const system = {
-    event: "event",
-    init() {}, // Init performs setup before the system starts (including optionally returning the initial state)
-    exit() {}, // Exit cleans up after the system is stopped
-    action(app, ...args) {},
+    event: "noop",
+    // Init performs setup before the system starts (including optionally returning the initial state)
+    init(app) {
+      t.is(app, application, "Application instance should be passed.");
+      running = true;
+    },
+    // Exit cleans up after the system is stopped
+    exit(app) {
+      t.is(app, application, "Application instance should be passed.");
+      running = false;
+    },
+    action() {},
   };
 
-  app.startSystem(system);
+  application.startSystem(system);
+  t.is(running, true, "Running should be set to true.");
+
+  application.stopSystem(system);
+  t.is(running, false, "Running should be set to false.");
 });
 
 // Groups API tests
