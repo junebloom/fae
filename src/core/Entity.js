@@ -7,6 +7,9 @@ export default class Entity {
     // A reference to an `Application` instance
     this.app = app;
 
+    // A Map of attached components
+    this.components = new Map();
+
     // The Set of group names that this entity is a member of
     this.groups = new Set();
 
@@ -16,26 +19,21 @@ export default class Entity {
 
   // ## Methods
 
-  // Attach the provided component instances to this entity
-  attach(...components) {
-    for (const component of components) {
-      this[component.key] = component;
-      this.group(component.key);
-      if (component.componentWasAttached) component.componentWasAttached(this);
-    }
+  // Attach the provided component to this entity
+  attach(component, ...args) {
+    this[component.key] = component.init(this, ...args);
+    this.components.set(component.key, component);
+    this.group(component.key);
     return this;
   }
 
-  // Remove the given components from this entity
-  detach(...components) {
-    for (const component of components) {
-      if (this[component.key] !== component)
-        throw new Error("component is not attached to this entity");
-      if (component.componentWillBeDetached)
-        component.componentWillBeDetached(this);
-      this.ungroup(component.key);
-      this[component.key] = null;
-    }
+  // Remove the given component from this entity
+  detach(key) {
+    const { exit } = this.components.get(key);
+    this[key] = undefined;
+    this.components.delete(key);
+    this.ungroup(key);
+    if (exit) exit(this);
     return this;
   }
 
@@ -67,21 +65,12 @@ export default class Entity {
     return true;
   }
 
-  // Return an array of all components attached to this entity
-  getComponents() {
-    const components = [];
-    for (const [key, value] of Object.entries(this)) {
-      if (value && value.key && value.key === key && this.groups.has(key)) {
-        components.push(value);
-      }
-    }
-    return components;
-  }
-
-  // Free all of fae's internal references to the entity,
-  // allowing it to be garbage collected
+  // Clean up any attached components and free all of fae's internal references
+  // to the entity, allowing it to be garbage collected.
   destroy() {
-    this.detach(...this.getComponents());
+    this.components.values().forEach(({ exit }) => {
+      if (exit) exit(this);
+    });
     this.ungroup(...this.groups);
     this.destroyed = true;
   }
