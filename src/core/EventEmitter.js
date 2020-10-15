@@ -13,7 +13,7 @@ export default class EventEmitter {
   // ## Methods
 
   // Register the given event listener
-  on(event, listener, context) {
+  addListener(event, listener, context) {
     let listeners = this.events.get(event);
 
     // Create a new Map to hold the event's listeners, if it doesn't exist yet

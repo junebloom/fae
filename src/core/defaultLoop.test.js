@@ -13,11 +13,11 @@ test("emits proper events in node", async (t) => {
   let updates = 0;
   let draws = 0;
 
-  app.event.on("update", () => {
+  app.event.addListener("update", () => {
     t.is(updates, expected);
     updates++;
   });
-  app.event.on("draw", () => {
+  app.event.addListener("draw", () => {
     t.is(draws, expected);
     draws++;
     expected++;

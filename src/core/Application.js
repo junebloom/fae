@@ -50,7 +50,7 @@ export default class Application {
   startSystem(system) {
     this.systems.add(system);
     for (const listener in system.listeners) {
-      this.event.on(listener, system.listeners[listener], system);
+      this.event.addListener(listener, system.listeners[listener], system);
     }
     return system;
   }
