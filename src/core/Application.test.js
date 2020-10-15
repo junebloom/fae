@@ -30,18 +30,27 @@ test("basic system", (t) => {
   );
 });
 
-test.skip("new api, system state", (t) => {
+test("system state", (t) => {
   const app = new Application({ hideBanner: true });
+  const outerState = { count: 0 };
 
   const system = {
-    event: "event",
-    init: (app) => ({}), // Returns initial state
-    action(app, state, ...args) {
-      // state is only passed if init returns a value
+    event: "add",
+    init: (app) => outerState, // Returns initial state.
+    action(app, state, amount) {
+      // `state` is only passed if init returns a value.
+      t.is(
+        state,
+        outerState,
+        "Internal state should match the object we gave."
+      );
+      state.count += amount;
     },
   };
 
   app.startSystem(system);
+  app.event.emit("add", 1);
+  t.is(outerState.count, 1, "Count should equal one.");
 });
 
 test.skip("new api, system lifecycle", (t) => {
