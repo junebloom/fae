@@ -2,6 +2,25 @@ import test from "ava";
 import Application from "./Application.js";
 import Entity from "./Entity.js";
 
+test("basic component", (t) => {
+  const app = new Application({ hideBanner: true });
+  const entity = new Entity(app);
+  t.falsy(entity.id, "ID field should not exist yet.");
+
+  const component = {
+    key: "id", // key is used to access the component on the entity.
+    init: () => 0, // init returns the initial state for the component.
+  };
+
+  entity.attach(component);
+  t.is(entity.id, 0, "ID should be present and set to 0.");
+
+  entity.detach(component.key);
+  t.falsy(entity.id, "ID should not exist anymore.");
+});
+
+test.todo("component lifecycle");
+
 test("is in 'all' group", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
