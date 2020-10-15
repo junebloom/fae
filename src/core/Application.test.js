@@ -18,16 +18,12 @@ test("basic system", (t) => {
 
   application.startSystem(system);
   application.event.emit("greet", "hello, system!");
-  t.is(received, true, "Greeting should have been received.");
+  t.true(received, "Greeting should have been received.");
 
   received = false;
   application.stopSystem(system);
   application.event.emit("greet", "hello, system!");
-  t.is(
-    received,
-    false,
-    "Greeting should not be received once system is stopped."
-  );
+  t.false(received, "Greeting should not be received once system is stopped.");
 });
 
 test("system state", (t) => {
@@ -61,22 +57,22 @@ test("system lifecycle", (t) => {
     event: "noop",
     // Init performs setup before the system starts (including optionally returning the initial state)
     init(app) {
-      t.is(app, application, "Application instance should be passed.");
+      t.is(app, application, "Application instance should be passed in init.");
       running = true;
     },
     // Exit cleans up after the system is stopped
     exit(app) {
-      t.is(app, application, "Application instance should be passed.");
+      t.is(app, application, "Application instance should be passed in exit.");
       running = false;
     },
     action() {},
   };
 
   application.startSystem(system);
-  t.is(running, true, "Running should be set to true.");
+  t.true(running, "Running should be set to true.");
 
   application.stopSystem(system);
-  t.is(running, false, "Running should be set to false.");
+  t.false(running, "Running should be set to false.");
 });
 
 // Groups API tests
