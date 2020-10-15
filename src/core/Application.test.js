@@ -1,17 +1,33 @@
 import test from "ava";
 import Application from "./Application.js";
 
-test.skip("new api, basic system", (t) => {
-  const app = new Application({ hideBanner: true });
+// Systems API tests
+test("basic system", (t) => {
+  t.plan(4);
+  const application = new Application({ hideBanner: true });
+  let received = false;
 
   const system = {
-    event: "event", // The event that the action is registered to
-    action(app, ...args) {
-      // Do something
+    event: "greet", // The event that the action is registered to.
+    action(app, greeting) {
+      t.is(app, application, "Application instance should be passed.");
+      t.is(greeting, "hello, system!", "Event arguments should be passed.");
+      received = true;
     },
   };
 
-  app.start(system);
+  application.startSystem(system);
+  application.event.emit("greet", "hello, system!");
+  t.is(received, true, "Greeting should have been received.");
+
+  received = false;
+  application.stopSystem(system);
+  application.event.emit("greet", "hello, system!");
+  t.is(
+    received,
+    false,
+    "Greeting should not be received once system is stopped."
+  );
 });
 
 test.skip("new api, system state", (t) => {
@@ -25,7 +41,7 @@ test.skip("new api, system state", (t) => {
     },
   };
 
-  app.start(system);
+  app.startSystem(system);
 });
 
 test.skip("new api, system lifecycle", (t) => {
@@ -38,28 +54,10 @@ test.skip("new api, system lifecycle", (t) => {
     action(app, ...args) {},
   };
 
-  app.start(system);
+  app.startSystem(system);
 });
 
-test("starts and stops systems properly", (t) => {
-  const app = new Application({ hideBanner: true });
-  let running;
-
-  const listeners = {
-    goodDay() {
-      t.true(running, "This should not be called if the system is stopped");
-    },
-  };
-
-  const system = app.startSystem({ listeners });
-  running = true; // system should be running
-  app.event.emit("goodDay");
-
-  app.stopSystem(system);
-  running = false; // system should be stopped
-  app.event.emit("goodDay");
-});
-
+// Groups API tests
 test("creates and holds reference to entity groups", (t) => {
   const app = new Application({ hideBanner: true });
   app.createGroup("powerpuff");
