@@ -2,8 +2,7 @@ import test from "ava";
 import Application from "./Application.js";
 
 test("starts and stops systems properly", (t) => {
-  const app = new Application();
-  app.hideBanner = true;
+  const app = new Application({ hideBanner: true });
   let running;
 
   const listeners = {
@@ -22,10 +21,7 @@ test("starts and stops systems properly", (t) => {
 });
 
 test("creates and holds reference to entity groups", (t) => {
-  const app = new Application();
-  app.hideBanner = true;
-
+  const app = new Application({ hideBanner: true });
   app.createGroup("powerpuff");
-
   t.truthy(app.groups.powerpuff, "The powerpuff group should exist");
 });

@@ -4,7 +4,7 @@ import defaultLoop from "./defaultLoop.js";
 
 // Provides events and manages systems, scenes, and entity groups
 export default class Application {
-  constructor(startGame = defaultLoop) {
+  constructor({ hideBanner = false, startGame = defaultLoop }) {
     // ## Properties
     // *(read-only)*
 
@@ -23,11 +23,8 @@ export default class Application {
     // It takes the app instance as its only argument
     startGame(this);
 
-    // Print the fae banner to the console upon the first frame of the gameloop
-    // being processed, unless `this.hideBanner` is truthy
-    setTimeout(() => {
-      if (!this.hideBanner) logBanner();
-    }, 0);
+    // Print the fae banner to console unless `hideBanner` is truthy
+    if (!hideBanner) logBanner();
   }
 
   // ## Methods

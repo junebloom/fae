@@ -3,17 +3,15 @@ import Application from "./Application.js";
 import Entity from "./Entity.js";
 
 test("is in 'all' group", (t) => {
-  const app = new Application();
+  const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
-  app.hideBanner = true;
 
   t.true(entity.groups.has("all"), "Every entity should be in 'all'");
 });
 
 test("can be added to and removed from groups", (t) => {
-  const app = new Application();
+  const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
-  app.hideBanner = true;
 
   entity.group("cuddly", "whiskers");
   t.true(entity.groups.has("cuddly"), "Should be very cuddly");
@@ -25,9 +23,8 @@ test("can be added to and removed from groups", (t) => {
 });
 
 test("hasGroups method works", (t) => {
-  const app = new Application();
+  const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
-  app.hideBanner = true;
 
   entity.group("dog", "horse");
 
