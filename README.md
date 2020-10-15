@@ -2,23 +2,30 @@
 
 A small game framework with a simple, joyful API.
 
-- Flexible, decoupled entity-component-system approach
+- Flexible; decoupled entity-component-system approach
 - Agnostic; pairs with anything you prefer for rendering, physics, etc.
 - Focused; only does what it's good at
 - Runs in browsers, Node, and Deno
 - Zero dependencies
-- ~1.2 kb gzipped
-
-# Installation
-
-`yarn add fae` or `npm i -S fae`
+- ~1kb compressed
 
 # Getting Started
+
+via package manager:
+
+`yarn add fae` _or_ `npm i -S fae`
 
 ```javascript
 import fae from "fae";
 
 const app = new fae.Application();
+```
+
+via CDN:
+
+```javascript
+// Use your preferred CDN; here we use jspm
+import fae from "https://jspm.dev/fae@1.4.1/dist/fae.js";
 ```
 
 # Concepts
