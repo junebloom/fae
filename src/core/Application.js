@@ -46,21 +46,23 @@ export default class Application {
     return entities;
   }
 
-  // Register `system`'s event listeners and return `system`
+  // Initialize the system and register its event listener.
   startSystem(system) {
     this.systems.add(system);
-    for (const listener in system.listeners) {
-      this.event.addListener(listener, system.listeners[listener], system);
+
+    const args = [system.event, system.action, this];
+    if (system.init) {
+      const initialState = system.init(this);
+      if (initialState !== undefined) args.push(initialState);
     }
-    return system;
+    this.event.addListener(...args);
   }
 
-  // Unregister `system`'s event listeners
+  // Unregister system's event listener and clean up
   stopSystem(system) {
+    this.event.removeListener(system.event, system.action);
+    if (system.exit) system.exit(this);
     this.systems.delete(system);
-    for (const listener in system.listeners) {
-      this.event.removeListener(listener, system.listeners[listener]);
-    }
   }
 
   // Stop/destroy all non-persistent systems and entities
