@@ -6,14 +6,14 @@ export default class EventEmitter {
     // *(read-only)*
 
     // A Map where the keys are event names and the values are Maps of
-    // listener/context pairs
+    // listener-function/frontArgs pairs
     this.events = new Map();
   }
 
   // ## Methods
 
   // Register the given event listener
-  addListener(event, listener, context) {
+  addListener(event, listener, ...frontArgs) {
     let listeners = this.events.get(event);
 
     // Create a new Map to hold the event's listeners, if it doesn't exist yet
@@ -22,8 +22,10 @@ export default class EventEmitter {
       this.events.set(event, listeners);
     }
 
-    // Add the listener to the Map, paired with its intended `this` context
-    listeners.set(listener, context);
+    // Add the listener to the Map, paired with its frontArgs.
+    // The frontArgs are always passed as the first arguments to this listener
+    // when the event is emitted.
+    listeners.set(listener, frontArgs);
 
     return this;
   }
@@ -47,8 +49,8 @@ export default class EventEmitter {
     const listeners = this.events.get(event);
     if (!listeners) return;
 
-    listeners.forEach((context, listener) => {
-      listener.apply(context, args);
+    listeners.forEach((frontArgs, listener) => {
+      listener.call(undefined, ...frontArgs, ...args);
     });
   }
 }
