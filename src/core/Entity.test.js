@@ -2,6 +2,7 @@ import test from "ava";
 import Application from "./Application.js";
 import Entity from "./Entity.js";
 
+// Components API tests
 test("basic component", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
@@ -46,8 +47,20 @@ test("component lifecycle", (t) => {
   t.false(alive, "Alive should no longer be true.");
 });
 
-test.todo("component parameters");
+test("component parameters", (t) => {
+  const app = new Application({ hideBanner: true });
+  const entity = new Entity(app);
 
+  const component = {
+    key: "flavor",
+    init: (e, flavor) => flavor,
+  };
+
+  entity.attach(component, "lime");
+  t.is(entity.flavor, "lime", "Flavor should be set to the passed parameter.");
+});
+
+// Groups API tests
 test("is in 'all' group", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
