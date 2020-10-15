@@ -3,7 +3,7 @@ import Application from "./Application.js";
 import Entity from "./Entity.js";
 
 // Components API tests
-test("basic component", (t) => {
+test("component attaches and detaches", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
   t.falsy(entity.id, "ID field should not exist yet.");
@@ -20,7 +20,7 @@ test("basic component", (t) => {
   t.falsy(entity.id, "ID should not exist anymore.");
 });
 
-test("component lifecycle", (t) => {
+test("component lifecycle initializes and exits", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
   let alive = false;
@@ -47,7 +47,7 @@ test("component lifecycle", (t) => {
   t.false(alive, "Alive should no longer be true.");
 });
 
-test("component parameters", (t) => {
+test("component parameters are passed to init", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = new Entity(app);
 

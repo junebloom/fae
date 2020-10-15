@@ -2,7 +2,7 @@ import test from "ava";
 import Application from "./Application.js";
 
 // Systems API tests
-test("basic system", (t) => {
+test("system starts, handles event, and stops", (t) => {
   t.plan(4);
   const application = new Application({ hideBanner: true });
   let received = false;
@@ -26,7 +26,7 @@ test("basic system", (t) => {
   t.false(received, "Greeting should not be received once system is stopped.");
 });
 
-test("system state", (t) => {
+test("system state is initialized and passed to action", (t) => {
   const app = new Application({ hideBanner: true });
   const outerState = { count: 0 };
 
@@ -49,7 +49,7 @@ test("system state", (t) => {
   t.is(outerState.count, 1, "Count should be 1.");
 });
 
-test("system lifecycle", (t) => {
+test("system lifecycle initializes and exits", (t) => {
   const application = new Application({ hideBanner: true });
   let running = null;
 
