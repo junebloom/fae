@@ -19,7 +19,34 @@ test("basic component", (t) => {
   t.falsy(entity.id, "ID should not exist anymore.");
 });
 
-test.todo("component lifecycle");
+test("component lifecycle", (t) => {
+  const app = new Application({ hideBanner: true });
+  const entity = new Entity(app);
+  let alive = false;
+
+  const component = {
+    key: "itsAlive",
+    // init can also be used for imperative set up/side effects.
+    init(e) {
+      t.is(e, entity, "Entity instance should be passed in init.");
+      alive = true;
+      return null;
+    },
+    // and exit handles the clean up afterwards.
+    exit(e) {
+      t.is(e, entity, "Entity instance should be passed in exit.");
+      alive = false;
+    },
+  };
+
+  entity.attach(component);
+  t.true(alive, "Alive should be set to true as a side effect of attaching.");
+
+  entity.detach(component.key);
+  t.false(alive, "Alive should no longer be true.");
+});
+
+test.todo("component parameters");
 
 test("is in 'all' group", (t) => {
   const app = new Application({ hideBanner: true });
