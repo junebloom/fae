@@ -48,21 +48,20 @@ export default class Application {
 
   // Initialize the system and register its event listener.
   startSystem(system) {
-    this.systems.add(system);
-
     const args = [system.event, system.action, this];
     if (system.init) {
       const initialState = system.init(this);
       if (initialState !== undefined) args.push(initialState);
     }
+    this.systems.add(system);
     this.event.addListener(...args);
   }
 
   // Unregister system's event listener and clean up
   stopSystem(system) {
     this.event.removeListener(system.event, system.action);
-    if (system.exit) system.exit(this);
     this.systems.delete(system);
+    if (system.exit) system.exit(this);
   }
 
   // Stop/destroy all non-persistent systems and entities
