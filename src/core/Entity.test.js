@@ -3,6 +3,7 @@ import { Entity } from "./Entity.js";
 
 function createEntity() {
   const mockCollection = {
+    app: {},
     index: () => ({
       set: {
         add: () => {},
@@ -10,9 +11,13 @@ function createEntity() {
       },
     }),
   };
-
   return new Entity(mockCollection);
 }
+
+test("application instance is available", (t) => {
+  const { app } = createEntity();
+  t.truthy(app, "Entity should have an `app` property.");
+});
 
 // Components API tests
 test("component attaches and detaches", (t) => {

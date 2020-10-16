@@ -5,6 +5,8 @@ export class Entity {
     // *(read-only)*
 
     this.collection = collection;
+    this.app = collection.app;
+
     this.components = new Map();
     this.tags = new Set();
 

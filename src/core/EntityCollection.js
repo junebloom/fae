@@ -51,7 +51,10 @@ class EntitySet {
 // Represents the collection of all entities for an app and provides an
 // interface to access them.
 export class EntityCollection {
-  constructor() {
+  constructor(app) {
+    // The Application instance.
+    this.app = app;
+
     // Store internal indexes for quickly accessing entities grouped by tags.
     this.indexes = new Map();
   }
