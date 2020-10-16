@@ -25,8 +25,8 @@ function setupFriends() {
 test("entity sets can be retrieved", (t) => {
   const { collection, alice, bob } = setupFriends();
 
-  t.like(
-    collection.get("friend"),
+  t.deepEqual(
+    [...collection.get("friend")],
     [alice, bob],
     'Should return a set of all entities with the tag "friend".'
   );
@@ -36,22 +36,22 @@ test("entity sets can be queried with basic set operations", (t) => {
   const { collection, alice, bob, charlie } = setupFriends();
 
   // (Only frenemies.)
-  t.like(
-    collection.get("friend").and("enemy"),
+  t.deepEqual(
+    [...collection.get("friend").and("enemy")],
     [bob],
     'Should return only entities with both of the tags "friend" and "enemy".'
   );
 
   // (All friends and all enemies.)
-  t.like(
-    collection.get("friend").or("enemy"),
+  t.deepEqual(
+    [...collection.get("friend").or("enemy")],
     [alice, bob, charlie],
     'Should return a union set of all entities with either "friend" or "enemy".'
   );
 
   // (Only friends, no frenemies.)
-  t.like(
-    collection.get("friend").andNot("enemy"),
+  t.deepEqual(
+    [...collection.get("friend").andNot("enemy")],
     [alice],
     'Should return entities with the tag "friend", excluding any which are also tagged "enemy".'
   );
@@ -68,8 +68,8 @@ test("entity sets can be filtered with custom queries", (t) => {
   alice.attach(ageComponent, 22);
   bob.attach(ageComponent, 20);
 
-  t.like(
-    collection.get("friend").filter((entity) => entity.age >= 21),
+  t.deepEqual(
+    [...collection.get("friend").filter((entity) => entity.age >= 21)],
     [alice],
     "Should return only friends over 21."
   );
