@@ -65,7 +65,7 @@ test("has 'all' tag", (t) => {
   const app = new Application({ hideBanner: true });
   const entity = app.entity.create();
 
-  t.true(entity.groups.has("all"), "Every entity should be tagged with 'all'.");
+  t.true(entity.tags.has("all"), "Every entity should be tagged with 'all'.");
 });
 
 test("tags can be added and removed", (t) => {
@@ -76,5 +76,5 @@ test("tags can be added and removed", (t) => {
   t.true(entity.tags.has("cuddly"), "Should be very cuddly.");
 
   entity.untag("cuddly");
-  t.false(entity.groups.has("cuddly"), "Should not be cuddly. :(");
+  t.false(entity.tags.has("cuddly"), "Should not be cuddly. :(");
 });
