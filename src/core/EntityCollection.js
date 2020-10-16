@@ -5,7 +5,6 @@ class EntitySet {
   constructor(collection, entities) {
     this.collection = collection;
     this.set = new Set(entities);
-    this[Symbol.iterator] = this.set.values;
   }
 
   // Returns a new set containing only the entities from this set which
@@ -38,8 +37,14 @@ class EntitySet {
     return filtered;
   }
 
+  // See `Set.prototype.forEach`.
   forEach(callback) {
     this.set.forEach(callback);
+  }
+
+  // Allow iteration of this object.
+  [Symbol.iterator]() {
+    return this.set.values();
   }
 }
 
