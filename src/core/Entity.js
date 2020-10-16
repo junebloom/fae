@@ -1,20 +1,15 @@
 // Composes one logical 'object' in the game using components
 export default class Entity {
-  constructor(app) {
+  constructor(collection) {
     // ## Properties
     // *(read-only)*
 
-    // A reference to an `Application` instance
-    this.app = app;
-
-    // A Map of attached components
+    this.collection = collection;
     this.components = new Map();
+    this.tags = new Set();
 
-    // The Set of group names that this entity is a member of
-    this.groups = new Set();
-
-    // Add this entity to the 'all' group
-    this.group("all");
+    // All entities have the 'all' tag.
+    this.tag("all");
   }
 
   // ## Methods
@@ -23,7 +18,7 @@ export default class Entity {
   attach(component, ...args) {
     this[component.key] = component.init(this, ...args);
     this.components.set(component.key, component);
-    this.group(component.key);
+    this.tag(component.key);
     return this;
   }
 
@@ -32,37 +27,25 @@ export default class Entity {
     const { exit } = this.components.get(key);
     this[key] = undefined;
     this.components.delete(key);
-    this.ungroup(key);
+    this.untag(key);
     if (exit) exit(this);
     return this;
   }
 
-  // Add this entity to the provided groups,
-  // creating any that don't already exist
-  group(...groupNames) {
-    for (const name of groupNames) {
-      (this.app.groups[name] || this.app.createGroup(name)).add(this);
-      this.groups.add(name);
-    }
+  // Add the tag to this entity
+  // and add this entity to the corresponding index of the collection.
+  tag(tag) {
+    this.tags.add(tag);
+    this.collection.index(tag).set.add(this);
     return this;
   }
 
-  // Remove this entity from the provided groups
-  ungroup(...groupNames) {
-    for (const name of groupNames) {
-      if (!this.app.groups[name]) continue;
-      this.app.groups[name].delete(this);
-      this.groups.delete(name);
-    }
+  // Remove the tag from this entity
+  // and remove the entity from the corresponding index.
+  untag(tag) {
+    this.tags.delete(tag);
+    this.collection.index(tag).set.delete(this);
     return this;
-  }
-
-  // Return `true` if this entity belongs to every group provided
-  hasGroups(...groups) {
-    for (const group of groups) {
-      if (!this.groups.has(group)) return false;
-    }
-    return true;
   }
 
   // Clean up any attached components and free all of fae's internal references
@@ -71,7 +54,7 @@ export default class Entity {
     this.components.values().forEach(({ exit }) => {
       if (exit) exit(this);
     });
-    this.ungroup(...this.groups);
+    this.tags.forEach((tag) => this.collection.index(tag).set.delete(this));
     this.destroyed = true;
   }
 }
