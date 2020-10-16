@@ -1,5 +1,6 @@
-import logBanner from "../utils/logBanner.js";
 import EventEmitter from "./EventEmitter.js";
+import { EntityCollection } from "./EntityCollection.js";
+import logBanner from "../utils/logBanner.js";
 import defaultLoop from "./defaultLoop.js";
 
 // Provides events and manages systems, scenes, and entity groups
@@ -11,13 +12,11 @@ export default class Application {
     // An EventEmitter for messaging throughout the game
     this.event = new EventEmitter();
 
-    // A Set containing all currently running ECS systems
-    this.systems = new Set();
+    // An EntityCollection for creating and querying entities
+    this.entity = new EntityCollection();
 
-    // An object whose keys are group names and whose values are Sets
-    // containing groups of related entities
-    this.groups = {};
-    this.createGroup("all");
+    // A Set containing all currently running systems
+    this.systems = new Set();
 
     // Call the `startGame` function, which should initiate the game loop
     // It takes the app instance as its only argument
@@ -28,23 +27,6 @@ export default class Application {
   }
 
   // ## Methods
-
-  // Create an empty group with the given name and return it
-  createGroup(name) {
-    this.groups[name] = new Set();
-    return this.groups[name];
-  }
-
-  // Return an array of entities that belong to *all* of the provided groups
-  entitiesWith(...groups) {
-    for (const group of groups) if (!this.groups[group]) return [];
-    groups.sort((a, b) => this.groups[a].size - this.groups[b].size);
-    const entities = [];
-    for (const entity of this.groups[groups[0]]) {
-      if (entity.hasGroups(...groups)) entities.push(entity);
-    }
-    return entities;
-  }
 
   // Initialize the system and register its event listener.
   startSystem(system) {

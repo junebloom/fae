@@ -75,9 +75,5 @@ test("system lifecycle initializes and exits", (t) => {
   t.false(running, "Running should be set to false.");
 });
 
-// Groups API tests
-test("creates and holds reference to entity groups", (t) => {
-  const app = new Application({ hideBanner: true });
-  app.createGroup("powerpuff");
-  t.truthy(app.groups.powerpuff, "The powerpuff group should exist");
-});
+// Application API tests
+test.todo("can be reset to a blank slate");
