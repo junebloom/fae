@@ -1,11 +1,11 @@
 import test from "ava";
 import Application from "./Application.js";
-import Entity from "./Entity.js";
 
 // Components API tests
 test("component attaches and detaches", (t) => {
   const app = new Application({ hideBanner: true });
-  const entity = new Entity(app);
+  const entity = app.entity.create();
+
   t.falsy(entity.id, "ID field should not exist yet.");
 
   const component = {
@@ -22,7 +22,7 @@ test("component attaches and detaches", (t) => {
 
 test("component lifecycle initializes and exits", (t) => {
   const app = new Application({ hideBanner: true });
-  const entity = new Entity(app);
+  const entity = app.entity.create();
   let alive = false;
 
   const component = {
@@ -49,7 +49,7 @@ test("component lifecycle initializes and exits", (t) => {
 
 test("component parameters are passed to init", (t) => {
   const app = new Application({ hideBanner: true });
-  const entity = new Entity(app);
+  const entity = app.entity.create();
 
   const component = {
     key: "flavor",
@@ -63,14 +63,14 @@ test("component parameters are passed to init", (t) => {
 // Tags API tests
 test("has 'all' tag", (t) => {
   const app = new Application({ hideBanner: true });
-  const entity = new Entity(app);
+  const entity = app.entity.create();
 
   t.true(entity.groups.has("all"), "Every entity should be tagged with 'all'.");
 });
 
 test("tags can be added and removed", (t) => {
   const app = new Application({ hideBanner: true });
-  const entity = new Entity(app);
+  const entity = app.entity.create();
 
   entity.tag("cuddly");
   t.true(entity.tags.has("cuddly"), "Should be very cuddly.");
