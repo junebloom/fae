@@ -1,12 +1,10 @@
-import { Entity } from "./Entity.js";
+import Entity from "./Entity.js";
 
 // Represents a set of entities, usually as the result of a query.
 class EntitySet {
   constructor(collection, entities) {
     this.collection = collection;
     this.set = new Set(entities);
-
-    this.forEach = this.set.forEach;
     this[Symbol.iterator] = this.set.values;
   }
 
@@ -38,6 +36,10 @@ class EntitySet {
       if (callback(entity)) filtered.set.add(entity);
     });
     return filtered;
+  }
+
+  forEach(callback) {
+    this.set.forEach(callback);
   }
 }
 
