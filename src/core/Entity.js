@@ -54,7 +54,9 @@ export class Entity {
     this.components.values().forEach(({ exit }) => {
       if (exit) exit(this);
     });
-    this.tags.forEach((tag) => this.collection.index(tag).set.delete(this));
+    this.tags.forEach((tag) => {
+      this.collection.index(tag).set.delete(this);
+    });
     this.destroyed = true;
   }
 }
