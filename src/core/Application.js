@@ -1,10 +1,10 @@
-import EventEmitter from "./EventEmitter.js";
+import { EventEmitter } from "./EventEmitter.js";
 import { EntityCollection } from "./EntityCollection.js";
-import logBanner from "../utils/logBanner.js";
-import defaultLoop from "./defaultLoop.js";
+import { logBanner } from "../utils/logBanner.js";
+import { defaultLoop } from "./defaultLoop.js";
 
 // Provides events and manages systems, scenes, and entity groups
-export default class Application {
+export class Application {
   constructor({ hideBanner = false, startGame = defaultLoop }) {
     // ## Properties
     // *(read-only)*

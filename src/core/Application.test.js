@@ -1,5 +1,5 @@
 import test from "ava";
-import Application from "./Application.js";
+import { Application } from "./Application.js";
 
 // Systems API tests
 test("system starts, handles event, and stops", (t) => {

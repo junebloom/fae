@@ -1,5 +1,5 @@
 // Composes one logical 'object' in the game using components
-export default class Entity {
+export class Entity {
   constructor(collection) {
     // ## Properties
     // *(read-only)*

@@ -1,4 +1,4 @@
-import Entity from "./Entity.js";
+import { Entity } from "./Entity.js";
 
 // Represents a set of entities, usually as the result of a query.
 class EntitySet {

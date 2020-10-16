@@ -1,7 +1,7 @@
 import pkg from "../../package.json";
 
 // Display a nice banner in the console
-export default function logBanner() {
+export function logBanner() {
   const message = `%cfae ♥ ${pkg.version}%c https://github.com/${pkg.repository} `;
 
   if (globalThis.document) {

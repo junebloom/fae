@@ -1,6 +1,6 @@
 // A small event emitter class which implements a subset of the Node API of the
 // same name
-export default class EventEmitter {
+export class EventEmitter {
   constructor() {
     // ## Properties
     // *(read-only)*

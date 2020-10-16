@@ -1,5 +1,5 @@
 import test from "ava";
-import Application from "./Application.js";
+import { Application } from "./Application.js";
 
 // Components API tests
 test("component attaches and detaches", (t) => {

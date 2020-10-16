@@ -1,6 +1,6 @@
 import test from "ava";
 import { EntityCollection } from "./EntityCollection.js";
-import Entity from "./Entity.js";
+import { Entity } from "./Entity.js";
 
 test("new entities can be created", (t) => {
   const collection = new EntityCollection();

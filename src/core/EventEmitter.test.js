@@ -1,5 +1,5 @@
 import test from "ava";
-import EventEmitter from "./EventEmitter.js";
+import { EventEmitter } from "./EventEmitter.js";
 
 test("registers and calls listeners", (t) => {
   const emitter = new EventEmitter();

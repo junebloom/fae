@@ -1,8 +1,8 @@
-import getTime from "../utils/getTime.js";
+import { getTime } from "../utils/getTime.js";
 
 // Default game loop used if you do not provide a custom `startGame` function to
 // the `Application` constructor
-export default function defaultLoop(app) {
+export function defaultLoop(app) {
   let lastTime = getTime();
   let currentTime, dt;
 

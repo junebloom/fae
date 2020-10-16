@@ -1,7 +1,7 @@
 import test from "ava";
 import util from "util";
-import EventEmitter from "./EventEmitter.js";
-import defaultLoop from "./defaultLoop.js";
+import { EventEmitter } from "./EventEmitter.js";
+import { defaultLoop } from "./defaultLoop.js";
 
 const promiseTimeout = util.promisify(setTimeout);
 

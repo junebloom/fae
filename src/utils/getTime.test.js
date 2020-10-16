@@ -1,6 +1,6 @@
 import test from "ava";
 import util from "util";
-import getTime from "./getTime.js";
+import { getTime } from "./getTime.js";
 
 const promiseTimeout = util.promisify(setTimeout);
 
