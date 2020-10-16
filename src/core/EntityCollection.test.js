@@ -35,21 +35,21 @@ test("entity sets can be retrieved", (t) => {
 test("entity sets can be queried with basic set operations", (t) => {
   const { collection, alice, bob, charlie } = setupFriends();
 
-  // (Only frenemies.)
+  // Only frenemies.
   t.deepEqual(
     [...collection.get("friend").and("enemy")],
     [bob],
     'Should return only entities with both of the tags "friend" and "enemy".'
   );
 
-  // (All friends and all enemies.)
+  // All friends and all enemies.
   t.deepEqual(
     [...collection.get("friend").or("enemy")],
     [alice, bob, charlie],
     'Should return a union set of all entities with either "friend" or "enemy".'
   );
 
-  // (Only friends, no frenemies.)
+  // Only friends, no frenemies.
   t.deepEqual(
     [...collection.get("friend").andNot("enemy")],
     [alice],

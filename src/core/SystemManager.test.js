@@ -62,12 +62,13 @@ test("system lifecycle initializes and exits", (t) => {
 
   const system = {
     event: "noop",
-    // Init performs setup before the system starts (including optionally returning the initial state)
+    // `init` performs setup before the system starts.
+    // (Including optionally returning the initial state.)
     init(app) {
       t.is(app, manager.app, "Application instance should be passed in init.");
       running = true;
     },
-    // Exit cleans up after the system is stopped
+    // `exit` cleans up after the system is stopped.
     exit(app) {
       t.is(app, manager.app, "Application instance should be passed in exit.");
       running = false;

@@ -1,13 +1,13 @@
 import { getTime } from "../utils/getTime.js";
 
-// Default game loop used if you do not provide a custom `startGame` function to
-// the `Application` constructor
+// This is the default game loop used if you do not provide a custom
+// `startGame` function to the Application constructor.
 export function defaultLoop(app) {
   let lastTime = getTime();
   let currentTime, dt;
 
-  function gameLoop() {
-    // Calculate frame delta time in seconds
+  function step() {
+    // Calculate frame delta time in seconds.
     currentTime = getTime();
     dt = currentTime - lastTime;
     lastTime = currentTime;
@@ -16,14 +16,13 @@ export function defaultLoop(app) {
     app.event.emit("draw");
   }
 
-  // Function to start looping using requestAnimationFrame
+  // Function to start looping using requestAnimationFrame.
   function rafLoop() {
-    gameLoop();
+    step();
     requestAnimationFrame(rafLoop);
   }
 
-  // Use requestAnimationFrame if available, otherwise use setInterval
-  // In either case, wait a frame before beginning
+  // Use requestAnimationFrame if available, otherwise use setInterval.
   if (globalThis.requestAnimationFrame) requestAnimationFrame(rafLoop);
-  else setInterval(gameLoop, 1000 / 60);
+  else setInterval(step, 1000 / 60);
 }

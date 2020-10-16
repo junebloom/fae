@@ -1,11 +1,11 @@
 import pkg from "../../package.json";
 
-// Display a nice banner in the console
+// Display a nice banner in the console.
 export function logBanner() {
   const message = `%cfae ♥ ${pkg.version}%c https://github.com/${pkg.repository} `;
 
   if (globalThis.document) {
-    // Style with CSS in browsers
+    // Style with CSS in browsers.
     console.log(
       message,
       `
@@ -17,7 +17,7 @@ export function logBanner() {
       "color: #aaf;"
     );
   } else {
-    // Color with ANSI escape sequences in node
+    // Color with ANSI escape sequences otherwise.
     console.log(
       message
         .replace(/%c/, "\x1B[35m\x1b[1m")

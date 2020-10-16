@@ -1,22 +1,16 @@
-// A small event emitter class which implements a subset of the Node API of the
-// same name
+// A small event emitter class.
 export class EventEmitter {
   constructor() {
-    // ## Properties
-    // *(read-only)*
-
     // A Map where the keys are event names and the values are Maps of
-    // listener-function/frontArgs pairs
+    // listener-function/frontArgs pairs.
     this.events = new Map();
   }
 
-  // ## Methods
-
-  // Register the given event listener
+  // Register the given event listener.
   addListener(event, listener, ...frontArgs) {
     let listeners = this.events.get(event);
 
-    // Create a new Map to hold the event's listeners, if it doesn't exist yet
+    // Create a new Map to hold the event's listeners, if it doesn't exist yet.
     if (!listeners) {
       listeners = new Map();
       this.events.set(event, listeners);
@@ -30,21 +24,21 @@ export class EventEmitter {
     return this;
   }
 
-  // Unregister the given event listener
+  // Unregister the given event listener.
   removeListener(event, listener) {
     const listeners = this.events.get(event);
     if (!listeners) return;
 
     listeners.delete(listener);
 
-    // Also delete the entry for the event if it has no more registered listeners
+    // Also delete the entry for the event if it has no more registered listeners.
     if (listeners.size === 0) this.events.delete(event);
 
     return this;
   }
 
   // Call all listeners for the event in order of registration,
-  // passing the given arguments
+  // passing the given arguments.
   emit(event, ...args) {
     const listeners = this.events.get(event);
     if (!listeners) return;

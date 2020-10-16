@@ -5,7 +5,7 @@ import { defaultLoop } from "./defaultLoop.js";
 
 const promiseTimeout = util.promisify(setTimeout);
 
-test("emits proper events in node", async (t) => {
+test("emits proper events", async (t) => {
   const app = { event: new EventEmitter() };
   defaultLoop(app);
 
@@ -14,16 +14,16 @@ test("emits proper events in node", async (t) => {
   let draws = 0;
 
   app.event.addListener("update", () => {
-    t.is(updates, expected);
+    t.is(updates, expected, "Number of updates should match what we expect.");
     updates++;
   });
   app.event.addListener("draw", () => {
-    t.is(draws, expected);
+    t.is(draws, expected, "Number of draws should match what we expect.");
     draws++;
     expected++;
   });
 
   await promiseTimeout(200);
-  t.not(updates, 0); // update event is being emitted
-  t.not(draws, 0); // draw event is being emitted
+  t.not(updates, 0, "Updates should have occurred.");
+  t.not(draws, 0, "Draws should have occurred.");
 });

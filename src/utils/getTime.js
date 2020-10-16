@@ -1,4 +1,4 @@
-// Return # of seconds past an arbitrary point in time in browser or node
+// Return # of seconds past an arbitrary point in time.
 export function getTime() {
   if (globalThis.performance) return performance.now() / 1000;
   else {

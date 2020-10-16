@@ -1,9 +1,8 @@
-// Composes one logical 'object' in the game using components
+// Represents a "thing" in the game world.
+// It is an empty container to which components are attached.
+// Components are the data that describe what the entity is.
 export class Entity {
   constructor(collection) {
-    // ## Properties
-    // *(read-only)*
-
     this.collection = collection;
     this.app = collection.app;
 
@@ -14,9 +13,7 @@ export class Entity {
     this.tag("all");
   }
 
-  // ## Methods
-
-  // Attach the provided component to this entity
+  // Attach the provided component to this entity.
   attach(component, ...args) {
     this[component.key] = component.init(this, ...args);
     this.components.set(component.key, component);
@@ -24,7 +21,7 @@ export class Entity {
     return this;
   }
 
-  // Remove the given component from this entity
+  // Remove the given component from this entity.
   detach(key) {
     const { exit } = this.components.get(key);
     this[key] = undefined;
@@ -34,23 +31,23 @@ export class Entity {
     return this;
   }
 
-  // Add the tag to this entity
-  // and add this entity to the corresponding index of the collection.
+  // Add the tag to this entity.
+  // (And add the entity to the corresponding index of the collection.)
   tag(tag) {
     this.tags.add(tag);
     this.collection.index(tag).set.add(this);
     return this;
   }
 
-  // Remove the tag from this entity
-  // and remove the entity from the corresponding index.
+  // Remove the tag from this entity.
+  // (And remove the entity from the corresponding index.)
   untag(tag) {
     this.tags.delete(tag);
     this.collection.index(tag).set.delete(this);
     return this;
   }
 
-  // Clean up any attached components and free all of fae's internal references
+  // Clean up any attached components and free all internal references
   // to the entity, allowing it to be garbage collected.
   destroy() {
     this.components.values().forEach(({ exit }) => {
