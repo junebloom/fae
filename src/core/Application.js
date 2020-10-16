@@ -6,9 +6,12 @@ import { logBanner } from "../utils/logBanner.js";
 
 // Provides an interface to events, entities, and systems
 export class Application {
-  constructor({ hideBanner = false, startGame = defaultLoop }) {
+  constructor({ hideBanner = false, startGame = defaultLoop, state = {} }) {
     // ## Properties
     // *(read-only)*
+
+    // A store for global state
+    this.state = state;
 
     // An EventEmitter for messaging throughout the game
     this.event = new EventEmitter();
