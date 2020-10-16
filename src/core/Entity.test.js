@@ -26,14 +26,14 @@ test("component attaches and detaches", (t) => {
   t.falsy(entity.id, "ID field should not exist yet.");
 
   const component = {
-    key: "id", // key is used to access the component on the entity.
+    tag: "id", // tag is used to access the component on the entity.
     init: () => 0, // init returns the initial state for the component.
   };
 
   entity.attach(component);
   t.is(entity.id, 0, "ID should be present and set to 0.");
 
-  entity.detach(component.key);
+  entity.detach(component.tag);
   t.falsy(entity.id, "ID should not exist anymore.");
 });
 
@@ -42,7 +42,7 @@ test("component lifecycle initializes and exits", (t) => {
   let alive = false;
 
   const component = {
-    key: "itsAlive",
+    tag: "itsAlive",
     // init can also be used for imperative set up/side effects.
     init(e) {
       t.is(e, entity, "Entity instance should be passed in init.");
@@ -59,7 +59,7 @@ test("component lifecycle initializes and exits", (t) => {
   entity.attach(component);
   t.true(alive, "Alive should be set to true as a side effect of attaching.");
 
-  entity.detach(component.key);
+  entity.detach(component.tag);
   t.false(alive, "Alive should no longer be true.");
 });
 
@@ -67,7 +67,7 @@ test("component parameters are passed to init", (t) => {
   const entity = createEntity();
 
   const component = {
-    key: "flavor",
+    tag: "flavor",
     init: (e, flavor) => flavor,
   };
 

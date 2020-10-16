@@ -61,7 +61,7 @@ test("entity sets can be filtered with custom queries", (t) => {
   const { collection, alice, bob } = setupFriends();
 
   const ageComponent = {
-    key: "age",
+    tag: "age",
     init: (e, age) => age,
   };
 

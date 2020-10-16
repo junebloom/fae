@@ -15,18 +15,18 @@ export class Entity {
 
   // Attach the provided component to this entity.
   attach(component, ...args) {
-    this[component.key] = component.init(this, ...args);
-    this.components.set(component.key, component);
-    this.tag(component.key);
+    this[component.tag] = component.init(this, ...args);
+    this.components.set(component.tag, component);
+    this.tag(component.tag);
     return this;
   }
 
   // Remove the given component from this entity.
-  detach(key) {
-    const { exit } = this.components.get(key);
-    this[key] = undefined;
-    this.components.delete(key);
-    this.untag(key);
+  detach(tag) {
+    const { exit } = this.components.get(tag);
+    this[tag] = undefined;
+    this.components.delete(tag);
+    this.untag(tag);
     if (exit) exit(this);
     return this;
   }
