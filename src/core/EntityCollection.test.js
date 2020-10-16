@@ -1,11 +1,12 @@
 import test from "ava";
 import { EntityCollection } from "./EntityCollection.js";
+import Entity from "./Entity.js";
 
 test("new entities can be created", (t) => {
   const collection = new EntityCollection();
   const entity = collection.create();
 
-  t.log("entity type: ", typeof entity);
+  t.true(entity instanceof Entity, "Should be an instance of Entity.");
 });
 
 function setupFriends() {
