@@ -26,15 +26,4 @@ export class Application {
     // Print the fae banner to console unless `hideBanner` is true.
     if (!hideBanner) logBanner();
   }
-
-  // Stop/destroy all non-persistent systems and entities.
-  // Includes persistent entities if `clearAll` is truthy.
-  clear(clearAll = false) {
-    for (const system of this.systems) {
-      if (!system.persistent || clearAll) this.stopSystem(system);
-    }
-    for (const entity of this.groups.all) {
-      if (!entity.persistent || clearAll) entity.destroy();
-    }
-  }
 }
