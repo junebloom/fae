@@ -5,9 +5,9 @@ import { getTime } from "./getTime.js";
 const promiseTimeout = util.promisify(setTimeout);
 
 test("returns time accurately in seconds", async (t) => {
-  const t1 = getTime(); // Get time.
-  await promiseTimeout(1000); // Wait 1 second.
-  const t2 = getTime(); // Get time again.
+  const t1 = getTime();
+  await promiseTimeout(1000);
+  const t2 = getTime();
 
   // t2 - t1 = ~1 = a
   // a - 1 = ~0 = b

@@ -1,6 +1,8 @@
 import test from "ava";
 import { EventEmitter } from "./EventEmitter.js";
 
+// EventEmitter API tests.
+
 test("registers and calls listeners", (t) => {
   const emitter = new EventEmitter();
 

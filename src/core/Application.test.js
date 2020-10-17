@@ -4,6 +4,8 @@ import { EventEmitter } from "./EventEmitter.js";
 import { EntityCollection } from "./EntityCollection.js";
 import { SystemManager } from "./SystemManager.js";
 
+// Application API tests.
+
 test("provides the correct interfaces", (t) => {
   const app = new Application({ hideBanner: true });
 

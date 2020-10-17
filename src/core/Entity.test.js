@@ -1,6 +1,7 @@
 import test from "ava";
 import { Entity } from "./Entity.js";
 
+// Testing utility for creating an isolated entity.
 function createEntity() {
   const mockCollection = {
     app: {},
@@ -14,12 +15,33 @@ function createEntity() {
   return new Entity(mockCollection);
 }
 
+// Entity API tests.
+
 test("application instance is available", (t) => {
   const { app } = createEntity();
   t.truthy(app, "Entity should have an `app` property.");
 });
 
-// Components API tests
+// Tags tests.
+
+test("has 'all' tag", (t) => {
+  const entity = createEntity();
+
+  t.true(entity.tags.has("all"), "Every entity should be tagged with 'all'.");
+});
+
+test("tags can be added and removed", (t) => {
+  const entity = createEntity();
+
+  entity.tag("cuddly");
+  t.true(entity.tags.has("cuddly"), "Should be very cuddly.");
+
+  entity.untag("cuddly");
+  t.false(entity.tags.has("cuddly"), "Should not be cuddly. :(");
+});
+
+// Components tests.
+
 test("component attaches and detaches", (t) => {
   const entity = createEntity();
 
@@ -73,21 +95,4 @@ test("component parameters are passed to init", (t) => {
 
   entity.attach(component, "lime");
   t.is(entity.flavor, "lime", "Flavor should be set to the passed parameter.");
-});
-
-// Tags API tests
-test("has 'all' tag", (t) => {
-  const entity = createEntity();
-
-  t.true(entity.tags.has("all"), "Every entity should be tagged with 'all'.");
-});
-
-test("tags can be added and removed", (t) => {
-  const entity = createEntity();
-
-  entity.tag("cuddly");
-  t.true(entity.tags.has("cuddly"), "Should be very cuddly.");
-
-  entity.untag("cuddly");
-  t.false(entity.tags.has("cuddly"), "Should not be cuddly. :(");
 });

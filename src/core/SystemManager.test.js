@@ -2,6 +2,7 @@ import test from "ava";
 import { SystemManager } from "./SystemManager.js";
 import { EventEmitter } from "./EventEmitter.js";
 
+// Test utility for creating an isolated SystemManager.
 function createSystemManager() {
   const mockApp = {
     event: new EventEmitter(),
@@ -9,13 +10,15 @@ function createSystemManager() {
   return new SystemManager(mockApp);
 }
 
+// SystemManager API tests.
+
 test("system starts, handles event, and stops", (t) => {
   const manager = createSystemManager();
   let received = false;
   t.plan(4);
 
   const system = {
-    event: "greet", // The event that the action is registered to.
+    event: "greet", // The event that the action is triggered in response to.
     action(app, greeting) {
       t.is(app, manager.app, "Application instance should be passed.");
       t.is(greeting, "hello, system!", "Event arguments should be passed.");
