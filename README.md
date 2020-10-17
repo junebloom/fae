@@ -33,7 +33,7 @@ const app = new Application();
 
 # API Reference
 
-The guide below is the best primary documentation, but if you need detailed API information, take a peek at the source code!
+The guide below is the best primary documentation, but if you need more detailed API information try taking a peek at the source!
 
 I work hard to keep it simple, readable, fully annotated, and fully unit-tested. The tests provide an overview of the APIs through usage examples, and the implementation of course has the full details.
 
@@ -51,14 +51,16 @@ For convenience, each section of the guide has links to the relevant implementat
 - [Querying Entities]()
   - [Conditions]()
   - [Using the Result]()
-    - [When to use queries?]()
-    - [How to get a specific entity?]()
+  - [When to use queries?]()
+  - [How to get a specific entity?]()
 - [System State]()
 - [Lifecycles]()
-  - [System Lifecycle]()
   - [Component Lifecycle]()
+  - [System Lifecycle]()
 - [Application State]()
 - [Custom Game Loop]()
+
+> Asides such as this contain additional explanation or information and appear throughout the guide.
 
 ## Introducing Entities
 
@@ -85,7 +87,7 @@ edgar.untag("hungry");
 edgar.tag("loved");
 ```
 
-Every entity has the `"all"` tag.
+> Every entity has the `"all"` tag.
 
 ## Describing With Components
 
@@ -124,7 +126,7 @@ console.log(edgar.weight); // 19.4
 edgar.detach("weight");
 ```
 
-Components are designed to be reusable. Attaching effectively creates an 'instance' of the component, due to how `init` works. This means we can attach the same component to as many entities as we like, and each one will have its own unique component state.
+> Components are designed to be reusable. Attaching effectively creates an 'instance' of the component, due to how `init` works. This means we can attach the same component to as many entities as we like, and each one will have its own unique component state.
 
 ### Component Parameters
 
@@ -166,7 +168,9 @@ As with components, a system is just an object with two properties:
 - `event` is the name of the event that the system listens for, and
 - `action` is the function that is triggered when the event occurs.
 
-You may have noticed that the action takes the `app` instance as an argument. [More on this in a minute.]()
+> You may have noticed that the action takes the `app` instance as an argument. [More on this in a minute.]()
+
+Let's start the system.
 
 ```js
 // Grooming will happen every sunrise until the system is stopped.
@@ -216,7 +220,7 @@ By default, there are two events emitted 60 times per second:
 - `update` - With one argument `dt` (the time in seconds since last update.)
 - `draw` - No arguments.
 
-This behavior can be overridden. See below.
+> This behavior can be overridden. [See Custom Game Loop.]()
 
 ## Querying Entities
 
@@ -248,7 +252,7 @@ Queries can be expanded with further conditions.
 // Get only entities tagged with both "fur" and "hungry".
 app.entity.get("fur").and("hungry"); // (Edgar)
 
-// Get all entities tagged either "fur" or "hungry".
+// Get all entities tagged with either "fur" or "hungry".
 app.entity.get("fur").or("hungry"); // (Edgar, Gus, Pam, and Cleo)
 
 // Get only entities with "fur" and without "hungry".
@@ -259,7 +263,7 @@ There is also a `filter` method for more complex conditions.
 
 ```js
 // Get only entities with short fur.
-app.entity.get("fur").filter(({ fur }) => fur.length === "short"); // (Edgar and Pam)
+app.entity.get("fur").filter(({ fur }) => fur.length === "short"); // (Gus and Pam)
 ```
 
 These conditions can all be chained continuously as well, to build as much complexity as needed, though it's rare to need very long queries.
@@ -272,7 +276,7 @@ app.entity
   .andNot("hungry"); // (Pam)
 ```
 
-For performance, an internal index is maintained for every tag that exists, meaning `get` always returns its result in constant time. Further conditions increase the complexity to linear time, which should still be quite fast in most cases.
+> For performance, an internal index is maintained for every tag that exists, meaning `get` always returns its result in constant time. Further conditions increase the complexity to linear time, which should still be quite fast in most cases.
 
 ### Using the Result
 
@@ -294,7 +298,7 @@ for e of app.entity.get("hungry") {
 }
 ```
 
-#### When to use queries?
+### When to use queries?
 
 Any time you need to access entities that weren't defined within the current scope, which is almost always.
 
@@ -328,7 +332,7 @@ const Name = {
 };
 ```
 
-#### How to get a specific entity?
+### How to get a specific entity?
 
 Usually when you need to do something with a specific entity, you can simply pass that entity as an argument to wherever it is needed, as in the [Feeding system from earlier]().
 
@@ -346,15 +350,101 @@ const [edgar] = app.entity.get("edgar"); // Not recommended.
 
 [Implementation]() - [Tests]()
 
+Most state in your game will belong to individual entities in the form of components, but on occasion, systems will need access to state that shouldn't necessarily belong to individual entities.
+
+To deal with this requirement, there is a way to store state in systems themselves.
+
+```js
+const HeadPat = {
+  event: "headPat",
+  init: (app) => ({ total: 0 }),
+  action(app, state, kitty) {
+    // Pat kitty's head.
+    // ...
+
+    // Increment the total so we know how many head pats have been given.
+    state.total += 1;
+    console.log(state.total);
+  },
+};
+```
+
+```js
+app.event.emit("headPat", edgar); // console: 1
+app.event.emit("headPat", gus); // console: 2
+```
+
+> `init` takes the `app` instance as its only argument.
+
+Similar to component state, the `init` function should return the initial state for the system. The returned value will be passed to `action` as the second parameter, whenever it is triggered.
+
+> It is worth noting that this behavior of passing the state to `action` only occurs if `init` explicitly returns a value other than `undefined`. The mere presence of `init` does not cause this. See [System Lifecycle]() for the explanation.
+
+### When to use system state?
+
+Whenever a system needs to use some state that doesn't describe a specific entity, _i.e._ it doesn't make sense for the state to be a component.
+
+Usually you won't need system state. For example, if you want to track which entities have had their heads patted, adding a `"patted"` tag or component to the individual entities is the recommended pattern, rather than keeping a list of entities in system state. This allows that information to remain queryable.
+
 ## Lifecycles
+
+Sometimes your components and systems may need to "step outside" of Fae to do certain kinds of interaction with the environment _(i.e. adding/removing DOM event listeners)_, or other libraries _(i.e. creating/destroying object instances)_, or they may simply need to do something at the beginning or end of their "life".
+
+Lifecycles are the way to do this.
+
+> Lifecycles can be very handy, but you should use the lifecycle API carefully because unnecessary side-effects in your components and systems can lead to difficult bugs.
+
+### Component Lifecycle
+
+[Implementation]() - [Tests]()
+
+While primarily for initializing state, a component's `init` function can also be used for other initialization. Simply do your set-up in the body of `init` and don't forget to still return the initial state for the component.
+
+Components can also have an `exit` function.
+
+> Like `init`, `exit` takes the entity as its first argument.
+
+```js
+const Component = {
+  tag: "foo",
+  init(e) {
+    // Do some set up.
+
+    // Return the initial state.
+    return "bar";
+  },
+  exit(e) {
+    // Do some clean up.
+  },
+};
+```
+
+> `init()` is called as the first step when a component is being attached, and `exit()` is called as the last step when being detached.
 
 ### System Lifecycle
 
 [Implementation]() - [Tests]()
 
-### Component Lifecycle
+In systems, `init` can be used for set-up, and returning an initial state is optional. If a value is returned from `init`, then the behavior described in [System State]() occurs.
 
-[Implementation]() - [Tests]()
+Systems can also have an `exit` function.
+
+> Both `init` and `exit` take the `app` instance as their only argument.
+
+```js
+const System = {
+  event: "foo",
+  init(app) {
+    // Add a DOM event listener or something.
+  },
+  exit(app) {
+    // Remove a DOM event listener or something.
+  },
+  action(app) {},
+};
+```
+
+> `init()` is called as the first step when a system is started, and `exit()` is called as the last step when stopped.
 
 ## Application State
 
