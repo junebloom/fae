@@ -32,7 +32,9 @@ const app = new Application();
 
 ## Introducing Entities
 
-[Entities]() are the _things_ in your game. Characters, items, tiles; if it exists in the game world, then it's probably an entity.
+[Implementation]() - [Tests]()
+
+Entities are the _things_ in your game. Characters, items, tiles; if it exists in the game world, then it's probably an entity.
 
 ```js
 // Let's make a kitty. His name is Edgar.
@@ -57,7 +59,9 @@ Every entity has the `"all"` tag.
 
 ## Describing With Components
 
-[Components]() are the data used to _describe_ entities. This is what a basic component looks like:
+[Implementation]() - [Tests]()
+
+Components are the data used to _describe_ entities. This is what a basic component looks like:
 
 ```js
 const Weight = {
@@ -114,7 +118,9 @@ So components describe an entity's characteristics, but they don't implement any
 
 ## Acting With Systems
 
-[Systems]() provide actions, the code to _do stuff_ with entities. This is a basic system:
+[Implementation]() - [Tests]()
+
+Systems provide actions, the code to _do stuff_ with entities. This is a basic system:
 
 ```js
 const BatheInTheMorning = {
@@ -145,7 +151,9 @@ app.system.start(RunInTheMorning);
 
 ## Events
 
-Systems perform actions in response to [events](). Where do the events come from?
+[Implementation]() - [Tests]()
+
+Systems perform actions in response to events. Where do the events come from?
 
 ```js
 // Emit a sunrise event.
@@ -171,7 +179,9 @@ app.event.emit("feed", edgar, 1);
 
 ### Default Game Loop
 
-[By default](), there are two events emitted 60 times per second:
+[Implementation]() - [Tests]()
+
+By default, there are two events emitted 60 times per second:
 
 - `update` - With one argument `dt` (the time in seconds since last update.)
 - `draw` - No arguments.
@@ -179,6 +189,8 @@ app.event.emit("feed", edgar, 1);
 This behavior can be overridden. See below.
 
 ## Querying Entities
+
+[Implementation]() - [Tests]()
 
 Let's re-create Edgar and give him some friends.
 
@@ -189,12 +201,16 @@ app.entity.create().attach(Fur, "gray", "short"); // Pam
 app.entity.create().tag("hungry"); // Cleo (hairless!)
 ```
 
-Now we've got some cool cats, but we haven't stored any reference to them. How do we do access them? With [queries]()!
+Now we've got some cool cats, but we haven't stored any reference to them. How do we do access them? With queries!
 
 ```js
 // Get all entities with the "fur" tag.
 app.entity.get("fur"); // (Edgar, Gus, and Pam)
 ```
+
+### Conditions
+
+[Implementation]() - [Tests]()
 
 Queries can be expanded with further conditions.
 
@@ -230,7 +246,9 @@ For performance, an internal index is maintained for every tag that exists, mean
 
 ### Using the Result
 
-The value returned from a query is an [EntitySet](), which implements the `forEach` method.
+[Implementation]() - [Tests]()
+
+The value returned from a query is an EntitySet, which implements the `forEach` method.
 
 ```js
 app.entity.get("hungry").forEach((e) => {
@@ -296,12 +314,22 @@ const [edgar] = app.entity.get("edgar"); // Not recommended.
 
 ## System State
 
+[Implementation]() - [Tests]()
+
 ## Lifecycles
 
 ### System Lifecycle
 
+[Implementation]() - [Tests]()
+
 ### Component Lifecycle
+
+[Implementation]() - [Tests]()
 
 ## Application State
 
+[Implementation]() - [Tests]()
+
 ## Custom Game Loop
+
+[Implementation]() - [Tests]()
