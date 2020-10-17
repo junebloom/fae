@@ -1,7 +1,8 @@
 import test from "ava";
 import { Entity } from "./Entity.js";
 
-// Test utility.
+// Test Utilities
+
 // Return a mock collection.
 const mockCollection = () => ({
   app: {},
@@ -13,14 +14,14 @@ const mockCollection = () => ({
   }),
 });
 
-// Entity API tests.
+// Entity API Tests
 
 test("application instance is available", (t) => {
   const { app } = new Entity(mockCollection());
   t.truthy(app, "Entity should have an `app` property.");
 });
 
-// Tags tests.
+// Tags Tests
 
 test("has 'all' tag", (t) => {
   const entity = new Entity(mockCollection());
@@ -38,7 +39,7 @@ test("tags can be added and removed", (t) => {
   t.false(entity.tags.has("cuddly"), "Should not be cuddly. :(");
 });
 
-// Components tests.
+// Components Tests
 
 test("component attaches and detaches", (t) => {
   const entity = new Entity(mockCollection());

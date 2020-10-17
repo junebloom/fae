@@ -2,7 +2,8 @@ import test from "ava";
 import { SystemManager } from "./SystemManager.js";
 import { EventEmitter } from "./EventEmitter.js";
 
-// Test utility for creating an isolated SystemManager.
+// Test Utilities
+
 function createSystemManager() {
   const mockApp = {
     event: new EventEmitter(),
@@ -10,7 +11,7 @@ function createSystemManager() {
   return new SystemManager(mockApp);
 }
 
-// SystemManager API tests.
+// SystemManager API Tests
 
 test("system starts, handles event, and stops", (t) => {
   const manager = createSystemManager();

@@ -3,7 +3,7 @@ import { EntityCollection } from "./EntityCollection.js";
 import { EntitySet } from "./EntitySet.js";
 import { Entity } from "./Entity.js";
 
-// EntityCollection API tests.
+// EntityCollection API Tests
 
 test("create and return an index idempotently", (t) => {
   const collection = new EntityCollection();
