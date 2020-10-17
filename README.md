@@ -27,8 +27,38 @@ import { Application } from "https://jspm.dev/fae@1.4.1/dist/fae.js";
 ```
 
 ```js
+// Create an Application instance and read the docs to get started!
 const app = new Application();
 ```
+
+# API Reference
+
+The guide below is the best primary documentation, but if you need detailed API information, take a peek at the source code!
+
+I work hard to keep it simple, readable, fully annotated, and fully unit-tested. The tests provide an overview of the APIs through usage examples, and the implementation of course has the full details.
+
+For convenience, each section of the guide has links to the relevant implementation and test files.
+
+# Guide
+
+- [Introducing Entities]()
+  - [Tags]()
+- [Describing With Components]()
+  - [Component Parameters]()
+- [Acting With Systems]()
+- [Events]()
+  - [Default Game Loop]()
+- [Querying Entities]()
+  - [Conditions]()
+  - [Using the Result]()
+    - [When to use queries?]()
+    - [How to get a specific entity?]()
+- [System State]()
+- [Lifecycles]()
+  - [System Lifecycle]()
+  - [Component Lifecycle]()
+- [Application State]()
+- [Custom Game Loop]()
 
 ## Introducing Entities
 
