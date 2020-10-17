@@ -1,13 +1,13 @@
 import test from "ava";
 import util from "util";
 import { EventEmitter } from "../core/EventEmitter.js";
-import { defaultLoop } from "./defaultLoop.js";
+import { startDefaultLoop } from "./startDefaultLoop.js";
 
 const promiseTimeout = util.promisify(setTimeout);
 
 test("emits proper events", async (t) => {
   const app = { event: new EventEmitter() };
-  defaultLoop(app);
+  startDefaultLoop(app);
 
   let expected = 0;
   let updates = 0;

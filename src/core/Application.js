@@ -1,12 +1,16 @@
 import { EventEmitter } from "./EventEmitter.js";
 import { EntityCollection } from "./EntityCollection.js";
 import { SystemManager } from "./SystemManager.js";
-import { defaultLoop } from "../utils/defaultLoop.js";
+import { startDefaultLoop } from "../utils/startDefaultLoop.js";
 import { logBanner } from "../utils/logBanner.js";
 
 // Provides an interface to events, entities, and systems.
 export class Application {
-  constructor({ hideBanner = false, startGame = defaultLoop, state = {} }) {
+  constructor({
+    startGame = startDefaultLoop,
+    state = {},
+    hideBanner = false,
+  }) {
     // A store for global state.
     this.state = state;
 
