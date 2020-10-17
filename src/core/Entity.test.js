@@ -1,37 +1,35 @@
 import test from "ava";
 import { Entity } from "./Entity.js";
 
-// Testing utility for creating an isolated entity.
-function createEntity() {
-  const mockCollection = {
-    app: {},
-    index: () => ({
-      set: {
-        add: () => {},
-        delete: () => {},
-      },
-    }),
-  };
-  return new Entity(mockCollection);
-}
+// Test utility.
+// Return a mock collection.
+const mockCollection = () => ({
+  app: {},
+  index: () => ({
+    set: {
+      add: () => {},
+      delete: () => {},
+    },
+  }),
+});
 
 // Entity API tests.
 
 test("application instance is available", (t) => {
-  const { app } = createEntity();
+  const { app } = new Entity(mockCollection());
   t.truthy(app, "Entity should have an `app` property.");
 });
 
 // Tags tests.
 
 test("has 'all' tag", (t) => {
-  const entity = createEntity();
+  const entity = new Entity(mockCollection());
 
   t.true(entity.tags.has("all"), "Every entity should be tagged with 'all'.");
 });
 
 test("tags can be added and removed", (t) => {
-  const entity = createEntity();
+  const entity = new Entity(mockCollection());
 
   entity.tag("cuddly");
   t.true(entity.tags.has("cuddly"), "Should be very cuddly.");
@@ -43,7 +41,7 @@ test("tags can be added and removed", (t) => {
 // Components tests.
 
 test("component attaches and detaches", (t) => {
-  const entity = createEntity();
+  const entity = new Entity(mockCollection());
 
   t.falsy(entity.id, "ID field should not exist yet.");
 
@@ -60,7 +58,7 @@ test("component attaches and detaches", (t) => {
 });
 
 test("component lifecycle initializes and exits", (t) => {
-  const entity = createEntity();
+  const entity = new Entity(mockCollection());
   let alive = false;
 
   const component = {
@@ -86,7 +84,7 @@ test("component lifecycle initializes and exits", (t) => {
 });
 
 test("component parameters are passed to init", (t) => {
-  const entity = createEntity();
+  const entity = new Entity(mockCollection());
 
   const component = {
     tag: "flavor",
