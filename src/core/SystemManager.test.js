@@ -4,17 +4,15 @@ import { EventEmitter } from "./EventEmitter.js";
 
 // Test Utilities
 
-function createSystemManager() {
-  const mockApp = {
-    event: new EventEmitter(),
-  };
-  return new SystemManager(mockApp);
-}
+// Return a mock application.
+const mockApplication = () => ({
+  event: new EventEmitter(),
+});
 
 // SystemManager API Tests
 
 test("system starts, handles event, and stops", (t) => {
-  const manager = createSystemManager();
+  const manager = new SystemManager(mockApplication());
   let received = false;
   t.plan(4);
 
@@ -38,7 +36,7 @@ test("system starts, handles event, and stops", (t) => {
 });
 
 test("system state is initialized and passed to action", (t) => {
-  const manager = createSystemManager();
+  const manager = new SystemManager(mockApplication());
   const outerState = { count: 0 };
 
   const system = {
@@ -61,7 +59,7 @@ test("system state is initialized and passed to action", (t) => {
 });
 
 test("system lifecycle initializes and exits", (t) => {
-  const manager = createSystemManager();
+  const manager = new SystemManager(mockApplication());
   let running = null;
 
   const system = {
