@@ -9,13 +9,13 @@ export class SystemManager {
 
   // Initialize the system and register its event listener.
   start(system) {
-    const args = [system.event, system.action, this.app];
+    const frontArgs = [this.app];
     if (system.init) {
       const initialState = system.init(this.app);
-      if (initialState !== undefined) args.push(initialState);
+      if (initialState !== undefined) frontArgs.push(initialState);
     }
     this.systems.add(system);
-    this.app.event.addListener(...args);
+    this.app.event.addListener(system.event, system.action, frontArgs);
   }
 
   // Unregister system's event listener and clean up.

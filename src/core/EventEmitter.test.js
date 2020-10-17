@@ -43,7 +43,7 @@ test("listeners are called with the correct frontArgs", (t) => {
     t.is(c, "this way comes", "`c` should be the regular argument.");
   }
 
-  emitter.addListener("forsooth", listener, "something", "wicked");
+  emitter.addListener("forsooth", listener, ["something", "wicked"]);
   emitter.emit("forsooth", "this way comes");
 });
 

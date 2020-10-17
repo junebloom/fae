@@ -7,7 +7,7 @@ export class EventEmitter {
   }
 
   // Register the given event listener.
-  addListener(event, listener, ...frontArgs) {
+  addListener(event, listener, frontArgs) {
     let listeners = this.events.get(event);
 
     // Create a new Map to hold the event's listeners, if it doesn't exist yet.
@@ -44,7 +44,8 @@ export class EventEmitter {
     if (!listeners) return;
 
     listeners.forEach((frontArgs, listener) => {
-      listener.call(undefined, ...frontArgs, ...args);
+      if (frontArgs) listener(...frontArgs, ...args);
+      else listener(...args);
     });
   }
 }
