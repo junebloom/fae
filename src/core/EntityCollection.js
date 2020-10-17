@@ -18,13 +18,16 @@ export class EntityCollection {
     return new Entity(this);
   }
 
-  // Return the set of entities for the given tag.
+  // Return the set of entities with the given tag.
   get(tag) {
     if (this.indexes.has(tag)) return this.indexes.get(tag);
     else return new EntitySet(this);
   }
 
   // Return the requested index, creating it if necessary.
+  // The difference this and get() is that this creates, stores, and returns
+  // a new index if it receives a tag that has no index,
+  // while `get` simply returns an empty set.
   index(tag) {
     let set;
     if (this.indexes.has(tag)) {
