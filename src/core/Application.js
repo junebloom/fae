@@ -1,7 +1,7 @@
 import { EventEmitter } from "./EventEmitter.js";
 import { EntityCollection } from "./EntityCollection.js";
 import { SystemManager } from "./SystemManager.js";
-import { defaultLoop } from "./defaultLoop.js";
+import { defaultLoop } from "../utils/defaultLoop.js";
 import { logBanner } from "../utils/logBanner.js";
 
 // Provides an interface to events, entities, and systems.
