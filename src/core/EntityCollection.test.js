@@ -2,75 +2,16 @@ import test from "ava";
 import { EntityCollection } from "./EntityCollection.js";
 import { Entity } from "./Entity.js";
 
-test("new entities can be created", (t) => {
+// EntityCollection API tests.
+
+test.skip("create and return an index idempotently", (t) => {});
+
+test.skip("retrieve a set by tag", (t) => {});
+
+test("create an entity", (t) => {
   const collection = new EntityCollection();
   const entity = collection.create();
 
   t.true(entity instanceof Entity, "Should be an instance of Entity.");
-});
-
-function setupFriends() {
-  const collection = new EntityCollection();
-  const alice = collection.create();
-  const bob = collection.create();
-  const charlie = collection.create();
-
-  alice.tag("friend");
-  bob.tag("friend").tag("enemy");
-  charlie.tag("enemy");
-
-  return { collection, alice, bob, charlie };
-}
-
-test("entity sets can be retrieved", (t) => {
-  const { collection, alice, bob } = setupFriends();
-
-  t.deepEqual(
-    [...collection.get("friend")],
-    [alice, bob],
-    'Should return a set of all entities with the tag "friend".'
-  );
-});
-
-test("entity sets can be queried with basic set operations", (t) => {
-  const { collection, alice, bob, charlie } = setupFriends();
-
-  // Only frenemies.
-  t.deepEqual(
-    [...collection.get("friend").and("enemy")],
-    [bob],
-    'Should return only entities with both of the tags "friend" and "enemy".'
-  );
-
-  // All friends and all enemies.
-  t.deepEqual(
-    [...collection.get("friend").or("enemy")],
-    [alice, bob, charlie],
-    'Should return a union set of all entities with either "friend" or "enemy".'
-  );
-
-  // Only friends, no frenemies.
-  t.deepEqual(
-    [...collection.get("friend").andNot("enemy")],
-    [alice],
-    'Should return entities with the tag "friend", excluding any which are also tagged "enemy".'
-  );
-});
-
-test("entity sets can be filtered with custom queries", (t) => {
-  const { collection, alice, bob } = setupFriends();
-
-  const ageComponent = {
-    tag: "age",
-    init: (e, age) => age,
-  };
-
-  alice.attach(ageComponent, 22);
-  bob.attach(ageComponent, 20);
-
-  t.deepEqual(
-    [...collection.get("friend").filter((entity) => entity.age >= 21)],
-    [alice],
-    "Should return only friends over 21."
-  );
+  t.is(entity.collection, collection, "Should reference this collection.");
 });
