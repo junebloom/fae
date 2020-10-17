@@ -25,8 +25,8 @@ export class EntityCollection {
   }
 
   // Return the requested index, creating it if necessary.
-  // The difference this and get() is that this creates, stores, and returns
-  // a new index if it receives a tag that has no index,
+  // The difference between this and get() is that this creates, stores, and
+  // returns a new index if it receives a tag that has no index,
   // while `get` simply returns an empty set.
   index(tag) {
     let set;
