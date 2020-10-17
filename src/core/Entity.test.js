@@ -44,7 +44,7 @@ test("tags can be added and removed", (t) => {
 test("component attaches and detaches", (t) => {
   const entity = new Entity(mockCollection());
 
-  t.falsy(entity.id, "ID field should not exist yet.");
+  t.falsy(entity.id, "ID should not exist yet.");
 
   const component = {
     tag: "id", // tag is used to access the component on the entity.
@@ -56,6 +56,18 @@ test("component attaches and detaches", (t) => {
 
   entity.detach(component.tag);
   t.falsy(entity.id, "ID should not exist anymore.");
+});
+
+test("component parameters are passed to init", (t) => {
+  const entity = new Entity(mockCollection());
+
+  const component = {
+    tag: "flavor",
+    init: (e, flavor) => flavor,
+  };
+
+  entity.attach(component, "lime");
+  t.is(entity.flavor, "lime", "Flavor should be set to the passed parameter.");
 });
 
 test("component lifecycle initializes and exits", (t) => {
@@ -82,16 +94,4 @@ test("component lifecycle initializes and exits", (t) => {
 
   entity.detach(component.tag);
   t.false(alive, "Alive should no longer be true.");
-});
-
-test("component parameters are passed to init", (t) => {
-  const entity = new Entity(mockCollection());
-
-  const component = {
-    tag: "flavor",
-    init: (e, flavor) => flavor,
-  };
-
-  entity.attach(component, "lime");
-  t.is(entity.flavor, "lime", "Flavor should be set to the passed parameter.");
 });
