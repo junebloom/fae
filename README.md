@@ -5,7 +5,7 @@ A small game framework with a simple, joyful API.
 - Flexible; decoupled entity-component-system approach.
 - Agnostic; pairs with anything you prefer for rendering, UI, etc.
 - Focused; only does what it's good at.
-- Runs in browsers, Node, and Deno.
+- Runs in browsers, [Node](https://github.com/nodejs/node), and [Deno](https://github.com/denoland/deno).
 - Zero dependencies.
 - ~1kb compressed.
 
@@ -35,42 +35,44 @@ const app = new Application();
 
 The guide below is the best primary documentation, but if you need more detailed API information try taking a peek at the source!
 
-I work hard to keep it small, readable, fully annotated, and fully unit-tested. The tests provide an overview of the APIs through usage examples, and the implementation of course has the full details.
+I work hard to keep it small, readable, fully annotated, and fully unit-tested. The tests provide an overview of the APIs, and the implementation of course has the full details.
 
 For convenience, each section of the guide has links to the relevant implementation and test files.
 
 # Guide
 
-After [Getting Started](), you're ready to dive in!
+After [Getting Started](#getting-started), you're ready to dive in!
 
 > Asides such as this contain additional explanation or information and appear throughout the guide.
 
-- [Introducing Entities]()
-  - [Tags]()
-- [Describing With Components]()
-  - [Component Parameters]()
-- [Acting With Systems]()
-- [Events]()
-  - [Default Game Loop]()
-- [Querying Entities]()
-  - [Conditions]()
-  - [Using the Result]()
-  - [When to use queries?]()
-  - [How to get a specific entity?]()
-- [System State]()
-- [Lifecycles]()
-  - [Component Lifecycle]()
-  - [System Lifecycle]()
-- [Application State]()
-- [Custom Game Loop]()
-- [Integrating Rendering, UI, and More]()
-  - [Example: Keyboard Input]()
-  - [Example: Canvas]()
-  - [Example: React]()
+- [Introducing Entities](#introducing-entities)
+  - [Tags](#tags)
+- [Describing With Components](#describing-with-components)
+  - [Component Parameters](#component-parameters)
+- [Acting With Systems](#acting-with-systems)
+- [Events](#events)
+  - [Default Game Loop](#default-game-loop)
+- [Querying Entities](#querying-entities)
+  - [Conditions](#conditions)
+  - [Using the Result](#using-the-result)
+  - [When to use queries?](#when-to-use-queries)
+  - [How to get a specific entity?](#how-to-get-a-specific-entity)
+- [System State](#system-state)
+  - [When to use system state?](#when-to-use-system-state)
+- [Lifecycles](#lifecycles)
+  - [Component Lifecycle](#component-lifecycle)
+  - [System Lifecycle](#system-lifecycle)
+- [Application State](#application-state)
+  - [When to use application state?](#when-to-use-application-state)
+- [Custom Game Loop](#custom-game-loop)
+- [Integrating Rendering, UI, and More](#integrating-rendering-ui-and-more)
+  - [Example: Canvas](#example-canvas)
+  - [Example: Keyboard Input](#example-keyboard-input)
+  - [Example: React](#example-react)
 
 ## Introducing Entities
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/Entity.js) - [Tests](/src/core/Entity.test.js)
 
 Entities are the _things_ in your game. Characters, items, tiles; if it exists in the game world, then it's probably an entity.
 
