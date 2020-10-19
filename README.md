@@ -3,7 +3,7 @@
 A small game framework with a simple, joyful API.
 
 - Flexible; decoupled entity-component-system approach.
-- Agnostic; pairs with anything you prefer for rendering, physics, etc.
+- Agnostic; pairs with anything you prefer for rendering, UI, etc.
 - Focused; only does what it's good at.
 - Runs in browsers, Node, and Deno.
 - Zero dependencies.
@@ -35,11 +35,15 @@ const app = new Application();
 
 The guide below is the best primary documentation, but if you need more detailed API information try taking a peek at the source!
 
-I work hard to keep it simple, readable, fully annotated, and fully unit-tested. The tests provide an overview of the APIs through usage examples, and the implementation of course has the full details.
+I work hard to keep it small, readable, fully annotated, and fully unit-tested. The tests provide an overview of the APIs through usage examples, and the implementation of course has the full details.
 
 For convenience, each section of the guide has links to the relevant implementation and test files.
 
 # Guide
+
+After [Getting Started](), you're ready to dive in!
+
+> Asides such as this contain additional explanation or information and appear throughout the guide.
 
 - [Introducing Entities]()
   - [Tags]()
@@ -59,8 +63,10 @@ For convenience, each section of the guide has links to the relevant implementat
   - [System Lifecycle]()
 - [Application State]()
 - [Custom Game Loop]()
-
-> Asides such as this contain additional explanation or information and appear throughout the guide.
+- [Integrating Rendering, UI, and More]()
+  - [Example: Keyboard Input]()
+  - [Example: Canvas]()
+  - [Example: React]()
 
 ## Introducing Entities
 
@@ -211,16 +217,18 @@ const Feeding = {
 app.event.emit("feed", edgar, 1);
 ```
 
+> `emit()` triggers event listeners synchronously and in the order in which they were registered. _(i.e. the order in which the respective systems were started.)_
+
 ### Default Game Loop
 
 [Implementation]() - [Tests]()
 
 By default, there are two events emitted 60 times per second:
 
-- `update` - With one argument `dt` (the time in seconds since last update.)
+- `update` - With one argument `dt` _(The time in seconds since the last update.)_
 - `draw` - No arguments.
 
-> This behavior can be overridden. [See Custom Game Loop.]()
+> This behavior can be overridden. See [Custom Game Loop]().
 
 ## Querying Entities
 
@@ -290,7 +298,7 @@ app.entity.get("hungry").forEach((e) => {
 });
 ```
 
-It is also an Iterable, so it can be used with `for...of` loops.
+EntitySet is also an Iterable, so it can be used with `for...of` loops.
 
 ```js
 for e of app.entity.get("hungry") {
@@ -374,9 +382,9 @@ app.event.emit("headPat", edgar); // console: 1
 app.event.emit("headPat", gus); // console: 2
 ```
 
-> `init` takes the `app` instance as its only argument.
+> `init` takes the `app` instance as its first argument. You can also give additional arguments to `app.system.start()`, and they will be passed to `init`, similar to passing arguments when [attaching components]().
 
-Similar to component state, the `init` function should return the initial state for the system. The returned value will be passed to `action` as the second parameter, whenever it is triggered.
+As with component state, the `init` function should return the initial state for the system. The returned value will be passed to `action` as the second parameter, whenever `action` triggered.
 
 > It is worth noting that this behavior of passing the state to `action` only occurs if `init` explicitly returns a value other than `undefined`. The mere presence of `init` does not cause this. See [System Lifecycle]() for the explanation.
 
@@ -429,7 +437,7 @@ In systems, `init` can be used for set-up, and returning an initial state is opt
 
 Systems can also have an `exit` function.
 
-> Both `init` and `exit` take the `app` instance as their only argument.
+> Both `init` and `exit` take the `app` instance as their first argument. If the system has state, `exit` takes it as its second argument.
 
 ```js
 const System = {
@@ -450,6 +458,186 @@ const System = {
 
 [Implementation]() - [Tests]()
 
+The Application State API is very minimal. The `app` instance simply has a `state` property, which you can use as a way to access global state throughout your game.
+
+```js
+app.state.canvas = document.getElementById("gameCanvas");
+```
+
+There is nothing special about the `state` property, except that it exists and you can initialize it in the Application constructor. It exists only to encourage a standard pattern for global state. By default it is just an empty object, but it can be set to anything you like.
+
+```js
+const app = new Application({ state: yourCustomStore });
+```
+
+### When to use application state?
+
+You could probably get by without using application state at all, but of course there may be cases where it makes more sense to use application state.
+
+There is a general order of precedence you can keep in mind when deciding where a piece of state should go:
+
+`entity state -> system state -> application state`
+
+1. _Can_ this state be stored as a tag or component on an entity, and _does it make sense_ to do so? In other words, can the state logically "belong" to a thing in the game world? If so, store it on the entity.
+
+2. If not, then is it only needed in a single system? If so, store it as system state.
+
+3. If not, then can it be "written" by one system and "read" by many? If so, then store it as system state and pass it around with events. See [this example]().
+
+4. If not, then it's probably a decent candidate for application state.
+
+> This is only my recommendation! Feel free to structure your state differently if it makes more sense for your case.
+
 ## Custom Game Loop
 
 [Implementation]() - [Tests]()
+
+If for any reason you want to override the [default game loop](), there is a very simple way of doing so.
+
+```js
+const app = new Application({
+  startGame: (app) => {
+    // Start your custom game loop!
+  },
+});
+```
+
+You may want to do this for a variety of reasons:
+
+- To add more features to the game loop.
+- To write a loop suitable for your game's server.
+- To make a turn-based game, where you might not need real-time updates.
+- To disable the loop entirely and just use Fae as an ECS library.
+- And more!
+
+> Take a look at the [implementation]() of the default game loop for an example of a `startGame` function.
+
+## Integrating Rendering, UI, and More
+
+We've covered all of Fae's concepts and APIs, and you're just about ready to make an awesome game! The only thing left is integrating Fae with the other APIs or libraries you'll need for your game.
+
+Fae is designed to be able to integrate with almost anything. The specifics of what this looks like will vary vastly depending on the exact API, library, and situation in which you're using them, but I'll provide examples for a few common cases here:
+
+- [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) for rendering.
+- [KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent) for input.
+- [React](https://github.com/facebook/react) for UI.
+
+> In the future, I may provide packages for common integrations.
+
+### Example: Canvas
+
+```js
+// index.js
+import { Application } from "fae";
+import { CanvasRender } from "./CanvasRender.js";
+
+const canvas = document.getElementById("canvas");
+const app = new Application();
+
+app.system.start(CanvasRender, canvas.getContext("2d"));
+```
+
+```js
+// CanvasRender.js
+export const CanvasRender = {
+  event: "draw",
+  init: (app, ctx) => ctx, // Store the rendering context as system state.
+  action(app, ctx) {
+    // Emit a "render" event that other systems can listen for.
+    app.event.emit("render", ctx);
+
+    // Clear the canvas after every frame.
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  },
+};
+```
+
+With this set up, we can now write systems that consume the `render` event and use the passed [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) to do the actual drawing operations.
+
+> For example, we could have a `DrawSprites` system to render any entities who have a `Sprite` component, or a `DrawColliders` system for debugging collisions.
+
+### Example: Keyboard Input
+
+```js
+// index.js
+import { Application } from "fae";
+import { KeyboardInput } from "./KeyboardInput.js";
+
+const gameElement = document.getElementById("game");
+const app = new Application();
+
+app.system.start(KeyboardInput, gameElement);
+```
+
+```js
+// KeyboardInput.js
+export const KeyboardInput = {
+  init(app, element) {
+    // Application state is used to keep a map of pressed keys, so that key
+    // state can be queried from anywhere in the game.
+    function initializeState() {
+      app.state.kb = {
+        keys: {},
+        codes: {},
+      };
+    }
+
+    function handleKeyDown({ key, code, repeat }) {
+      app.state.kb.keys[key.toLowerCase()] = true;
+      app.event.emit("keydown", { key: key.toLowerCase(), code, repeat });
+    }
+
+    function handleKeyUp({ key, code }) {
+      app.state.kb.keys[key.toLowerCase()] = false;
+      app.event.emit("keyup", { key: key.toLowerCase(), code });
+    }
+
+    element.addEventListener("keydown", handleKeyDown);
+    element.addEventListener("keyup", handleKeyUp);
+
+    // Reset all pressed keys if the game loses focus. This prevents "stuck"
+    // keys if the user releases the key while the game isn't focused and thus
+    // can't receive the "keyup" event.
+    window.addEventListener("blur", initializeState);
+    element.addEventListener("blur", initializeState);
+
+    initializeState();
+  },
+};
+```
+
+> You should also write an `exit()` function that cleans up these DOM event listeners, especially if your game runs in a page where the user may also do other things besides playing your game. I've omitted it here for brevity.
+
+> Also note that the browser gives us the "printable representation" of the pressed `key` name, including case. So "a" and "A" are two different keys. Seriously. This is why I used `toLowerCase()` to normalize key names. See [key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) and [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) at MDN for more info.
+
+Now we can easily query keyboard state in our other systems.
+
+```js
+const KBMovementController = {
+  event: "update",
+  action(app, dt) {
+    app.entity.get("KBControlled").forEach((e) => {
+      if (app.state.kb.code["KeyA"]) {
+        // Move left.
+      }
+    });
+  },
+};
+```
+
+Or respond to key events.
+
+```js
+const UIController = {
+  event: "keydown",
+  action(app, { key }) {
+    if (key === "i") {
+      // Open inventory.
+    }
+  },
+};
+```
+
+### Example: React
+
+> Coming soon.
