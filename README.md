@@ -55,15 +55,15 @@ After [Getting Started](#getting-started), you're ready to dive in!
 - [Querying Entities](#querying-entities)
   - [Conditions](#conditions)
   - [Using the Result](#using-the-result)
-  - [When to use queries?](#when-to-use-queries)
-  - [How to get a specific entity?](#how-to-get-a-specific-entity)
+  - [_When to use queries?_](#when-to-use-queries)
+  - [_How to get a specific entity?_](#how-to-get-a-specific-entity)
 - [System State](#system-state)
-  - [When to use system state?](#when-to-use-system-state)
+  - [_When to use system state?_](#when-to-use-system-state)
 - [Lifecycles](#lifecycles)
   - [Component Lifecycle](#component-lifecycle)
   - [System Lifecycle](#system-lifecycle)
 - [Application State](#application-state)
-  - [When to use application state?](#when-to-use-application-state)
+  - [_When to use application state?_](#when-to-use-application-state)
 - [Custom Game Loop](#custom-game-loop)
 - [Integrating Rendering, UI, and More](#integrating-rendering-ui-and-more)
   - [Example: Canvas](#example-canvas)
@@ -308,7 +308,7 @@ for e of app.entity.get("hungry") {
 }
 ```
 
-### When to use queries?
+### _When to use queries?_
 
 Any time you need to access entities that weren't defined within the current scope, which is almost always.
 
@@ -342,7 +342,7 @@ const Name = {
 };
 ```
 
-### How to get a specific entity?
+### _How to get a specific entity?_
 
 Usually when you need to do something with a specific entity, you can simply pass that entity as an argument to wherever it is needed, as in the [Feeding system from earlier](#events).
 
@@ -390,7 +390,7 @@ As with component state, the `init` function should return the initial state for
 
 > It is worth noting that this behavior of passing the state to `action` only occurs if `init` explicitly returns a value other than `undefined`. The mere presence of `init` does not cause this. See [System Lifecycle](#system-lifecycle) for the explanation.
 
-### When to use system state?
+### _When to use system state?_
 
 Whenever a system needs to use some state that doesn't describe a specific entity, _i.e._ it doesn't make sense for the state to be a component.
 
@@ -470,7 +470,7 @@ There is nothing special about the `state` property, except that it exists and y
 const app = new Application({ state: yourCustomStore });
 ```
 
-### When to use application state?
+### _When to use application state?_
 
 There is a general order of precedence you can keep in mind when deciding where a piece of state should go:
 
