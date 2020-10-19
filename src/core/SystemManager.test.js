@@ -41,7 +41,7 @@ test("system state is initialized and passed to action", (t) => {
 
   const system = {
     event: "add",
-    init: () => outerState, // Returns initial state.
+    init: (initialState) => initialState, // Returns initial state.
     // `state` is only passed if init returns a value.
     action(app, state, amount) {
       t.is(
@@ -53,7 +53,7 @@ test("system state is initialized and passed to action", (t) => {
     },
   };
 
-  manager.start(system);
+  manager.start(system, outerState);
   manager.app.event.emit("add", 1);
   t.is(outerState.count, 1, "Count should be 1.");
 });

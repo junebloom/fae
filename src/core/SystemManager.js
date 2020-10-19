@@ -8,10 +8,10 @@ export class SystemManager {
   }
 
   // Initialize the system and register its event listener.
-  start(system) {
+  start(system, ...initArgs) {
     const frontArgs = [this.app];
     if (system.init) {
-      const initialState = system.init(this.app);
+      const initialState = system.init(this.app, ...initArgs);
       if (initialState !== undefined) frontArgs.push(initialState);
     }
     this.systems.add(system);

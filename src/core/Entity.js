@@ -14,8 +14,8 @@ export class Entity {
   }
 
   // Attach the provided component to this entity.
-  attach(component, ...args) {
-    this[component.tag] = component.init(this, ...args);
+  attach(component, ...initArgs) {
+    this[component.tag] = component.init(this, ...initArgs);
     this.components.set(component.tag, component);
     this.tag(component.tag);
     return this;
