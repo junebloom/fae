@@ -392,7 +392,7 @@ As with component state, the `init` function should return the initial state for
 
 Whenever a system needs to use some state that doesn't describe a specific entity, _i.e._ it doesn't make sense for the state to be a component.
 
-Usually you won't need system state. For example, if you want to track which entities have had their heads patted, adding a `"patted"` tag or component to the individual entities is the recommended pattern, rather than keeping a list of entities in system state. This allows that information to remain queryable.
+Usually you won't need system state. For example, if you want to track which entities have had their heads patted, adding a `"patted"` tag or component to the individual entities is the recommended pattern, rather than keeping a list of entities in system state. This allows that information to remain [queryable]().
 
 ## Lifecycles
 
@@ -408,7 +408,7 @@ Lifecycles are the way to do this.
 
 While primarily for initializing state, a component's `init` function can also be used for other initialization. Simply do your set-up in the body of `init` and don't forget to still return the initial state for the component.
 
-Components can also have an `exit` function.
+Components can also have an `exit` function which is called when being detached from an entity.
 
 > Like `init`, `exit` takes the entity as its first argument.
 
@@ -427,15 +427,13 @@ const Component = {
 };
 ```
 
-> `init()` is called as the first step when a component is being attached, and `exit()` is called as the last step when being detached.
-
 ### System Lifecycle
 
 [Implementation]() - [Tests]()
 
 In systems, `init` can be used for set-up, and returning an initial state is optional. If a value is returned from `init`, then the behavior described in [System State]() occurs.
 
-Systems can also have an `exit` function.
+Systems can also have an `exit` function which is called when the system is stopped.
 
 > Both `init` and `exit` take the `app` instance as their first argument. If the system has state, `exit` takes it as its second argument.
 
@@ -452,7 +450,7 @@ const System = {
 };
 ```
 
-> `init()` is called as the first step when a system is started, and `exit()` is called as the last step when stopped.
+> Very rarely, you only need a system for its side effects in `init` and `exit`, rather than to respond to events, so `event` and `action` are technically optional. See [this example]().
 
 ## Application State
 
@@ -472,21 +470,19 @@ const app = new Application({ state: yourCustomStore });
 
 ### When to use application state?
 
-You could probably get by without using application state at all, but of course there may be cases where it makes more sense to use application state.
-
 There is a general order of precedence you can keep in mind when deciding where a piece of state should go:
 
 `entity state -> system state -> application state`
 
-1. _Can_ this state be stored as a tag or component on an entity, and _does it make sense_ to do so? In other words, can the state logically "belong" to a thing in the game world? If so, store it on the entity.
+1. Can the state logically "belong" to a thing in the game world? _If so,_ store it as a tag or component on the entity.
 
-2. If not, then is it only needed in a single system? If so, store it as system state.
+2. _If not,_ then is it only needed in a single system? _If so,_ store it as system state.
 
-3. If not, then can it be "written" by one system and "read" by many? If so, then store it as system state and pass it around with events. See [this example]().
+3. _If not,_ then is it only needed in reaction to specific events - or does it need to be queryable? _If the former,_ then store it as system state and pass it around with events. See [this example]().
 
-4. If not, then it's probably a decent candidate for application state.
+4. _If the latter,_ then it's probably a good candidate for application state. See [this example]().
 
-> This is only my recommendation! Feel free to structure your state differently if it makes more sense for your case.
+> This is only a recommendation! Feel free to structure your state differently if it makes more sense for your case.
 
 ## Custom Game Loop
 
@@ -516,7 +512,7 @@ You may want to do this for a variety of reasons:
 
 We've covered all of Fae's concepts and APIs, and you're just about ready to make an awesome game! The only thing left is integrating Fae with the other APIs or libraries you'll need for your game.
 
-Fae is designed to be able to integrate with almost anything. The specifics of what this looks like will vary vastly depending on the exact API, library, and situation in which you're using them, but I'll provide examples for a few common cases here:
+Fae is designed to be able to integrate with almost anything. The specifics of what this looks like will vary vastly depending on the exact API or library, and situation in which you're using them, but I'll provide examples for a few common cases here:
 
 - [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) for rendering.
 - [KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent) for input.
