@@ -35,14 +35,15 @@ test("system starts, handles event, and stops", (t) => {
   t.false(received, "Greeting should not be received once system is stopped.");
 });
 
-test("system state is initialized and passed to action", (t) => {
+test("system state is initialized, passed to action and exit", (t) => {
   const manager = new SystemManager(mockApplication());
   const outerState = { count: 0 };
 
   const system = {
     event: "add",
     init: (initialState) => initialState, // Returns initial state.
-    // `state` is only passed if init returns a value.
+    exit: (state) => t.is(state, outerState, "State should be passed to exit."),
+    // State is only passed to action if init returns a value.
     action(app, state, amount) {
       t.is(
         state,

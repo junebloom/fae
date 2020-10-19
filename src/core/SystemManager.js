@@ -1,27 +1,27 @@
 export class SystemManager {
   constructor(app) {
-    // The Application instance.
     this.app = app;
 
-    // A Set containing all currently running systems.
-    this.systems = new Set();
+    // A Map pairing systems to their state, if they have any.
+    this.states = new Map();
   }
 
-  // Initialize the system and register its event listener.
+  // Start a system.
   start(system, ...initArgs) {
+    const initialState = system.init && system.init(this.app, ...initArgs);
     const frontArgs = [this.app];
-    if (system.init) {
-      const initialState = system.init(this.app, ...initArgs);
-      if (initialState !== undefined) frontArgs.push(initialState);
+    if (initialState) {
+      this.states.set(system, initialState);
+      frontArgs.push(initialState);
     }
-    this.systems.add(system);
     this.app.event.addListener(system.event, system.action, frontArgs);
   }
 
-  // Unregister system's event listener and clean up.
+  // Stop a system.
   stop(system) {
+    const state = this.states.get(system);
     this.app.event.removeListener(system.event, system.action);
-    this.systems.delete(system);
-    if (system.exit) system.exit(this.app);
+    this.states.delete(system);
+    if (system.exit) system.exit(this.app, state);
   }
 }
