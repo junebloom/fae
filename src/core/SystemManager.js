@@ -14,14 +14,18 @@ export class SystemManager {
       this.states.set(system, initialState);
       frontArgs.push(initialState);
     }
-    this.app.event.addListener(system.event, system.action, frontArgs);
+    if (system.event) {
+      this.app.event.addListener(system.event, system.action, frontArgs);
+    }
   }
 
   // Stop a system.
   stop(system) {
     const state = this.states.get(system);
-    this.app.event.removeListener(system.event, system.action);
     this.states.delete(system);
+    if (system.event) {
+      this.app.event.removeListener(system.event, system.action);
+    }
     if (system.exit) system.exit(this.app, state);
   }
 }
