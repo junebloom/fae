@@ -99,7 +99,7 @@ edgar.tag("loved");
 
 ## Describing With Components
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/Entity.js) - [Tests](/src/core/Entity.test.js)
 
 Components are the data used to _describe_ entities. This is what a basic component looks like:
 
@@ -158,7 +158,7 @@ So components describe an entity's characteristics, but they don't implement any
 
 ## Acting With Systems
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/SystemManager.js) - [Tests](/src/core/SystemManager.test.js)
 
 Systems provide actions, the code to _do stuff_ with entities. This is a basic system:
 
@@ -176,7 +176,7 @@ As with components, a system is just an object with two properties:
 - `event` is the name of the event that the system listens for, and
 - `action` is the function that is triggered when the event occurs.
 
-> You may have noticed that the action takes the `app` instance as an argument. [More on this in a minute.]()
+> You may have noticed that the action takes the `app` instance as an argument. [More on this in a minute.](#when-to-use-queries)
 
 Let's start the system.
 
@@ -193,7 +193,7 @@ app.system.start(RunInTheMorning);
 
 ## Events
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/EventEmitter.js) - [Tests](/src/core/EventEmitter.test.js)
 
 Systems perform actions in response to events. Where do the events come from?
 
@@ -223,18 +223,18 @@ app.event.emit("feed", edgar, 1);
 
 ### Default Game Loop
 
-[Implementation]() - [Tests]()
+[Implementation](/src/utils/startDefaultLoop.js) - [Tests](/src/utils/startDefaultLoop.test.js)
 
 By default, there are two events emitted 60 times per second:
 
 - `update` - With one argument `dt` _(The time in seconds since the last update.)_
 - `draw` - No arguments.
 
-> This behavior can be overridden. See [Custom Game Loop]().
+> This behavior can be overridden. See [Custom Game Loop](#custom-game-loop).
 
 ## Querying Entities
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/EntityCollection.js) - [Tests](/src/core/EntityCollection.test.js)
 
 Let's re-create Edgar and give him some friends.
 
@@ -254,7 +254,7 @@ app.entity.get("fur"); // (Edgar, Gus, and Pam)
 
 ### Conditions
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/EntitySet.js) - [Tests](/src/core/EntitySet.test.js)
 
 Queries can be expanded with further conditions.
 
@@ -290,9 +290,9 @@ app.entity
 
 ### Using the Result
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/EntitySet.js) - [Tests](/src/core/EntitySet.test.js)
 
-The value returned from a query is an EntitySet, which implements the `forEach` method.
+The value returned from a query is an [EntitySet](/src/core/EntitySet.js), which implements the `forEach` method.
 
 ```js
 app.entity.get("hungry").forEach((e) => {
@@ -344,7 +344,7 @@ const Name = {
 
 ### How to get a specific entity?
 
-Usually when you need to do something with a specific entity, you can simply pass that entity as an argument to wherever it is needed, as in the [Feeding system from earlier]().
+Usually when you need to do something with a specific entity, you can simply pass that entity as an argument to wherever it is needed, as in the [Feeding system from earlier](#events).
 
 If that's not possible, then you can query for some unique property of the entity, but this isn't recommended because it may not be robust - if the property isn't actually unique, or the entity doesn't exist, et cetera - and may create strong coupling, which can make it harder to maintain and expand your code later.
 
@@ -358,7 +358,7 @@ const [edgar] = app.entity.get("edgar"); // Not recommended.
 
 ## System State
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/SystemManager.js) - [Tests](/src/core/SystemManager.test.js)
 
 Most state in your game will belong to individual entities in the form of components, but on occasion, systems will need access to state that shouldn't necessarily belong to individual entities.
 
@@ -384,17 +384,17 @@ app.event.emit("headPat", edgar); // console: 1
 app.event.emit("headPat", gus); // console: 2
 ```
 
-> `init` takes the `app` instance as its first argument. You can also give additional arguments to `app.system.start()`, and they will be passed to `init`, similar to passing arguments when [attaching components]().
+> `init` takes the `app` instance as its first argument. You can also give additional arguments to `app.system.start()`, and they will be passed to `init`, similar to passing arguments when [attaching components](#component-parameters).
 
 As with component state, the `init` function should return the initial state for the system. The returned value will be passed to `action` as the second parameter, whenever `action` triggered.
 
-> It is worth noting that this behavior of passing the state to `action` only occurs if `init` explicitly returns a value other than `undefined`. The mere presence of `init` does not cause this. See [System Lifecycle]() for the explanation.
+> It is worth noting that this behavior of passing the state to `action` only occurs if `init` explicitly returns a value other than `undefined`. The mere presence of `init` does not cause this. See [System Lifecycle](#system-lifecycle) for the explanation.
 
 ### When to use system state?
 
 Whenever a system needs to use some state that doesn't describe a specific entity, _i.e._ it doesn't make sense for the state to be a component.
 
-Usually you won't need system state. For example, if you want to track which entities have had their heads patted, adding a `"patted"` tag or component to the individual entities is the recommended pattern, rather than keeping a list of entities in system state. This allows that information to remain [queryable]().
+Usually you won't need system state. For example, if you want to track which entities have had their heads patted, adding a `"patted"` tag or component to the individual entities is the recommended pattern, rather than keeping a list of entities in system state. This allows that information to remain [queryable](#querying-entities).
 
 ## Lifecycles
 
@@ -406,7 +406,7 @@ Lifecycles are the way to do this.
 
 ### Component Lifecycle
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/Entity.js) - [Tests](/src/core/Entity.test.js)
 
 While primarily for initializing state, a component's `init` function can also be used for other initialization. Simply do your set-up in the body of `init` and don't forget to still return the initial state for the component.
 
@@ -431,9 +431,9 @@ const Component = {
 
 ### System Lifecycle
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/SystemManager.js) - [Tests](/src/core/SystemManager.test.js)
 
-In systems, `init` can be used for set-up, and returning an initial state is optional. If a value is returned from `init`, then the behavior described in [System State]() occurs.
+In systems, `init` can be used for set-up, and returning an initial state is optional. If a value is returned from `init`, then the behavior described in [System State](#system-state) occurs.
 
 Systems can also have an `exit` function which is called when the system is stopped.
 
@@ -452,11 +452,11 @@ const System = {
 };
 ```
 
-> Very rarely, you only need a system for its side effects in `init` and `exit`, rather than to respond to events, so `event` and `action` are technically optional. See [this example]().
+> Very rarely, you only need a system for its side effects in `init` and `exit`, rather than to respond to events, so `event` and `action` are technically optional. See [this example](#example-keyboard-input).
 
 ## Application State
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/Application.js) - [Tests](/src/core/Application.test.js)
 
 The Application State API is very minimal. The `app` instance simply has a `state` property, which you can use as a way to access global state throughout your game.
 
@@ -480,17 +480,17 @@ There is a general order of precedence you can keep in mind when deciding where 
 
 2. _If not,_ then is it only needed in a single system? _If so,_ store it as system state.
 
-3. _If not,_ then is it only needed in reaction to specific events - or does it need to be queryable? _If the former,_ then store it as system state and pass it around with events. See [this example]().
+3. _If not,_ then is it only needed in reaction to specific events - or does it need to be queryable? _If the former,_ then store it as system state and pass it around with events. See [this example](#example-canvas).
 
-4. _If the latter,_ then it's probably a good candidate for application state. See [this example]().
+4. _If the latter,_ then it's probably a good candidate for application state. See [this example](#example-keyboard-input).
 
 > This is only a recommendation! Feel free to structure your state differently if it makes more sense for your case.
 
 ## Custom Game Loop
 
-[Implementation]() - [Tests]()
+[Implementation](/src/core/Application.js) - [Tests](/src/core/Application.test.js)
 
-If for any reason you want to override the [default game loop](), there is a very simple way of doing so.
+If for any reason you want to override the [default game loop](#default-game-loop), there is a very simple way of doing so.
 
 ```js
 const app = new Application({
@@ -508,7 +508,7 @@ You may want to do this for a variety of reasons:
 - To disable the loop entirely and just use Fae as an ECS library.
 - And more!
 
-> Take a look at the [implementation]() of the default game loop for an example of a `startGame` function.
+> Take a look at the [implementation](/src/utils/startDefaultLoop.js) of the default game loop for an example of a `startGame` function.
 
 ## Integrating Rendering, UI, and More
 
@@ -516,13 +516,13 @@ We've covered all of Fae's concepts and APIs, and you're just about ready to mak
 
 Fae is designed to be able to integrate with almost anything. The specifics of what this looks like will vary vastly depending on the exact API or library, and situation in which you're using them, but I'll provide examples for a few common cases here:
 
-- [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) for rendering.
-- [KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent) for input.
-- [React](https://github.com/facebook/react) for UI.
+- [Canvas](#example-canvas) - For rendering.
+- [KeyboardEvent](#example-keyboard-input) - For input.
+- [React](#example-react) - For UI.
 
 > In the future, I may provide packages for common integrations.
 
-### Example: Canvas
+### Example: [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
 ```js
 // index.js
@@ -554,7 +554,7 @@ With this set up, we can now write systems that consume the `render` event and u
 
 > For example, we could have a `DrawSprites` system to render any entities who have a `Sprite` component, or a `DrawColliders` system for debugging collisions.
 
-### Example: Keyboard Input
+### Example: [Keyboard Input](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
 
 ```js
 // index.js
@@ -636,6 +636,6 @@ const UIController = {
 };
 ```
 
-### Example: React
+### Example: [React](https://github.com/facebook/react)
 
 > Coming soon.
