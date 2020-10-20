@@ -516,13 +516,13 @@ We've covered all of Fae's concepts and APIs, and you're just about ready to mak
 
 Fae is designed to be able to integrate with almost anything. The specifics of what this looks like will vary vastly depending on the exact API or library, and situation in which you're using them, but I'll provide examples for a few common cases here:
 
-- [Canvas](#example-canvas) - For rendering.
-- [KeyboardEvent](#example-keyboard-input) - For input.
-- [React](#example-react) - For UI.
+- [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) - For rendering.
+- [KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent) - For input.
+- [React](https://github.com/facebook/react) - For UI.
 
 > In the future, I may provide packages for common integrations.
 
-### Example: [Canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+### Example: Canvas
 
 ```js
 // index.js
@@ -554,7 +554,9 @@ With this set up, we can now write systems that consume the `render` event and u
 
 > For example, we could have a `DrawSprites` system to render any entities who have a `Sprite` component, or a `DrawColliders` system for debugging collisions.
 
-### Example: [Keyboard Input](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+### Example: Keyboard Input
+
+> Keyboard input has some surprising subtleties, detailed below. Consider [Kaybee](https://github.com/junebloom/kaybee) as a library to handle these for you.
 
 ```js
 // index.js
@@ -604,9 +606,9 @@ export const KeyboardInput = {
 };
 ```
 
-> You should also write an `exit()` function that cleans up these DOM event listeners, especially if your game runs in a page where the user may also do other things besides playing your game. I've omitted it here for brevity.
+You should also write an `exit()` function that cleans up these DOM event listeners, especially if your game runs in a page where the user may also do other things besides playing your game. I've omitted it here for brevity.
 
-> Also note that the browser gives us the "printable representation" of the pressed `key` name, including case. So "a" and "A" are two different keys. Seriously. This is why I used `toLowerCase()` to normalize key names. See [key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) and [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) at MDN for more info.
+> Note that the browser gives us the "printable representation" of the pressed `key`, including case. So "a" and "A" are two different keys. Seriously. This is why I used `toLowerCase()` to normalize key names. See [key](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) and [code](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) at MDN for more info.
 
 Now we can easily query keyboard state in our other systems.
 
@@ -636,6 +638,6 @@ const UIController = {
 };
 ```
 
-### Example: [React](https://github.com/facebook/react)
+### Example: React
 
 > Coming soon.
