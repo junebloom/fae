@@ -312,7 +312,7 @@ for e of app.entity.get("hungry") {
 
 Any time you need to access entities that weren't defined within the current scope, which is almost always.
 
-Generally, components and systems should only use local state - meaning either state passed as arguments or defined within the function of the component or system itself - to keep them generic and reusable.
+Generally, components and systems should only use state passed as arguments or defined within the function of the component or system itself - to keep them generic and reusable. This is one of the reasons queries are useful.
 
 Remember how `app` is passed as an argument to a system's `action`? This allows us to use queries within an action.
 
