@@ -35,7 +35,7 @@ test("system starts, handles event, and stops", (t) => {
   t.false(received, "Greeting should not be received once system is stopped.");
 });
 
-test.only("system state is initialized, passed to action and exit", (t) => {
+test("system state is initialized, passed to action and exit", (t) => {
   const manager = new SystemManager(mockApplication());
   const outerState = { count: 0 };
   t.plan(3);
