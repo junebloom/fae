@@ -34,19 +34,6 @@ test("arguments are passed to listeners", (t) => {
   emitter.emit("fruitTime", ...args);
 });
 
-test("listeners are called with the correct frontArgs", (t) => {
-  const emitter = new EventEmitter();
-
-  function listener(a, b, c) {
-    t.is(a, "something", "`a` should be the first frontArg.");
-    t.is(b, "wicked", "`b` should be the second frontArg.");
-    t.is(c, "this way comes", "`c` should be the regular argument.");
-  }
-
-  emitter.addListener("forsooth", listener, ["something", "wicked"]);
-  emitter.emit("forsooth", "this way comes");
-});
-
 test("multiple listeners for the same event are called in-order", (t) => {
   const emitter = new EventEmitter();
   let count = 0;

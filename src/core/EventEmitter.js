@@ -1,26 +1,22 @@
 // A small event emitter class.
 export class EventEmitter {
   constructor() {
-    // A Map where the keys are event names and the values are Maps of
-    // listener-function/frontArgs pairs.
+    // A Map where the keys are event names and the values are Sets of
+    // listeners for that event.
     this.events = new Map();
   }
 
   // Register the given event listener.
-  addListener(event, listener, frontArgs) {
+  addListener(event, listener) {
     let listeners = this.events.get(event);
 
-    // Create a new Map to hold the event's listeners, if it doesn't exist yet.
+    // Create a new Set to hold the event's listeners, if it doesn't exist yet.
     if (!listeners) {
-      listeners = new Map();
+      listeners = new Set();
       this.events.set(event, listeners);
     }
 
-    // Add the listener to the Map, paired with its frontArgs.
-    // The frontArgs are always passed as the first arguments to this listener
-    // when the event is emitted.
-    listeners.set(listener, frontArgs);
-
+    listeners.add(listener);
     return this;
   }
 
@@ -42,10 +38,6 @@ export class EventEmitter {
   emit(event, ...args) {
     const listeners = this.events.get(event);
     if (!listeners) return;
-
-    listeners.forEach((frontArgs, listener) => {
-      if (frontArgs) listener(...frontArgs, ...args);
-      else listener(...args);
-    });
+    listeners.forEach((listener) => listener(...args));
   }
 }
