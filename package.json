@@ -1,7 +1,7 @@
 {
   "name": "fae",
   "version": "1.4.1",
-  "description": "A tiny magical game framework written in modern ECMAScript",
+  "description": "A tiny magical game framework written in modern ECMAScript.",
   "repository": "junebloom/fae",
   "author": "June Bloom",
   "license": "MIT",
