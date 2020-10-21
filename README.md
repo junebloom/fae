@@ -23,7 +23,8 @@ via CDN:
 
 ```js
 // Use your preferred CDN; here we use jspm.
-import { Application } from "https://jspm.dev/fae@1.4.1/dist/fae.js";
+// (And be sure to specify a version so your game doesn't break when Fae updates!)
+import { Application } from "https://jspm.dev/fae/dist/fae.js";
 ```
 
 ```js
