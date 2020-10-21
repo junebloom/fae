@@ -11,7 +11,7 @@ A small game framework with a simple, joyful API.
 
 # Getting Started
 
-via package manager:
+Via package manager:
 
 `yarn add fae` _or_ `npm i -S fae`
 
@@ -19,13 +19,15 @@ via package manager:
 import { Application } from "fae";
 ```
 
-via CDN:
+Via CDN:
 
 ```js
 // Use your preferred CDN; here we use jspm.
 // (And be sure to specify a version so your game doesn't break when Fae updates!)
 import { Application } from "https://jspm.dev/fae/dist/fae.js";
 ```
+
+And then:
 
 ```js
 // Create an Application instance and read the docs to get started!
