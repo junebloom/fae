@@ -20,3 +20,9 @@ test("provides the correct interfaces", (t) => {
     "Should provide a system manager."
   );
 });
+
+test("instantiates without options", (t) => {
+  t.notThrows(() => {
+    new Application();
+  }, "Should be possible to pass no options object.");
+});

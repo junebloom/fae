@@ -10,7 +10,7 @@ export class Application {
     startGame = startDefaultLoop,
     state = {},
     hideBanner = false,
-  }) {
+  } = {}) {
     // A store for global state.
     this.state = state;
 
