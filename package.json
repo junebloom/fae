@@ -14,8 +14,7 @@
   ],
   "scripts": {
     "test": "ava",
-    "build": "rollup --config",
-    "prepublishOnly": "git push && git push --tags"
+    "build": "rollup --config"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.0.0",
