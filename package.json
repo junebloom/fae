@@ -15,7 +15,7 @@
   "scripts": {
     "test": "ava",
     "build": "rollup --config",
-    "prepublishOnly": "yarn test && yarn build && git push && git push --tags"
+    "prepublishOnly": "yarn test && yarn build"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
