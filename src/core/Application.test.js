@@ -1,30 +1,28 @@
-import test from 'ava'
-import Application from './Application'
+import test from "ava";
+import { Application } from "./Application.js";
+import { EventEmitter } from "./EventEmitter.js";
+import { EntityCollection } from "./EntityCollection.js";
+import { SystemManager } from "./SystemManager.js";
 
-test('starts and stops systems properly', t => {
-  const app = new Application()
-  app.hideBanner = true
-  let running
+// Application API Tests
 
-  const listeners = {
-    goodDay() {
-      t.true(running, 'This should not be called if the system is stopped')
-    }
-  }
+test("provides the correct interfaces", (t) => {
+  const app = new Application({ hideBanner: true });
 
-  const system = app.startSystem({ listeners })
-  running = true // system should be running
-  app.event.emit('goodDay')
+  t.truthy(app.state, "Should provide a store for global state.");
+  t.true(app.event instanceof EventEmitter, "Should provide an event emitter.");
+  t.true(
+    app.entity instanceof EntityCollection,
+    "Should provide an entity collection."
+  );
+  t.true(
+    app.system instanceof SystemManager,
+    "Should provide a system manager."
+  );
+});
 
-  app.stopSystem(system)
-  running = false // system should be stopped
-  app.event.emit('goodDay')
-})
-
-test('creates and holds reference to entity groups', t => {
-  const app = new Application()
-
-  app.createGroup('powerpuff')
-
-  t.truthy(app.groups.powerpuff, 'The powerpuff group should exist')
-})
+test("instantiates without options", (t) => {
+  t.notThrows(() => {
+    new Application();
+  }, "Should be possible to pass no options object.");
+});

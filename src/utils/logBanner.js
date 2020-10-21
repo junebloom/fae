@@ -1,12 +1,11 @@
-/* eslint no-console: off */
-import { version, repository } from '../../package.json'
+import pkg from "../../package.json";
 
-// Display a nice banner in the console
-export default function logBanner() {
-  const message = `%cfae ♥ ${version}%c https://github.com/${repository} `
+// Display a nice banner in the console.
+export function logBanner() {
+  const message = `%cfae ♥ ${pkg.version}%c https://github.com/${pkg.repository} `;
 
-  if (global.window) {
-    // Style with CSS in browsers
+  if (globalThis.document) {
+    // Style with CSS in browsers.
     console.log(
       message,
       `
@@ -15,12 +14,14 @@ export default function logBanner() {
         padding: 4px 10px;
         border-radius: 30px;
       `,
-      'color: #aaf;'
-    )
+      "color: #aaf;"
+    );
   } else {
-    // Color with ANSI escape sequences in node
+    // Color with ANSI escape sequences otherwise.
     console.log(
-      message.replace(/%c/, '\x1B[35m\x1b[1m').replace(/%c/, '\x1b[0m\x1b[35m')
-    )
+      message
+        .replace(/%c/, "\x1B[35m\x1b[1m")
+        .replace(/%c/, "\x1b[0m\x1b[35m") + "\x1b[0m"
+    );
   }
 }

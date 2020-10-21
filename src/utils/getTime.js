@@ -1,8 +1,9 @@
-// Return # of seconds past an arbitrary point in time in browser or node
-export default function getTime () {
-  if (global.window) return window.performance.now() / 1000
+// Return the number of seconds passed since some fixed point in time.
+export function getTime() {
+  if (globalThis.performance) return performance.now() / 1000;
   else {
-    const t = process.hrtime()
-    return t[0] + t[1] / 1e9
+    // Fall back to a Node API if high-quality standards aren't implemented.
+    const t = process.hrtime();
+    return t[0] + t[1] / 1e9;
   }
 }

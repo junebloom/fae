@@ -1,9 +1,13 @@
-import Application from './core/Application'
-import Entity from './core/Entity'
-import logBanner from './utils/logBanner'
+import { Application } from "./core/Application.js";
+import { getTime } from "./utils/getTime.js";
+import { logBanner } from "./utils/logBanner.js";
+
+export { Application } from "./core/Application.js";
+export { getTime } from "./utils/getTime.js";
+export { logBanner } from "./utils/logBanner.js";
 
 export default {
   Application,
-  Entity,
-  utils: { logBanner }
-}
+  getTime,
+  logBanner,
+};

@@ -1,77 +1,61 @@
-// Composes one logical 'object' in the game using components
-export default class Entity {
-  constructor (app) {
-    // ## Properties
-    // *(read-only)*
+// Represents a "thing" in the game world.
+// It is an empty container to which components are attached.
+// Components are the data that describe what the entity is.
+export class Entity {
+  constructor(collection) {
+    this.collection = collection;
+    this.app = collection.app;
 
-    // A reference to an `Application` instance
-    this.app = app
+    this.components = new Map();
+    this.tags = new Set();
 
-    // The Set of group names that this entity is a member of
-    this.groups = new Set()
-
-    // Add this entity to the 'all' group
-    this.group('all')
+    // All entities have the 'all' tag.
+    this.tag("all");
   }
 
-  // ## Methods
-
-  // Attach the provided component instances to this entity
-  attach (...components) {
-    for (const component of components) {
-      const getPrototypeOf = Object.getPrototypeOf
-      const name = component.name || getPrototypeOf(component).constructor.name
-
-      this[name] = component
-      this.group(name)
-
-      component.entity = this
-    }
-    return this
+  // Attach the provided component to this entity.
+  attach(component, ...initArgs) {
+    this[component.tag] = component.init(this, ...initArgs);
+    this.components.set(component.tag, component);
+    this.tag(component.tag);
+    return this;
   }
 
-  // Remove the components with the given names from this entity
-  detach (...componentNames) {
-    for (const name of componentNames) {
-      this[name] = null
-      this.ungroup(name)
-    }
-    return this
+  // Remove the given component from this entity.
+  detach(tag) {
+    const { exit } = this.components.get(tag);
+    this[tag] = undefined;
+    this.components.delete(tag);
+    this.untag(tag);
+    if (exit) exit(this);
+    return this;
   }
 
-  // Add this entity to the provided groups,
-  // creating any that don't already exist
-  group (...groupNames) {
-    for (const name of groupNames) {
-      (this.app.groups[name] || this.app.createGroup(name)).add(this)
-      this.groups.add(name)
-    }
-    return this
+  // Add the tag to this entity.
+  // (And add the entity to the corresponding index of the collection.)
+  tag(tag) {
+    this.tags.add(tag);
+    this.collection.index(tag).set.add(this);
+    return this;
   }
 
-  // Remove this entity from the provided groups
-  ungroup (...groupNames) {
-    for (const name of groupNames) {
-      this.app.groups[name].delete(this)
-      this.groups.delete(name)
-    }
-    return this
+  // Remove the tag from this entity.
+  // (And remove the entity from the corresponding index.)
+  untag(tag) {
+    this.tags.delete(tag);
+    this.collection.index(tag).set.delete(this);
+    return this;
   }
 
-  // Return `true` if this entity belongs to every group provided
-  hasGroups (...groups) {
-    for (const group of groups) {
-      if (!this.groups.has(group)) return false
-    }
-    return true
-  }
-
-  // Free all of fae's internal references to the entity,
-  // allowing it to be garbage collected
-  destroy () {
-    this.destroyed = true
-    for (const group of this.groups) {
-      this.ungroup(group)
-    }
+  // Clean up any attached components and free all internal references
+  // to the entity, allowing it to be garbage collected.
+  destroy() {
+    this.components.values().forEach(({ exit }) => {
+      if (exit) exit(this);
+    });
+    this.tags.forEach((tag) => {
+      this.collection.index(tag).set.delete(this);
+    });
+    this.destroyed = true;
   }
 }
