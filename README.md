@@ -248,7 +248,7 @@ app.entity.create().attach(Fur, "gray", "short"); // Pam
 app.entity.create().tag("hungry"); // Cleo (hairless!)
 ```
 
-Now we've got some cool cats, but we haven't stored any reference to them. How do we do access them? With queries!
+Now we've got some cool cats, but we haven't stored any reference to them. How do we access them? With queries!
 
 ```js
 // Get all entities with the "fur" tag.
