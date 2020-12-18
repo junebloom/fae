@@ -457,6 +457,26 @@ const System = {
 
 > Very rarely, you only need a system for its side effects in `init` and `exit`, rather than to respond to events, so `event` and `action` are technically optional. See [this example](#example-keyboard-input).
 
+## The Application
+
+[Implementation](/src/core/Application.js) - [Tests](/src/core/Application.test.js)
+
+The Application instance created in [Getting Started]() is the main interface to Fae, which we've been working with throughout the guide. It is only a small wrapper around Fae's various pieces, and doesn't do much on its own.
+
+It simply exposes the interfaces for working with entities, systems, and events, which we've discussed, and handles starting and stopping the game loop.
+
+The game loop is started automatically when a new Application instance is constructed, and it can be halted by calling `app.stop()`.
+
+```js
+// Creating an app instance starts the game loop.
+const app = new Application();
+
+// Calling `app.stop()` terminates the game loop.
+app.stop();
+```
+
+> The Application constructor can also take an options object to customize its behavior. Keep reading to learn more, or check out the implementation source.
+
 ## Application State
 
 [Implementation](/src/core/Application.js) - [Tests](/src/core/Application.test.js)
@@ -499,6 +519,10 @@ If for any reason you want to override the [default game loop](#default-game-loo
 const app = new Application({
   startGame: (app) => {
     // Start your custom game loop!
+    // ...
+
+    // You must return a function which can be called to stop the loop.
+    return () => {};
   },
 });
 ```
