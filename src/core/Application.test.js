@@ -19,6 +19,7 @@ test("provides the correct interfaces", (t) => {
     app.system instanceof SystemManager,
     "Should provide a system manager."
   );
+  t.true(typeof app.stop === "function", "Should provide a stop function.");
 });
 
 test("instantiates without options", (t) => {

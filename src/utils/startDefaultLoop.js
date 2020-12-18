@@ -5,6 +5,7 @@ import { getTime } from "./getTime.js";
 export function startDefaultLoop(app) {
   let lastTime = getTime();
   let currentTime, dt;
+  let cancelHandle = null;
 
   function step() {
     // Calculate frame delta time in seconds.
@@ -16,13 +17,24 @@ export function startDefaultLoop(app) {
     app.event.emit("draw");
   }
 
-  // Function to start looping using requestAnimationFrame.
-  function rafLoop() {
-    step();
-    requestAnimationFrame(rafLoop);
+  // Start the loop using RAF, if available.
+  if (globalThis.requestAnimationFrame) {
+    const loop = () => {
+      step();
+      cancelHandle = requestAnimationFrame(loop);
+    };
+
+    loop();
+
+    // Return a function that terminates the loop.
+    return () => cancelAnimationFrame(cancelHandle);
   }
 
-  // Use requestAnimationFrame if available, otherwise use setInterval.
-  if (globalThis.requestAnimationFrame) requestAnimationFrame(rafLoop);
-  else setInterval(step, 1000 / 60);
+  // If RAF is not available, use setInterval.
+  else {
+    cancelHandle = setInterval(step, 1000 / 60);
+
+    // Return a function that terminates the loop.
+    return () => clearInterval(cancelHandle);
+  }
 }

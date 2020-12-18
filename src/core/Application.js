@@ -25,7 +25,9 @@ export class Application {
 
     // Call the `startGame` function, which should initiate the game loop.
     // It takes the app instance as its only argument.
-    startGame(this);
+    // `startGame` should return a `stop` function which can be called to
+    // terminate the loop.
+    this.stop = startGame(this);
 
     // Print the fae banner to console unless `hideBanner` is true.
     if (!hideBanner) logBanner();

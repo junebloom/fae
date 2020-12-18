@@ -27,3 +27,20 @@ test("emits proper events", async (t) => {
   t.not(updates, 0, "Updates should have occurred.");
   t.not(draws, 0, "Draws should have occurred.");
 });
+
+test("returns a function that terminates the loop", async (t) => {
+  const app = { event: new EventEmitter() };
+  let stopped = false;
+
+  const stopLoop = startDefaultLoop(app);
+
+  app.event.addListener("update", () => {
+    if (stopped) t.fail("Should not emit any updates while stopped.");
+  });
+
+  stopLoop();
+  stopped = true;
+
+  await promiseTimeout(200);
+  t.pass();
+});
